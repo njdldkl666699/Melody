@@ -1,6 +1,12 @@
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
 
+#Cola Add Files
+debug
+release
+.vs
+*.qtvscr
+
 *~
 *.autosave
 *.a
