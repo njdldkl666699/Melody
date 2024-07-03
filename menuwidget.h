@@ -1,24 +1,16 @@
-#ifndef MENUWIDGET_H
-#define MENUWIDGET_H
+#pragma once
 
 #include <QWidget>
+#include "ui_MenuWidget.h"
 
-QT_BEGIN_NAMESPACE
-namespace Ui
-{
-	class menuWidget;
-}
-QT_END_NAMESPACE
-
-class menuWidget : public QWidget
+class MenuWidget : public QWidget
 {
 	Q_OBJECT
 
 public:
-	menuWidget(QWidget* parent = nullptr);
-	~menuWidget();
+	MenuWidget(QWidget *parent = nullptr);
+	~MenuWidget();
 
 private:
-	Ui::menuWidget* ui;
+	Ui::MenuWidgetClass ui;
 };
-#endif // MENUWIDGET_H

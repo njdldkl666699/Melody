@@ -1,8 +1,8 @@
 <UI version="4.0" >
- <class>MenuWidgetClass</class>
- <widget class="QWidget" name="MenuWidgetClass" >
+ <class>PlayWidgetClass</class>
+ <widget class="QWidget" name="PlayWidgetClass" >
   <property name="objectName" >
-   <string notr="true">MenuWidgetClass</string>
+   <string notr="true">PlayWidgetClass</string>
   </property>
   <property name="geometry" >
    <rect>
@@ -13,7 +13,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>MenuWidget</string>
+   <string>PlayWidget</string>
   </property>$centralwidget$
  </widget>
  <layoutDefault spacing="6" margin="11" />
