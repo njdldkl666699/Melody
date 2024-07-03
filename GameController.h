@@ -1,22 +1,12 @@
 #pragma once
 
-#include <QWidget>
-#include "ui_GameController.h"
+#include <QObject>
 
-//note class 
-/*
-* Tap
-* Hold
-*/
-
-class GameController : public QWidget
+class GameController  : public QObject
 {
 	Q_OBJECT
 
 public:
-	GameController(QWidget* parent = nullptr);
+	GameController(QObject *parent);
 	~GameController();
-
-private:
-	Ui::GameControllerClass ui;
 };
