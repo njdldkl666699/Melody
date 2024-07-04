@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -9,16 +9,40 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    main.cpp \
-    menuwidget.cpp
+    src/EndWidget.cpp \
+    src/GameController.cpp \
+    src/Hold.cpp \
+    src/MenuWidget.cpp \
+    src/PauseWidget.cpp \
+    src/PlayWidget.cpp \
+    src/SettingsWidget.cpp \
+    src/Tap.cpp \
+    src/main.cpp
 
 HEADERS += \
-    menuwidget.h
+    include/EndWidget.h \
+    include/GameController.h \
+    include/Hold.h \
+    include/MenuWidget.h \
+    include/PauseWidget.h \
+    include/PlayWidget.h \
+    include/SettingsWidget.h \
+    include/Tap.h
+
+INCLUDEPATH += \
+    include
 
 FORMS += \
-    menuwidget.ui
+    ui/EndWidget.ui \
+    ui/Menuwidget.ui \
+    ui/PauseWidget.ui \
+    ui/PlayWidget.ui \
+    ui/SettingsWidget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    Resource.qrc

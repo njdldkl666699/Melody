@@ -1,0 +1,22 @@
+<UI version="4.0" >
+ <class>SettingsWidgetClass</class>
+ <widget class="QWidget" name="SettingsWidgetClass" >
+  <property name="objectName" >
+   <string notr="true">SettingsWidgetClass</string>
+  </property>
+  <property name="geometry" >
+   <rect>
+	<x>0</x>
+	<y>0</y>
+	<width>600</width>
+	<height>400</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>SettingsWidget</string>
+  </property>$centralwidget$
+ </widget>
+ <layoutDefault spacing="6" margin="11" />
+ <pixmapfunction></pixmapfunction>
+ <connections/>
+</UI>
