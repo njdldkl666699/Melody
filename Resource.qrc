@@ -1,5 +1,21 @@
 <RCC>
     <qresource prefix="/">
         <file>res/image/Malody.jpg</file>
+        <file>image/1.png</file>
+        <file>image/2.png</file>
+        <file>image/3.png</file>
+        <file>image/4.png</file>
+        <file>image/119822345_p0.png</file>
+        <file>image/diamond.png</file>
+        <file>image/home.png</file>
+        <file>image/pause.png</file>
+        <file>image/refresh.png</file>
+        <file>image/return.png</file>
+        <file>image/settings.png</file>
+        <file>image/spotlight.png</file>
+        <file>video/backGroudBeginning.mp4</file>
+        <file>video/backGroundEnding.mp4</file>
+        <file>video/miku.mp4</file>
+        <file>video/swing.mp4</file>
     </qresource>
 </RCC>

@@ -3,6 +3,7 @@
 #include <QWidget>
 #include "ui_EndWidget.h"
 
+
 class EndWidget : public QWidget
 {
 	Q_OBJECT
