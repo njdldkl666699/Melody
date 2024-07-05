@@ -2,12 +2,23 @@
 #include<QPixmap>
 
 MenuWidget::MenuWidget(QWidget* parent)
-	: QWidget(parent)
+	: QWidget(parent), settingsWidget(new SettingsWidget(parent)), playWidget(nullptr)
 {
 	ui.setupUi(this);
 	initSongComboBox();
 	connect(ui.comboBox_song, &QComboBox::currentTextChanged, this, &MenuWidget::comboBoxSongSelected);
+
+	// connect SettingsWidget related
+	connect(ui.pushButton_settings, &QPushButton::clicked, this, [this]()
+		{
+			settingsWidget->show();
+			this->hide();
+		});
+	connect(settingsWidget, &SettingsWidget::pushButtonBackMenuClicked, this, &MenuWidget::show);
+
+	// connect PlayWidget related
 	connect(ui.pushButton_play, &QPushButton::clicked, this, &MenuWidget::pushButtonPlayClicked);
+	connect(playWidget, &PlayWidget::signalBackMenu, this, &MenuWidget::show);
 }
 
 void MenuWidget::initSongComboBox()
@@ -43,7 +54,7 @@ void MenuWidget::comboBoxSongSelected(const QString& songName)
 	ui.comboBox_chart->addItems(chartFiles);
 
 	// Update song picture
-	if(ui.comboBox_song->currentText() == "[Select Song]")
+	if (ui.comboBox_song->currentText() == "[Select Song]")
 	{
 		ui.songPicture->clear();
 		return;
@@ -55,7 +66,7 @@ void MenuWidget::comboBoxSongSelected(const QString& songName)
 	QPixmap songPic(songPicPath);
 	songPic = songPic.scaled(ui.songPicture->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 	ui.songPicture->setPixmap(songPic);
-	
+
 	// Update songFile and chartFile
 	QStringList songFileFilters;
 	songFileFilters << "*.mp3" << "*.ogg" << "*.wav" << "*.flac" << "*.m4a";
@@ -67,7 +78,7 @@ void MenuWidget::comboBoxSongSelected(const QString& songName)
 void MenuWidget::pushButtonPlayClicked()
 {
 	// Check if song and chart are selected
-	if (ui.comboBox_song->currentText() == "[Select Song]" || 
+	if (ui.comboBox_song->currentText() == "[Select Song]" ||
 		ui.comboBox_chart->currentText() == "[Select Chart]")
 	{
 		return;
@@ -75,6 +86,8 @@ void MenuWidget::pushButtonPlayClicked()
 	else
 	{
 		// Initialize PlayWidget
-
+		playWidget = new PlayWidget(songFilePath, chartFilePath, settingsWidget);
+		playWidget->show();
+		this->hide();
 	}
 }

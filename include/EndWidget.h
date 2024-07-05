@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QWidget>
+#include"GameController.h"
 #include "ui_EndWidget.h"
 
 class EndWidget : public QWidget
@@ -8,9 +9,16 @@ class EndWidget : public QWidget
 	Q_OBJECT
 
 public:
-	EndWidget(QWidget *parent = nullptr);
+	EndWidget(GameController* game, QWidget* parent = nullptr);
 	~EndWidget();
+
+signals:
+	void signalBackMenu();
+	void signalRestart();
+
+private slots:
 
 private:
 	Ui::EndWidgetClass ui;
+	GameController* gameController;
 };
