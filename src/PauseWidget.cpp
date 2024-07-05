@@ -4,6 +4,12 @@ PauseWidget::PauseWidget(QWidget* parent)
 	:QWidget(parent)
 {
 	ui.setupUi(this);
+
+	//固定窗口大小
+	QSize windowSize(1440, 819);
+	this->setFixedSize(windowSize);
+
+
 	connect(ui.pushButton_backMenu, &QPushButton::clicked, this, [this]()
 		{
 			emit signalBackMenu();

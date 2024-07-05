@@ -6,6 +6,12 @@ PlayWidget::PlayWidget(const QString& songFileName, const QString& chartFileName
 	gameController(nullptr), endWidget(new EndWidget(gameController))
 {
 	ui.setupUi(this);
+
+	//固定窗口大小
+	QSize windowSize(1440, 819);
+	this->setFixedSize(windowSize);
+
+
 	auto songName = songFileName;
 	auto chartName = chartFileName;
 

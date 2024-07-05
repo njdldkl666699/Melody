@@ -5,6 +5,12 @@ MenuWidget::MenuWidget(QWidget* parent)
 	: QWidget(parent), settingsWidget(new SettingsWidget(parent)), playWidget(nullptr)
 {
 	ui.setupUi(this);
+
+	//固定窗口大小
+	QSize windowSize(1440, 819); 
+	this->setFixedSize(windowSize); 
+
+
 	initSongComboBox();
 	connect(ui.comboBox_song, &QComboBox::currentTextChanged, this, &MenuWidget::comboBoxSongSelected);
 
