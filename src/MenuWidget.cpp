@@ -24,7 +24,6 @@ MenuWidget::MenuWidget(QWidget* parent)
 
 	// connect PlayWidget related
 	connect(ui.pushButton_play, &QPushButton::clicked, this, &MenuWidget::pushButtonPlayClicked);
-	connect(playWidget, &PlayWidget::signalBackMenu, this, &MenuWidget::show);
 }
 
 void MenuWidget::initSongComboBox()
@@ -93,6 +92,10 @@ void MenuWidget::pushButtonPlayClicked()
 	{
 		// Initialize PlayWidget
 		playWidget = new PlayWidget(songFilePath, chartFilePath, settingsWidget);
+		connect(playWidget, &PlayWidget::signalBackMenu, this, [this]()
+			{
+				this->show();
+			});
 		playWidget->show();
 		this->hide();
 	}
