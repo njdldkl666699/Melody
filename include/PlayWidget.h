@@ -9,6 +9,7 @@ class PlayWidget : public QWidget
 
 public:
 	PlayWidget(QWidget *parent = nullptr);
+	PlayWidget(const QString& songFileName, const QString& chartFileName, QWidget* parent = nullptr);
 	~PlayWidget();
 
 private:
