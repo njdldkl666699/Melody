@@ -121,6 +121,7 @@ void MenuWidget::pushButtonPlayClicked()
 			{
 				this->show();
 			});
+		playWidget->resize(this->size());
 		playWidget->show();
 		this->hide();
 	}

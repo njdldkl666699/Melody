@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QWidget>
+#include <QMovie>
 #include "ui_PauseWidget.h"
 
 class PauseWidget : public QWidget
@@ -11,6 +12,8 @@ public:
 	PauseWidget(QWidget* parent = nullptr);
 	~PauseWidget();
 
+private:
+	void initBackgroundGIF();
 signals:
 	void signalBackMenu();
 	void signalRestart();
@@ -18,4 +21,5 @@ signals:
 
 private:
 	Ui::PauseWidgetClass ui;
+	QMovie* backgroundGIF;
 };

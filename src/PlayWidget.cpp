@@ -7,11 +7,6 @@ PlayWidget::PlayWidget(const QString& songFileName, const QString& chartFileName
 {
 	ui.setupUi(this);
 
-	//固定窗口大小
-	QSize windowSize(1440, 819);
-	this->setFixedSize(windowSize);
-
-
 	auto songName = songFileName;
 	auto chartName = chartFileName;
 
@@ -42,7 +37,7 @@ PlayWidget::~PlayWidget()
 
 void PlayWidget::initPlayWidget()
 {
-	this->show();
+	//this->show();
 }
 
 void PlayWidget::gamePause()
@@ -52,6 +47,7 @@ void PlayWidget::gamePause()
 	// Pause game
 
 	// Show pause menu
+	pauseWidget->resize(this->size());
 	pauseWidget->show();
 	this->hide();
 }
