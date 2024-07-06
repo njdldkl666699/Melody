@@ -1,16 +1,14 @@
 #include "MenuWidget.h"
 #include<QPixmap>
 
+
 MenuWidget::MenuWidget(QWidget* parent)
 	: QWidget(parent), settingsWidget(new SettingsWidget(parent)), playWidget(nullptr)
 {
 	ui.setupUi(this);
+	initBackgroundGIF();
 
-	//固定窗口大小
-	QSize windowSize(1440, 819); 
-	this->setFixedSize(windowSize); 
-
-
+	// SongComboBox related
 	initSongComboBox();
 	connect(ui.comboBox_song, &QComboBox::currentTextChanged, this, &MenuWidget::comboBoxSongSelected);
 
@@ -33,17 +31,39 @@ void MenuWidget::initSongComboBox()
 	beatmapFilters << "*";
 	QDir::Filters beatFilter = QDir::Dirs | QDir::NoDotAndDotDot;
 	QStringList beatmapSubDirs = beatmapDir.entryList(beatmapFilters, beatFilter);
-	/*foreach(const QString & subDir, beatmapSubDirs)
+	foreach(const QString & subDir, beatmapSubDirs)
 	{
 		qDebug() << subDir;
-	}*/
+	}
 	ui.comboBox_song->addItem("[Select Song]");
 	ui.comboBox_song->addItems(beatmapSubDirs);
 	ui.comboBox_song->setCurrentText("[Select Song]");
 }
 
+void MenuWidget::initBackgroundGIF()
+{
+	backgroundGIF = new QMovie("./res/background/menu.gif");
+	ui.background->setMovie(backgroundGIF);
+	backgroundGIF->start();
+}
+
 MenuWidget::~MenuWidget()
 {}
+
+void MenuWidget::keyPressEvent(QKeyEvent* event)
+{
+	if (event->key() == Qt::Key_Escape)
+	{
+		qDebug() << "Escape key pressed!";
+		// 这里可以添加你的处理逻辑  
+		this->close();
+	}
+	else
+	{
+			// 调用基类的keyPressEvent来处理其他按键  
+		return QWidget::keyPressEvent(event);
+	}
+}
 
 void MenuWidget::comboBoxSongSelected(const QString& songName)
 {
@@ -55,7 +75,12 @@ void MenuWidget::comboBoxSongSelected(const QString& songName)
 	chartFilters << "*.txt";
 	songDir = beatmapDir.path() + "/" + songName;
 	QStringList chartFiles = songDir.entryList(chartFilters, QDir::Files);
-	qDebug() << chartFiles;
+	for(auto &chart: chartFiles)
+	{
+		int suffixPos = chart.lastIndexOf(".txt");
+		chart = chart.left(suffixPos);
+		qDebug() << chart;
+	}
 	ui.comboBox_chart->addItems(chartFiles);
 
 	// Update song picture
@@ -77,7 +102,7 @@ void MenuWidget::comboBoxSongSelected(const QString& songName)
 	songFileFilters << "*.mp3" << "*.ogg" << "*.wav" << "*.flac" << "*.m4a";
 	QString songFileName = songDir.entryList(songFileFilters, QDir::Files).at(0);
 	songFilePath = songDir.path() + "/" + songName;
-	chartFilePath = songDir.path() + "/" + ui.comboBox_chart->currentText();
+	chartFilePath = songDir.path() + "/" + ui.comboBox_chart->currentText() + ".txt";
 }
 
 void MenuWidget::pushButtonPlayClicked()

@@ -113,7 +113,7 @@
     <QtUic Include="ui\EndWidget.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="ui\Menuwidget.ui">
+    <QtUic Include="ui\MenuWidget.ui">
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="ui\PauseWidget.ui">
@@ -125,13 +125,5 @@
     <QtUic Include="ui\SettingsWidget.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="res\image\Malody.jpg">
-      <Filter>Resource Files</Filter>
-    </None>
-    <QtRcc Include="Resource.qrc">
-      <Filter>Resource Files</Filter>
-    </QtRcc>
   </ItemGroup>
 </Project>

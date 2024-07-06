@@ -1,7 +1,9 @@
 #pragma once
 
 #include <QWidget>
+#include<QKeyEvent>
 #include <QDir>
+#include<QMovie>
 #include<QFile>
 #include"SettingsWidget.h"
 #include"PlayWidget.h"
@@ -15,7 +17,8 @@ public:
 	MenuWidget(QWidget* parent = nullptr);
 	~MenuWidget();
 
-	void initSongComboBox();
+protected:
+	void keyPressEvent(QKeyEvent* event) override;
 
 private slots:
 	void comboBoxSongSelected(const QString& songName);
@@ -23,7 +26,14 @@ private slots:
 	void pushButtonPlayClicked();
 
 private:
+	void initSongComboBox();
+
+	void initBackgroundGIF();
+
+private:
 	Ui::MenuWidgetClass ui;
+	QMovie* backgroundGIF;
+
 	SettingsWidget* settingsWidget;
 	PlayWidget* playWidget;
 
