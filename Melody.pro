@@ -36,7 +36,7 @@ INCLUDEPATH += \
 
 FORMS += \
     ui/EndWidget.ui \
-    ui/Menuwidget.ui \
+    ui/MenuWidget.ui \
     ui/PauseWidget.ui \
     ui/PlayWidget.ui \
     ui/SettingsWidget.ui
@@ -45,6 +45,3 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
-RESOURCES += \
-    Resource.qrc
