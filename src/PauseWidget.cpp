@@ -5,6 +5,9 @@ PauseWidget::PauseWidget(QWidget* parent)
 {
 	ui.setupUi(this);
 	initBackgroundGIF();
+	initPauseWidget();
+
+
 
 
 	connect(ui.pushButton_backMenu, &QPushButton::clicked, this, [this]()
@@ -32,4 +35,9 @@ void PauseWidget::initBackgroundGIF()
 	backgroundGIF = new QMovie("./res/background/Pause2.gif");
 	ui.background->setMovie(backgroundGIF);
 	backgroundGIF->start();
+}
+
+void PauseWidget::initPauseWidget()
+{
+	setFixedSize(1200, 675);
 }

@@ -10,7 +10,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
 {
 	ui.setupUi(this);
 	initBackground();
-	initSettings();
+	initSettingsWidget();
 	initUISettings();
 
 	connect(ui.pushButton_backMenu, &QPushButton::clicked, this, [this]()
@@ -31,8 +31,10 @@ void SettingsWidget::initBackground()
 	ui.background->show();
 }
 
-void SettingsWidget::initSettings()
+void SettingsWidget::initSettingsWidget()
 {
+	setFixedSize(1200, 675);
+
 	QFile file("./settings.cfg");
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 	{

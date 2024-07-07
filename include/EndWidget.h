@@ -16,6 +16,8 @@ signals:
 	void signalBackMenu();
 	void signalRestart();
 
+private:
+	void initEndWidget();
 private slots:
 
 private:

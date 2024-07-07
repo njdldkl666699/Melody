@@ -30,7 +30,7 @@ signals:
 
 private:
 	void initBackground();
-	void initSettings();
+	void initSettingsWidget();
 	void initUISettings();
 
 private slots:

@@ -6,6 +6,8 @@ MenuWidget::MenuWidget(QWidget* parent)
 	: QWidget(parent), settingsWidget(new SettingsWidget(parent)), playWidget(nullptr)
 {
 	ui.setupUi(this);
+	initMenuWidget();
+
 	initBackgroundGIF();
 
 	// SongComboBox related
@@ -38,6 +40,13 @@ void MenuWidget::initSongComboBox()
 	ui.comboBox_song->addItem("[Select Song]");
 	ui.comboBox_song->addItems(beatmapSubDirs);
 	ui.comboBox_song->setCurrentText("[Select Song]");
+}
+
+void MenuWidget::initMenuWidget()
+{
+	//固定窗口大小为1200,675;
+	setFixedSize(1200, 675);
+
 }
 
 void MenuWidget::initBackgroundGIF()

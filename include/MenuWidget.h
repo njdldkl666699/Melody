@@ -27,7 +27,7 @@ private slots:
 
 private:
 	void initSongComboBox();
-
+	void initMenuWidget();
 	void initBackgroundGIF();
 
 private:
