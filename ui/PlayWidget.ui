@@ -29,7 +29,7 @@
   <widget class="QPushButton" name="pushButton_debug">
    <property name="geometry">
     <rect>
-     <x>200</x>
+     <x>190</x>
      <y>260</y>
      <width>211</width>
      <height>24</height>
@@ -37,6 +37,19 @@
    </property>
    <property name="text">
     <string>Game End [Debug]</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>110</y>
+     <width>1200</width>
+     <height>675</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </widget>
  </widget>

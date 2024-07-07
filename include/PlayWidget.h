@@ -17,10 +17,13 @@ public:
 
 	~PlayWidget();
 
-	void initPlayWidget();
 
 signals:
 	void signalBackMenu();
+
+private:
+	void initPlayWidget();
+
 
 private slots:
 	void gamePause();

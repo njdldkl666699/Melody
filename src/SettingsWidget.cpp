@@ -27,8 +27,8 @@ SettingsWidget::~SettingsWidget()
 void SettingsWidget::initBackground()
 {
 	backgroundPic = backgroundPic.scaled(this->size(), Qt::KeepAspectRatioByExpanding);
-    ui.background->setPixmap(backgroundPic);
-    ui.background->show();
+	ui.background->setPixmap(backgroundPic);
+	ui.background->show();
 }
 
 void SettingsWidget::initSettingsWidget()

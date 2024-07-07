@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>400</height>
+    <width>904</width>
+    <height>411</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,53 +16,77 @@
   <widget class="QPushButton" name="pushButton_backMenu">
    <property name="geometry">
     <rect>
-     <x>89</x>
-     <y>160</y>
-     <width>111</width>
-     <height>24</height>
+     <x>470</x>
+     <y>20</y>
+     <width>64</width>
+     <height>64</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton
+{
+background-color:transparent;
+background-image:url(./res/icon/home.png);
+border:0px;
+}</string>
+   </property>
    <property name="text">
-    <string>Back to Menu</string>
+    <string/>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_restart">
    <property name="geometry">
     <rect>
-     <x>240</x>
-     <y>160</y>
-     <width>131</width>
-     <height>24</height>
+     <x>620</x>
+     <y>20</y>
+     <width>64</width>
+     <height>64</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton
+{
+background-color:transparent;
+background-image:url(./res/icon/restart_white_64x.png);
+border:0px;
+}</string>
+   </property>
    <property name="text">
-    <string>Restart</string>
+    <string/>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_continue">
    <property name="geometry">
     <rect>
-     <x>380</x>
-     <y>170</y>
-     <width>80</width>
-     <height>24</height>
+     <x>778</x>
+     <y>20</y>
+     <width>64</width>
+     <height>64</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton
+{
+background-color:transparent;
+background-image:url(./res/icon/continue_white_64x .png);
+border:0px;
+}</string>
+   </property>
    <property name="text">
-    <string>Continue</string>
+    <string/>
    </property>
   </widget>
   <widget class="QLabel" name="background">
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>10</y>
+     <y>0</y>
      <width>1200</width>
      <height>675</height>
     </rect>
    </property>
    <property name="text">
-    <string>TextLabel</string>
+    <string/>
    </property>
   </widget>
  </widget>

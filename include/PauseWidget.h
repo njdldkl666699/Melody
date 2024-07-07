@@ -7,14 +7,15 @@
 class PauseWidget : public QWidget
 {
 	Q_OBJECT
-
+		     
 public:
 	PauseWidget(QWidget* parent = nullptr);
 	~PauseWidget();
-
+	
 private:
 	void initBackgroundGIF();
 	void initPauseWidget();
+
 signals:
 	void signalBackMenu();
 	void signalRestart();
