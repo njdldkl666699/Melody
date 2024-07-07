@@ -64,12 +64,12 @@ void MenuWidget::keyPressEvent(QKeyEvent* event)
 	if (event->key() == Qt::Key_Escape)
 	{
 		qDebug() << "Escape key pressed!";
-		// 这里可以添加你的处理逻辑  
+		// close the window by escape key
 		this->close();
 	}
 	else
 	{
-			// 调用基类的keyPressEvent来处理其他按键  
+		//do nothing
 		return QWidget::keyPressEvent(event);
 	}
 }
