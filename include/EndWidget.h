@@ -18,13 +18,13 @@ signals:
 	void signalRestart();
 
 private:
-	void initEndWidget();
 	void initBackgroundGIF();
 	void initScoreList();
 	void initChartIntro();
-	void setScore(int bestNum,int coolNum,int goodNum,int missNum,int comboNum,int accNum,int score);
+	void setScore(int bestNum, int coolNum, int goodNum, int missNum, int comboNum, int accNum, int score);
 	void showScore();
 	void showRank();
+
 private slots:
 private:
 	int bestNum;

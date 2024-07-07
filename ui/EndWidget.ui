@@ -82,31 +82,6 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="label_top">
-   <property name="geometry">
-    <rect>
-     <x>550</x>
-     <y>-20</y>
-     <width>100</width>
-     <height>100</height>
-    </rect>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>100</width>
-     <height>100</height>
-    </size>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:36pt;&quot;&gt;成绩&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="label_test">
    <property name="geometry">
     <rect>
@@ -117,7 +92,7 @@
     </rect>
    </property>
    <property name="frameShape">
-    <enum>QFrame::Box</enum>
+    <enum>QFrame::Shape::Box</enum>
    </property>
    <property name="text">
     <string>此处label仅供ui中参考位置，实际在代码中实现另一个label</string>
@@ -243,7 +218,7 @@
        <bool>true</bool>
       </property>
       <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+       <enum>Qt::Orientation::Horizontal</enum>
       </property>
       <property name="invertedAppearance">
        <bool>false</bool>
@@ -395,7 +370,7 @@
     </rect>
    </property>
    <property name="orientation">
-    <enum>Qt::Horizontal</enum>
+    <enum>Qt::Orientation::Horizontal</enum>
    </property>
   </widget>
   <widget class="Line" name="line_2">
@@ -408,7 +383,7 @@
     </rect>
    </property>
    <property name="orientation">
-    <enum>Qt::Horizontal</enum>
+    <enum>Qt::Orientation::Horizontal</enum>
    </property>
   </widget>
   <widget class="QLabel" name="label_scoreNum">
@@ -446,17 +421,12 @@
     </rect>
    </property>
    <property name="text">
-    <string>TextLabel</string>
+    <string/>
    </property>
   </widget>
   <zorder>background</zorder>
   <zorder>pushButton_restart</zorder>
   <zorder>pushButton_backMenu</zorder>
-  <zorder>label_top</zorder>
-  <zorder>label_cool</zorder>
-  <zorder>label_good</zorder>
-  <zorder>label_miss</zorder>
-  <zorder></zorder>
   <zorder>widget_scoreList</zorder>
   <zorder>label_test</zorder>
   <zorder>label_chartIntro</zorder>

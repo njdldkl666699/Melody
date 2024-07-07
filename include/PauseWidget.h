@@ -14,7 +14,6 @@ public:
 	
 private:
 	void initBackgroundGIF();
-	void initPauseWidget();
 
 signals:
 	void signalBackMenu();

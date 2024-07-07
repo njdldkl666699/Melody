@@ -1,14 +1,14 @@
 #include "PlayWidget.h"
 
-PlayWidget::PlayWidget(const QString& songFileName, const QString& chartFileName,
-	SettingsWidget* settings, QWidget* parent)
+PlayWidget::PlayWidget(const QString& songFilePath, const QString& chartFilePath,
+	const SettingsWidget* settings, QWidget* parent)
 	: pauseWidget(new PauseWidget()), QWidget(parent), 
 	gameController(nullptr), endWidget(new EndWidget(gameController))
 {
 	ui.setupUi(this);
 
-	auto songName = songFileName;
-	auto chartName = chartFileName;
+	auto songName = songFilePath;
+	auto chartName = chartFilePath;
 
 	initPlayWidget();
 
@@ -33,11 +33,13 @@ PlayWidget::PlayWidget(const QString& songFileName, const QString& chartFileName
 
 PlayWidget::~PlayWidget()
 {
+	delete pauseWidget;
+	delete endWidget;
+	delete gameController;
 }
 
 void PlayWidget::initPlayWidget()
 {
-	setFixedSize(1200, 675);
 	this->show();
 }
 
@@ -48,7 +50,6 @@ void PlayWidget::gamePause()
 	// Pause game
 
 	// Show pause menu
-	pauseWidget->resize(this->size());
 	pauseWidget->show();
 	this->hide();
 }

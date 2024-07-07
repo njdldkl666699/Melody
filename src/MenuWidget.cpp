@@ -1,13 +1,10 @@
 #include "MenuWidget.h"
 #include<QPixmap>
 
-
 MenuWidget::MenuWidget(QWidget* parent)
 	: QWidget(parent), settingsWidget(new SettingsWidget(parent)), playWidget(nullptr)
 {
 	ui.setupUi(this);
-	initMenuWidget();
-
 	initBackgroundGIF();
 
 	// SongComboBox related
@@ -26,6 +23,13 @@ MenuWidget::MenuWidget(QWidget* parent)
 	connect(ui.pushButton_play, &QPushButton::clicked, this, &MenuWidget::pushButtonPlayClicked);
 }
 
+MenuWidget::~MenuWidget()
+{
+	delete settingsWidget;
+	delete playWidget;
+	delete backgroundGIF;
+}
+
 void MenuWidget::initSongComboBox()
 {
 	beatmapDir = QDir::currentPath() + "/beatmap";
@@ -42,22 +46,12 @@ void MenuWidget::initSongComboBox()
 	ui.comboBox_song->setCurrentText("[Select Song]");
 }
 
-void MenuWidget::initMenuWidget()
-{
-	//固定窗口大小为1200,675;
-	setFixedSize(1200, 675);
-
-}
-
 void MenuWidget::initBackgroundGIF()
 {
 	backgroundGIF = new QMovie("./res/background/menu.gif");
 	ui.background->setMovie(backgroundGIF);
 	backgroundGIF->start();
 }
-
-MenuWidget::~MenuWidget()
-{}
 
 void MenuWidget::keyPressEvent(QKeyEvent* event)
 {
@@ -103,16 +97,8 @@ void MenuWidget::comboBoxSongSelected(const QString& songName)
 	QString songPicName = songDir.entryList(songPicFilters, QDir::Files).at(0);
 	QString songPicPath = songDir.path() + "/" + songPicName;
 	QPixmap songPic(songPicPath);
-
 	songPic = songPic.scaled(ui.songPicture->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 	ui.songPicture->setPixmap(songPic);
-
-	// Update songFile and chartFile
-	QStringList songFileFilters;
-	songFileFilters << "*.mp3" << "*.ogg" << "*.wav" << "*.flac" << "*.m4a";
-	QString songFileName = songDir.entryList(songFileFilters, QDir::Files).at(0);
-	songFilePath = songDir.path() + "/" + songName;
-	chartFilePath = songDir.path() + "/" + ui.comboBox_chart->currentText() + ".txt";
 }
 
 void MenuWidget::pushButtonPlayClicked()
@@ -125,7 +111,13 @@ void MenuWidget::pushButtonPlayClicked()
 	}
 	else
 	{
-
+		// Update songFile and chartFile
+		QStringList songFileFilters;
+		songFileFilters << "*.mp3" << "*.ogg" << "*.wav" << "*.flac" << "*.m4a";
+		QString songFileName = songDir.entryList(songFileFilters, QDir::Files).at(0);
+		songFilePath = songDir.path() + "/" + songFileName;
+		chartFilePath = songDir.path() + "/" + ui.comboBox_chart->currentText() + ".txt";
+		qDebug() << songFilePath << "\n" << chartFilePath;
 
 		// Initialize PlayWidget
 		playWidget = new PlayWidget(songFilePath, chartFilePath, settingsWidget);

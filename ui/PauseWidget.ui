@@ -6,9 +6,27 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>904</width>
-    <height>411</height>
+    <width>1200</width>
+    <height>675</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1200</width>
+    <height>675</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1200</width>
+    <height>675</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>PauseWidget</string>
@@ -16,7 +34,7 @@
   <widget class="QPushButton" name="pushButton_backMenu">
    <property name="geometry">
     <rect>
-     <x>470</x>
+     <x>460</x>
      <y>20</y>
      <width>64</width>
      <height>64</height>
@@ -25,19 +43,29 @@
    <property name="styleSheet">
     <string notr="true">QPushButton
 {
-background-color:transparent;
-background-image:url(./res/icon/home.png);
-border:0px;
+	background-color:transparent;
+	background-image:url(./res/icon/home_white_64x.png);
+	border:0px;
+}
+
+QPushButton:pressed
+{
+	background-color:transparent;
+	background-image:url(./res/icon/home_black_64x.png);
+	border:0px;
 }</string>
    </property>
    <property name="text">
     <string/>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_restart">
    <property name="geometry">
     <rect>
-     <x>620</x>
+     <x>610</x>
      <y>20</y>
      <width>64</width>
      <height>64</height>
@@ -46,19 +74,29 @@ border:0px;
    <property name="styleSheet">
     <string notr="true">QPushButton
 {
-background-color:transparent;
-background-image:url(./res/icon/restart_white_64x.png);
-border:0px;
+	background-color:transparent;
+	background-image:url(./res/icon/restart_white_64x.png);
+	border:0px;
+}
+
+QPushButton:pressed
+{
+	background-color:transparent;
+	background-image:url(./res/icon/restart_black_64x.png);
+	border:0px;
 }</string>
    </property>
    <property name="text">
     <string/>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_continue">
    <property name="geometry">
     <rect>
-     <x>778</x>
+     <x>760</x>
      <y>20</y>
      <width>64</width>
      <height>64</height>
@@ -67,13 +105,23 @@ border:0px;
    <property name="styleSheet">
     <string notr="true">QPushButton
 {
-background-color:transparent;
-background-image:url(./res/icon/continue_white_64x .png);
-border:0px;
+	background-color:transparent;
+	background-image:url(./res/icon/continue_white_64x.png);
+	border:0px;
+}
+
+QPushButton:pressed
+{
+	background-color:transparent;
+	background-image:url(./res/icon/continue_black_64x.png);
+	border:0px;
 }</string>
    </property>
    <property name="text">
     <string/>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QLabel" name="background">
@@ -89,6 +137,10 @@ border:0px;
     <string/>
    </property>
   </widget>
+  <zorder>background</zorder>
+  <zorder>pushButton_backMenu</zorder>
+  <zorder>pushButton_restart</zorder>
+  <zorder>pushButton_continue</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

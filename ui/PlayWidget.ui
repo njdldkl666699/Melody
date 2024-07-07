@@ -6,9 +6,27 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>400</height>
+    <width>1200</width>
+    <height>675</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1200</width>
+    <height>675</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1200</width>
+    <height>675</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>PlayWidget</string>
@@ -16,21 +34,55 @@
   <widget class="QPushButton" name="pushButton_pause">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>20</y>
-     <width>80</width>
-     <height>24</height>
+     <x>30</x>
+     <y>40</y>
+     <width>64</width>
+     <height>64</height>
     </rect>
    </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>64</width>
+     <height>64</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>64</width>
+     <height>64</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton
+{
+	background-image:url(./res/icon/pause_white_64x.png);
+	border:0px;
+}
+
+QPushButton:pressed
+{
+	background-image:url(./res/icon/pause_black_64x.png);
+	border:0px;
+}</string>
+   </property>
    <property name="text">
-    <string>Pause</string>
+    <string/>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_debug">
    <property name="geometry">
     <rect>
-     <x>200</x>
-     <y>260</y>
+     <x>520</x>
+     <y>430</y>
      <width>211</width>
      <height>24</height>
     </rect>
@@ -39,6 +91,40 @@
     <string>Game End [Debug]</string>
    </property>
   </widget>
+  <widget class="QLabel" name="background">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1200</width>
+     <height>675</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>1200</width>
+     <height>675</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>1200</width>
+     <height>675</height>
+    </size>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <zorder>background</zorder>
+  <zorder>pushButton_pause</zorder>
+  <zorder>pushButton_debug</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

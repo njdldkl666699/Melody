@@ -1,12 +1,17 @@
 #pragma once
 
-#include <QObject>
+#include"Note.h"
 
-class Hold  : public QObject
+class Hold : public Note
 {
 	Q_OBJECT
 
 public:
-	Hold(QObject *parent);
+	Hold(int strtTime, int edTime, QKeySequence ky, QObject* parent = nullptr);
 	~Hold();
+
+	bool judge() override;
+
+private:
+	int endTime;
 };

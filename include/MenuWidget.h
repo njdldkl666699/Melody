@@ -16,11 +16,6 @@ class MenuWidget : public QWidget
 public:
 	MenuWidget(QWidget* parent = nullptr);
 	~MenuWidget();
-	QString getChartFilePath() const
-	{
-		return chartFilePath;
-	}
-
 
 protected:
 	void keyPressEvent(QKeyEvent* event) override;
@@ -32,7 +27,6 @@ private slots:
 
 private:
 	void initSongComboBox();
-	void initMenuWidget();
 	void initBackgroundGIF();
 
 private:

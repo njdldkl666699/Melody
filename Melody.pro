@@ -19,7 +19,8 @@ SOURCES += \
     src/PlayWidget.cpp \
     src/SettingsWidget.cpp \
     src/Tap.cpp \
-    src/main.cpp
+    src/main.cpp \
+    src/Note.cpp
 
 HEADERS += \
     include/EndWidget.h \
@@ -30,6 +31,7 @@ HEADERS += \
     include/PlayWidget.h \
     include/SettingsWidget.h \
     include/Tap.h
+    include/Note.h
 
 INCLUDEPATH += \
     include

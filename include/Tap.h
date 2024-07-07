@@ -1,14 +1,16 @@
 #pragma once
 
-#include <QObject>
+#include"Note.h"
 
-class Tap  : public QObject
+class Tap : public Note
 {
 	Q_OBJECT
 
 public:
-	Tap(QObject *parent);
+	Tap(int strtTime, QKeySequence ky, QObject* parent = nullptr);
 	~Tap();
+
+	bool judge() override;
 
 private:
 };

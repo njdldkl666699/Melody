@@ -33,8 +33,6 @@ void SettingsWidget::initBackground()
 
 void SettingsWidget::initSettingsWidget()
 {
-	setFixedSize(1200, 675);
-
 	QFile file("./settings.cfg");
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 	{

@@ -13,17 +13,15 @@ class PlayWidget : public QWidget
 
 public:
 	PlayWidget(const QString& songFileName, const QString& chartFileName,
-		SettingsWidget* settings, QWidget* parent = nullptr);
+		const SettingsWidget* settings, QWidget* parent = nullptr);
 
 	~PlayWidget();
-
 
 signals:
 	void signalBackMenu();
 
 private:
 	void initPlayWidget();
-
 
 private slots:
 	void gamePause();

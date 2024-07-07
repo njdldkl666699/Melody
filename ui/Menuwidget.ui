@@ -37,8 +37,8 @@
   <widget class="QComboBox" name="comboBox_song">
    <property name="geometry">
     <rect>
-     <x>390</x>
-     <y>560</y>
+     <x>320</x>
+     <y>550</y>
      <width>231</width>
      <height>31</height>
     </rect>
@@ -124,7 +124,7 @@ QPushButton:pressed
   <widget class="QLabel" name="songPicture">
    <property name="geometry">
     <rect>
-     <x>480</x>
+     <x>420</x>
      <y>90</y>
      <width>400</width>
      <height>400</height>
@@ -149,10 +149,10 @@ QPushButton:pressed
     </size>
    </property>
    <property name="frameShape">
-    <enum>QFrame::Box</enum>
+    <enum>QFrame::Shape::Box</enum>
    </property>
    <property name="frameShadow">
-    <enum>QFrame::Raised</enum>
+    <enum>QFrame::Shadow::Raised</enum>
    </property>
    <property name="lineWidth">
     <number>1</number>
@@ -225,8 +225,8 @@ QPushButton:pressed
   <widget class="QComboBox" name="comboBox_chart">
    <property name="geometry">
     <rect>
-     <x>770</x>
-     <y>560</y>
+     <x>700</x>
+     <y>550</y>
      <width>231</width>
      <height>31</height>
     </rect>
