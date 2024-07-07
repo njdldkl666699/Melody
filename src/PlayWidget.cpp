@@ -38,6 +38,9 @@ PlayWidget::~PlayWidget()
 void PlayWidget::initPlayWidget()
 {
 	setFixedSize(1200, 675);
+	//deBug
+	endWidget->show();
+	this->hide();
 }
 
 void PlayWidget::gamePause()

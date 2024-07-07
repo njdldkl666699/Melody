@@ -103,6 +103,7 @@ void MenuWidget::comboBoxSongSelected(const QString& songName)
 	QString songPicName = songDir.entryList(songPicFilters, QDir::Files).at(0);
 	QString songPicPath = songDir.path() + "/" + songPicName;
 	QPixmap songPic(songPicPath);
+
 	songPic = songPic.scaled(ui.songPicture->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 	ui.songPicture->setPixmap(songPic);
 
@@ -124,6 +125,8 @@ void MenuWidget::pushButtonPlayClicked()
 	}
 	else
 	{
+
+
 		// Initialize PlayWidget
 		playWidget = new PlayWidget(songFilePath, chartFilePath, settingsWidget);
 		connect(playWidget, &PlayWidget::signalBackMenu, this, [this]()
@@ -135,3 +138,4 @@ void MenuWidget::pushButtonPlayClicked()
 		this->hide();
 	}
 }
+
