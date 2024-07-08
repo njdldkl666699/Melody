@@ -8,9 +8,3 @@ Tap::Tap(int strtTime, QKeySequence ky, QLabel* parent)
 
 Tap::~Tap()
 {}
-
-bool Tap::judge()
-{
-	//to be implemented
-	return true;
-}

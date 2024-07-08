@@ -16,9 +16,8 @@ public:
 
 	int getStartTime()const { return startTime; }
 	QKeySequence getKey()const { return key; }
-
-	// judge if the note is hit, pure virtual function
-	virtual bool judge() = 0;
+	
+	virtual QString getType()const = 0;
 
 protected:
 	int startTime;

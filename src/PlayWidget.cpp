@@ -1,36 +1,32 @@
 #include "PlayWidget.h"
 
-PlayWidget::PlayWidget(const QString& songFilePath, const QString& chartFilePath,
+PlayWidget::PlayWidget(const QString& songFilePth, const QString& chartFilePth,
 	const SettingsWidget* settingsWidget, QWidget* parent)
-	: gameController(new GameController(songFilePath, chartFilePath, settingsWidget)),
-	pauseWidget(new PauseWidget()), endWidget(nullptr),
-	QWidget(parent), settings(settingsWidget)
+	: endWidget(nullptr), QWidget(parent),
+	pauseWidget(new PauseWidget()), settings(settingsWidget),
+	songFilePath(songFilePth), chartFilePath(chartFilePth),
+	gameController(new GameController(songFilePth, chartFilePth, settingsWidget))
 {
 	ui.setupUi(this);
-
-	auto songName = songFilePath;
-	auto chartName = chartFilePath;
-
 	initPlayWidget();
+
+	//connect GameController related
+	connect(this, &PlayWidget::signalKeyPressed, gameController, &GameController::judgeKeyPress);
+	connect(this, &PlayWidget::signalKeyReleased, gameController, &GameController::judgeKeyRelease);
+	connect(gameController, &GameController::musicEnded, this, &PlayWidget::gameEnd);
 
 	//connect PauseWidget related
 	connect(ui.pushButton_pause, &QPushButton::clicked, this, &PlayWidget::gamePause);
 	connect(pauseWidget, &PauseWidget::signalBackMenu, this, &PlayWidget::gameClose);
-	connect(pauseWidget, &PauseWidget::signalRestart, this, &PlayWidget::initPlayWidget);
+	connect(pauseWidget, &PauseWidget::signalRestart, this, &PlayWidget::gameRestart);
 	connect(pauseWidget, &PauseWidget::signalContinue, this, &PlayWidget::gameContinue);
 
 	//connect EndWidget related
 	connect(endWidget, &EndWidget::signalBackMenu, this, &PlayWidget::gameClose);
-	connect(endWidget, &EndWidget::signalRestart, this, &PlayWidget::initPlayWidget);
+	connect(endWidget, &EndWidget::signalRestart, this, &PlayWidget::gameRestart);
 
-	//connect([MusicPlayer],[musicEnd],this,&PlayWidget::gameEndSlot);
 	//Debug
-	connect(ui.pushButton_debug, &QPushButton::clicked, this, [this]()
-		{
-			endWidget = new EndWidget(gameController);
-			endWidget->show();
-			this->hide();
-		});
+	connect(ui.pushButton_debug, &QPushButton::clicked, this, &PlayWidget::gameEnd);
 }
 
 PlayWidget::~PlayWidget()
@@ -51,23 +47,13 @@ void PlayWidget::initPlayWidget()
 
 void PlayWidget::keyPressEvent(QKeyEvent* event)
 {
-	emit signalKeyPressed(event);
-	//QString key[4] = { settings->getKey_1().toString(), settings->getKey_2().toString(),
-	//	settings->getKey_3().toString(), settings->getKey_4().toString() };
-	//for (int i = 0; i < 4; i++)
-	//{
-	//	qDebug() << key[i] << '\n' << event->text();
-	//	if (key[i] == event->text())
-	//	{
-	//		qDebug()<< "Hit!";
-	//		int musicCurrentTime = gameController->getMusicCurrentTime();
-	//		int noteStartTime=gameController.
-	//		//case perfect
-	//		
-	//		//case good
-	//		//case miss
-	//	}
-	//}
+	if (event->key() == Qt::Key_Escape)
+	{
+		gamePause();
+		return;
+	}
+	else
+		emit signalKeyPressed(event);
 }
 
 void PlayWidget::keyReleaseEvent(QKeyEvent* event)
@@ -78,14 +64,13 @@ void PlayWidget::keyReleaseEvent(QKeyEvent* event)
 void PlayWidget::gamePause()
 {
 	// Pause music
-
+	gameController->pauseMusic();
 	// Pause game
 
 	// Show pause menu
 	pauseWidget->show();
 	this->hide();
 }
-
 
 void PlayWidget::gameContinue()
 {
@@ -94,11 +79,26 @@ void PlayWidget::gameContinue()
 	// Continue the game
 
 	// Continue the music
+	gameController->playMusic();
+	this->show();
+}
+
+void PlayWidget::gameRestart()
+{
+	gameController->reset();
 	this->show();
 }
 
 void PlayWidget::gameClose()
 {
 	emit signalBackMenu();
+	this->close();
+}
+
+void PlayWidget::gameEnd()
+{
+	gameController->stopMusic();
+	endWidget = new EndWidget(gameController);
+	endWidget->show();
 	this->hide();
 }
