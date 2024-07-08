@@ -30,8 +30,8 @@ signals:
 
 private:
 	void initBackground();
-	void initSettingsWidget();
-	void initUISettings();
+	void initSettings();
+	void initUIValues();
 
 private slots:
 	void saveSettings();

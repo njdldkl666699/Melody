@@ -10,8 +10,8 @@ SettingsWidget::SettingsWidget(QWidget* parent)
 {
 	ui.setupUi(this);
 	initBackground();
-	initSettingsWidget();
-	initUISettings();
+	initSettings();
+	initUIValues();
 
 	connect(ui.pushButton_backMenu, &QPushButton::clicked, this, [this]()
 		{
@@ -31,7 +31,7 @@ void SettingsWidget::initBackground()
     ui.background->show();
 }
 
-void SettingsWidget::initSettingsWidget()
+void SettingsWidget::initSettings()
 {
 	QFile file("./settings.cfg");
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -82,7 +82,7 @@ void SettingsWidget::initSettingsWidget()
 	file.close();
 }
 
-void SettingsWidget::initUISettings()
+void SettingsWidget::initUIValues()
 {
 	//set values
 	ui.slider_music->setValue(musicVal);
@@ -103,6 +103,18 @@ void SettingsWidget::initUISettings()
 
 void SettingsWidget::saveSettings()
 {
+	//save settings to variables
+	musicVal = ui.slider_music->value();
+	soundVal = ui.slider_sound->value();
+	speedVal = ui.slider_speed->value();
+	biasVal = ui.slider_bias->value();
+	fpsVal = ui.comboBox_fps->currentText().toInt();
+	key_1 = ui.keySequenceEdit_1->keySequence();
+	key_2 = ui.keySequenceEdit_2->keySequence();
+	key_3 = ui.keySequenceEdit_3->keySequence();
+	key_4 = ui.keySequenceEdit_4->keySequence();
+
+	//save settings to file
 	QFile file("./settings.cfg");
 	//It can always open the file for writing, 
 	//because it is always created in the constructor
