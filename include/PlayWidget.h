@@ -37,9 +37,9 @@ private slots:
 
 private:
 	Ui::PlayWidgetClass ui;
+	GameController* gameController;
 	PauseWidget* pauseWidget;
 	EndWidget* endWidget;
 
-	GameController* gameController;
 	const SettingsWidget* settings;
 };

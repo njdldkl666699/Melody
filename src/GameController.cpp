@@ -2,14 +2,14 @@
 
 GameController::GameController(const QString& songFilePth, const QString& chartFilePth,
 	const SettingsWidget* settingsWidget, QObject* parent)
-	: QObject(parent), settings(settingsWidget), perfectCount(0), goodCount(0),
-	missCount(0), accuracy(0), score(0), combo(0), maxCombo(0),
+	: settings(settingsWidget), perfectCount(0), goodCount(0),
+	missCount(0), accuracy(0), score(0), combo(0), maxCombo(0),QObject(parent),
 	songFilePath(songFilePth), chartFilePath(chartFilePth)
 {
 	initnoteTracks();
 	initMediaPlayer();
-	qDebug() << getSongName();
-	qDebug() << getChartName();
+	//qDebug() << getSongName();
+	//qDebug() << getChartName();
 }
 
 GameController::~GameController()

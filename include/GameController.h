@@ -12,7 +12,6 @@
 #include<QFileInfo>
 #include<QTextStream>
 
-class PlayWidget;
 class GameController : public QObject
 {
 	Q_OBJECT
