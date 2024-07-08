@@ -7,7 +7,7 @@ class Tap : public Note
 	Q_OBJECT
 
 public:
-	Tap(int strtTime, QKeySequence ky, QObject* parent = nullptr);
+	Tap(int strtTime, QKeySequence ky, QLabel* parent = nullptr);
 	~Tap();
 
 	bool judge() override;

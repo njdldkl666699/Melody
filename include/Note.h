@@ -1,15 +1,17 @@
 #pragma once
 
-#include <QObject>
 #include<QKeySequence>
 #include<QTimer>
+#include<QTime>
+#include<QLabel>
+#include<QSoundEffect>
 
-class Note  : public QObject
+class Note  : public QLabel
 {
 	Q_OBJECT
 
 public:
-	Note(int strtTime, QKeySequence ky, QObject* parent = nullptr);
+	Note(int strtTime, QKeySequence ky, QLabel* parent = nullptr);
 	~Note();
 
 	int getStartTime()const { return startTime; }
@@ -21,4 +23,5 @@ public:
 protected:
 	int startTime;
 	QKeySequence key;
+	QSoundEffect sound;
 };

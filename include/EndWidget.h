@@ -10,7 +10,7 @@ class EndWidget : public QWidget
 	Q_OBJECT
 
 public:
-	EndWidget(GameController* game, QWidget* parent = nullptr);
+	EndWidget(const GameController* game, QWidget* parent = nullptr);
 	~EndWidget();
 
 signals:
@@ -36,6 +36,6 @@ private:
 	int score;
 
 	Ui::EndWidgetClass ui;
-	GameController* gameController;
+	const GameController* gameController;
 	QMovie* backgroundGIF;
 };

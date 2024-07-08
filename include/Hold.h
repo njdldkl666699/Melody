@@ -7,7 +7,7 @@ class Hold : public Note
 	Q_OBJECT
 
 public:
-	Hold(int strtTime, int edTime, QKeySequence ky, QObject* parent = nullptr);
+	Hold(int strtTime, int edTime, QKeySequence ky, QLabel* parent = nullptr);
 	~Hold();
 
 	bool judge() override;

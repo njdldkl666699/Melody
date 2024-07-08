@@ -30,7 +30,7 @@ HEADERS += \
     include/PauseWidget.h \
     include/PlayWidget.h \
     include/SettingsWidget.h \
-    include/Tap.h
+    include/Tap.h \
     include/Note.h
 
 INCLUDEPATH += \

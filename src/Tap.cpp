@@ -1,6 +1,6 @@
 #include "Tap.h"
 
-Tap::Tap(int strtTime, QKeySequence ky, QObject* parent)
+Tap::Tap(int strtTime, QKeySequence ky, QLabel* parent)
 	: Note(strtTime, ky, parent)
 {
 

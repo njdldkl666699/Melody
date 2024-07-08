@@ -2,8 +2,8 @@
 
 PlayWidget::PlayWidget(const QString& songFilePath, const QString& chartFilePath,
 	const SettingsWidget* settings, QWidget* parent)
-	: pauseWidget(new PauseWidget()), QWidget(parent), 
-	gameController(nullptr), endWidget(new EndWidget(gameController))
+	: gameController(new GameController(songFilePath, chartFilePath, settings)),
+	pauseWidget(new PauseWidget()), endWidget(new EndWidget(gameController)), QWidget(parent)
 {
 	ui.setupUi(this);
 

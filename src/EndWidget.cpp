@@ -2,7 +2,7 @@
 #include "MenuWidget.h"
 #include<QPixmap>
 
-EndWidget::EndWidget(GameController* game, QWidget* parent)
+EndWidget::EndWidget(const GameController* game, QWidget* parent)
 	: gameController(game), QWidget(parent)
 {
 	ui.setupUi(this);
