@@ -13,7 +13,7 @@ class PlayWidget : public QWidget
 	Q_OBJECT
 
 public:
-	PlayWidget(const QString& songFileName, const QString& chartFileName,
+	PlayWidget(const QString& songFilePth, const QString& chartFilePth,
 		const SettingsWidget* settingsWidget, QWidget* parent = nullptr);
 
 	~PlayWidget();
@@ -33,7 +33,9 @@ private:
 private slots:
 	void gamePause();
 	void gameContinue();
+	void gameRestart();
 	void gameClose();
+	void gameEnd();
 
 private:
 	Ui::PlayWidgetClass ui;
@@ -42,4 +44,6 @@ private:
 	EndWidget* endWidget;
 
 	const SettingsWidget* settings;
+	const QString& songFilePath;
+	const QString& chartFilePath;
 };

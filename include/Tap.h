@@ -10,7 +10,7 @@ public:
 	Tap(int strtTime, QKeySequence ky, QLabel* parent = nullptr);
 	~Tap();
 
-	bool judge() override;
+	QString getType()const override { return "Tap"; }
 
 protected:
 };
