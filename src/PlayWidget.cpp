@@ -1,9 +1,10 @@
 #include "PlayWidget.h"
 
 PlayWidget::PlayWidget(const QString& songFilePath, const QString& chartFilePath,
-	const SettingsWidget* settings, QWidget* parent)
-	: gameController(new GameController(songFilePath, chartFilePath, settings)),
-	pauseWidget(new PauseWidget()), endWidget(new EndWidget(gameController)), QWidget(parent)
+	const SettingsWidget* settingsWidget, QWidget* parent)
+	: gameController(new GameController(songFilePath, chartFilePath, settingsWidget)),
+	pauseWidget(new PauseWidget()), endWidget(new EndWidget(gameController)),
+	QWidget(parent), settings(settingsWidget)
 {
 	ui.setupUi(this);
 
@@ -45,6 +46,32 @@ void PlayWidget::initPlayWidget()
 		Qt::KeepAspectRatio, Qt::SmoothTransformation);
 	ui.background->setPixmap(backgroundPNG);
 	this->show();
+}
+
+void PlayWidget::keyPressEvent(QKeyEvent* event)
+{
+	emit signalKeyPressed(event);
+	//QString key[4] = { settings->getKey_1().toString(), settings->getKey_2().toString(),
+	//	settings->getKey_3().toString(), settings->getKey_4().toString() };
+	//for (int i = 0; i < 4; i++)
+	//{
+	//	qDebug() << key[i] << '\n' << event->text();
+	//	if (key[i] == event->text())
+	//	{
+	//		qDebug()<< "Hit!";
+	//		int musicCurrentTime = gameController->getMusicCurrentTime();
+	//		int noteStartTime=gameController.
+	//		//case perfect
+	//		
+	//		//case good
+	//		//case miss
+	//	}
+	//}
+}
+
+void PlayWidget::keyReleaseEvent(QKeyEvent* event)
+{
+	emit signalKeyReleased(event);
 }
 
 void PlayWidget::gamePause()

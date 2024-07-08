@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QWidget>
+#include<QKeyEvent>
 #include "ui_PlayWidget.h"
 #include"EndWidget.h"
 #include"PauseWidget.h"
@@ -13,12 +14,18 @@ class PlayWidget : public QWidget
 
 public:
 	PlayWidget(const QString& songFileName, const QString& chartFileName,
-		const SettingsWidget* settings, QWidget* parent = nullptr);
+		const SettingsWidget* settingsWidget, QWidget* parent = nullptr);
 
 	~PlayWidget();
 
 signals:
 	void signalBackMenu();
+	void signalKeyPressed(QKeyEvent* event);
+	void signalKeyReleased(QKeyEvent* event);
+
+protected:
+	void keyPressEvent(QKeyEvent* event) override;
+	void keyReleaseEvent(QKeyEvent* event) override;
 
 private:
 	void initPlayWidget();
@@ -34,4 +41,5 @@ private:
 	EndWidget* endWidget;
 
 	GameController* gameController;
+	const SettingsWidget* settings;
 };

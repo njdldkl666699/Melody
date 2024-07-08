@@ -8,7 +8,8 @@ GameController::GameController(const QString& songFilePth, const QString& chartF
 {
 	initnoteTracks();
 	initMediaPlayer();
-	//qDebug() << getSongName();
+	qDebug() << getSongName();
+	qDebug() << getChartName();
 }
 
 GameController::~GameController()
@@ -29,7 +30,10 @@ QString GameController::getSongName()const
 QString GameController::getChartName()const
 {
 	QFileInfo fileInfo(chartFilePath);
-	return fileInfo.baseName();
+	QString chartName = fileInfo.fileName();
+	int suffixPos = chartName.lastIndexOf(".txt");
+	chartName = chartName.left(suffixPos);
+	return chartName;
 }
 
 QPixmap GameController::getSongPicture()const
@@ -127,6 +131,13 @@ void GameController::initnoteTracks()
 	chartFile.close();
 }
 
+void GameController::initMediaPlayer()
+{
+	//to be implemented
+	musicPlayer.setSource(QUrl::fromLocalFile(songFilePath));
+	audioOutput.setVolume(settings->getMusicVal() / 100.0f);
+}
+
 int GameController::getNoteTime(const QString& rawTimeData)const
 {
 	QStringList timeData = rawTimeData.split(",");
@@ -137,9 +148,7 @@ int GameController::getNoteTime(const QString& rawTimeData)const
 	return miliseconds;
 }
 
-void GameController::initMediaPlayer()
+int GameController::getMusicCurrentTime()const
 {
-	//to be implemented
-	musicPlayer.setSource(QUrl::fromLocalFile(songFilePath));
-	audioOutput.setVolume(settings->getMusicVal() / 100.0f);
+	return musicPlayer.position();
 }

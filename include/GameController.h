@@ -12,6 +12,7 @@
 #include<QFileInfo>
 #include<QTextStream>
 
+class PlayWidget;
 class GameController : public QObject
 {
 	Q_OBJECT
@@ -40,6 +41,11 @@ private:
 
 	//get Unbiased Note Time (ms)
 	int getNoteTime(const QString& rawTimeData)const;
+	//get Music Current Time (ms)
+	int getMusicCurrentTime()const;
+
+private slots:
+	//void judge();
 
 private:
 	uint perfectCount, goodCount, missCount;

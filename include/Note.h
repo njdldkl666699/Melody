@@ -1,7 +1,6 @@
 #pragma once
 
 #include<QKeySequence>
-#include<QKeyEvent>
 #include<QTimer>
 #include<QTime>
 #include<QLabel>

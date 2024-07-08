@@ -13,5 +13,4 @@ public:
 	bool judge() override;
 
 protected:
-	void keyPressEvent(QKeyEvent* event)override;
 };
