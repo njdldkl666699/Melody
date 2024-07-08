@@ -8,6 +8,7 @@
 #include<QAudioOutput>
 #include<QQueue>
 #include<QFile>
+#include<QFileInfo>
 #include<QTextStream>
 
 class GameController : public QObject
@@ -27,6 +28,8 @@ public:
 	float getAccuracy() const { return accuracy; }
 	uint getScore() const { return score; }
 	uint getMaxCombo() const { return maxCombo; }
+	QString getSongName()const;
+	QString getChartName()const;
 
 private:
 	//init functions

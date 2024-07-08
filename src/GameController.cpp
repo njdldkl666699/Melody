@@ -8,6 +8,7 @@ GameController::GameController(const QString& songFilePth, const QString& chartF
 {
 	initnoteTracks();
 	initMediaPlayer();
+	//qDebug() << getSongName();
 }
 
 GameController::~GameController()
@@ -15,6 +16,18 @@ GameController::~GameController()
 	for (int i = 0; i < 4; i++)
 		while (!noteTracks[i].isEmpty())
 			delete noteTracks[i].dequeue();
+}
+
+QString GameController::getSongName()const
+{
+	QFileInfo fileInfo(songFilePath);
+	return fileInfo.baseName();
+}
+
+QString GameController::getChartName()const
+{
+	QFileInfo fileInfo(chartFilePath);
+	return fileInfo.baseName();
 }
 
 void GameController::initnoteTracks()
@@ -114,6 +127,7 @@ int GameController::getNoteTime(const QString& rawTimeData)const
 
 void GameController::initMediaPlayer()
 {
+	//to be implemented
 	musicPlayer.setSource(QUrl::fromLocalFile(songFilePath));
 	audioOutput.setVolume(settings->getMusicVal() / 100.0f);
 }
