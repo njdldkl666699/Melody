@@ -39,6 +39,7 @@ QString GameController::getChartName()const
 QPixmap GameController::getSongPicture()const
 {
 	QDir songDir(songFilePath);
+	songDir.cdUp();
 	QStringList songPicFilters;
 	songPicFilters << "*.jpg" << "*.png";
 	QString songPicName = songDir.entryList(songPicFilters, QDir::Files).at(0);

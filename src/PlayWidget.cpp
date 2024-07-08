@@ -3,7 +3,7 @@
 PlayWidget::PlayWidget(const QString& songFilePath, const QString& chartFilePath,
 	const SettingsWidget* settingsWidget, QWidget* parent)
 	: gameController(new GameController(songFilePath, chartFilePath, settingsWidget)),
-	pauseWidget(new PauseWidget()), endWidget(new EndWidget(gameController)),
+	pauseWidget(new PauseWidget()), endWidget(nullptr),
 	QWidget(parent), settings(settingsWidget)
 {
 	ui.setupUi(this);
@@ -27,6 +27,7 @@ PlayWidget::PlayWidget(const QString& songFilePath, const QString& chartFilePath
 	//Debug
 	connect(ui.pushButton_debug, &QPushButton::clicked, this, [this]()
 		{
+			endWidget = new EndWidget(gameController);
 			endWidget->show();
 			this->hide();
 		});
