@@ -27,16 +27,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
-      <Extensions>qrc;*</Extensions>
-      <ParseFiles>false</ParseFiles>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
-      <Extensions>qrc;*</Extensions>
-      <ParseFiles>false</ParseFiles>
-    </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
@@ -59,6 +49,9 @@
     <ClCompile Include="src\MenuWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Note.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\PauseWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -74,8 +67,8 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Note.cpp">
-      <Filter>Generated Files</Filter>
+    <ClCompile Include="confirmDialog.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +84,9 @@
     <QtMoc Include="include\MenuWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="include\Note.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
     <QtMoc Include="include\PauseWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
@@ -103,9 +99,17 @@
     <QtMoc Include="include\Tap.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="include\Note.h">
+    <QtMoc Include="confirmDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="debug\moc_predefs.h.cbt">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="release\moc_predefs.h.cbt">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="ui\EndWidget.ui">
@@ -121,6 +125,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="ui\SettingsWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="confirmDialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

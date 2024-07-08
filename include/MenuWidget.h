@@ -7,6 +7,7 @@
 #include<QFile>
 #include"SettingsWidget.h"
 #include"PlayWidget.h"
+#include "confirmDialog.h"
 #include "ui_MenuWidget.h"
 
 class MenuWidget : public QWidget
@@ -35,6 +36,7 @@ private:
 
 	SettingsWidget* settingsWidget;
 	PlayWidget* playWidget;
+	ConfirmDialog* confirmDialog;
 
 	QDir beatmapDir, songDir;
 

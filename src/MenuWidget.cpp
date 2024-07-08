@@ -2,7 +2,7 @@
 #include<QPixmap>
 
 MenuWidget::MenuWidget(QWidget* parent)
-	: QWidget(parent), settingsWidget(new SettingsWidget(parent)), playWidget(nullptr)
+	: QWidget(parent), settingsWidget(new SettingsWidget(parent)), playWidget(nullptr),confirmDialog(new ConfirmDialog(parent))
 {
 	ui.setupUi(this);
 	initBackgroundGIF();
@@ -21,6 +21,16 @@ MenuWidget::MenuWidget(QWidget* parent)
 
 	// connect PlayWidget related
 	connect(ui.pushButton_play, &QPushButton::clicked, this, &MenuWidget::pushButtonPlayClicked);
+
+	//connect confirmDialog related
+	connect(confirmDialog, &ConfirmDialog::backToMenu, this, [this]()
+		{
+			this->show();
+		});
+	connect(confirmDialog, &ConfirmDialog::exitGame, this, [this]()
+	{
+	QApplication::quit();
+	});
 }
 
 MenuWidget::~MenuWidget()
@@ -59,8 +69,19 @@ void MenuWidget::keyPressEvent(QKeyEvent* event)
 	if (event->key() == Qt::Key_Escape)
 	{
 		qDebug() << "Escape key pressed!";
-		// close the window by escape key
-		this->close();
+		// confirm to close the window by escape key
+		//ConfirmDialog confirmDialog(this);
+		
+
+		if (confirmDialog->exec() == QDialog::Accepted)
+		{
+			event->accept();
+		}
+		else
+		{
+			event->ignore();
+		}
+		
 	}
 	else
 	{
