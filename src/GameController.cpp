@@ -20,14 +20,26 @@ GameController::~GameController()
 
 QString GameController::getSongName()const
 {
-	QFileInfo fileInfo(songFilePath);
-	return fileInfo.baseName();
+	QDir songDir(songFilePath);
+	songDir.cdUp();
+	//qDebug() << songDir.dirName();
+	return songDir.dirName();
 }
 
 QString GameController::getChartName()const
 {
 	QFileInfo fileInfo(chartFilePath);
 	return fileInfo.baseName();
+}
+
+QPixmap GameController::getSongPicture()const
+{
+	QDir songDir(songFilePath);
+	QStringList songPicFilters;
+	songPicFilters << "*.jpg" << "*.png";
+	QString songPicName = songDir.entryList(songPicFilters, QDir::Files).at(0);
+	QString songPicPath = songDir.path() + "/" + songPicName;
+	return QPixmap(songPicPath);
 }
 
 void GameController::initnoteTracks()

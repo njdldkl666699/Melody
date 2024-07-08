@@ -49,6 +49,7 @@ void MenuWidget::initSongComboBox()
 void MenuWidget::initBackgroundGIF()
 {
 	backgroundGIF = new QMovie("./res/background/menu.gif");
+	backgroundGIF->setScaledSize(this->size());
 	ui.background->setMovie(backgroundGIF);
 	backgroundGIF->start();
 }

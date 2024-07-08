@@ -40,6 +40,10 @@ PlayWidget::~PlayWidget()
 
 void PlayWidget::initPlayWidget()
 {
+	QPixmap backgroundPNG("./res/background/play.png");
+	backgroundPNG = backgroundPNG.scaled(ui.background->size(),
+		Qt::KeepAspectRatio, Qt::SmoothTransformation);
+	ui.background->setPixmap(backgroundPNG);
 	this->show();
 }
 

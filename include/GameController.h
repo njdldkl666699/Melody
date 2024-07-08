@@ -7,6 +7,7 @@
 #include<QMediaPlayer>
 #include<QAudioOutput>
 #include<QQueue>
+#include<QDir>
 #include<QFile>
 #include<QFileInfo>
 #include<QTextStream>
@@ -30,6 +31,7 @@ public:
 	uint getMaxCombo() const { return maxCombo; }
 	QString getSongName()const;
 	QString getChartName()const;
+	QPixmap getSongPicture()const;
 
 private:
 	//init functions
