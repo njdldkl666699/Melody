@@ -131,17 +131,31 @@ void GameController::initnoteTracks()
 
 		//construct note
 		Note* note = nullptr;
+		QString soundPath = "./res/note/sound.wav";
+		QString picturePath;
 		if (!isHold)
 		{
 			//Tap note
-			note = new Tap(startTime, keySequence);
+			if (key == 0 || key == 3)		//Outer Track
+				picturePath = "./res/note/note_blue.png";
+			else if (key == 1 || key == 2)	//Inner Track
+				picturePath = "./res/note/note_pink.png";
+			else							//not happen	
+				return;
+			note = new Tap(startTime, keySequence, soundPath, picturePath, QSize(10, 10));
 		}
 		else
 		{
 			//Hold note
 			QString endTimeRaw = noteData.at(2);
 			int endTime = getNoteTime(endTimeRaw);
-			note = new Hold(startTime, endTime, keySequence);
+			if (key == 0 || key == 3)		//Outer Track
+				picturePath = "./res/note/hold_blue.png";
+			else if (key == 1 || key == 2)	//Inner Track
+				picturePath = "./res/note/hold_pink.png";
+			else							//not happen	
+				return;
+			note = new Hold(startTime, endTime, keySequence, soundPath, picturePath, QSize(10, 10));
 		}
 
 		//push note to noteTracks

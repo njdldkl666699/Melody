@@ -29,10 +29,12 @@ private slots:
 private:
 	void initSongComboBox();
 	void initBackgroundGIF();
+	void initLogoGIF();
 
 private:
 	Ui::MenuWidgetClass ui;
 	QMovie* backgroundGIF;
+	QMovie* logoGIF;
 
 	SettingsWidget* settingsWidget;
 	PlayWidget* playWidget;

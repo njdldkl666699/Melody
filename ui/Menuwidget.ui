@@ -277,12 +277,26 @@ QPushButton:pressed
     <string/>
    </property>
   </widget>
+  <widget class="QLabel" name="logo">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>400</width>
+     <height>225</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
   <zorder>background</zorder>
   <zorder>comboBox_song</zorder>
   <zorder>pushButton_settings</zorder>
   <zorder>songPicture</zorder>
   <zorder>pushButton_play</zorder>
   <zorder>comboBox_chart</zorder>
+  <zorder>logo</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

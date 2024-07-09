@@ -6,6 +6,7 @@ MenuWidget::MenuWidget(QWidget* parent)
 {
 	ui.setupUi(this);
 	initBackgroundGIF();
+	initLogoGIF();
 
 	// SongComboBox related
 	initSongComboBox();
@@ -56,6 +57,14 @@ void MenuWidget::initBackgroundGIF()
 	backgroundGIF->setScaledSize(this->size());
 	ui.background->setMovie(backgroundGIF);
 	backgroundGIF->start();
+}
+
+void MenuWidget::initLogoGIF()
+{
+	logoGIF=new QMovie("./res/icon/logo.gif");
+	logoGIF->setScaledSize(ui.logo->size());
+	ui.logo->setMovie(logoGIF);
+	logoGIF->start();
 }
 
 void MenuWidget::keyPressEvent(QKeyEvent* event)

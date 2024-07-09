@@ -15,7 +15,8 @@ public:
 	};
 
 public:
-	Hold(int strtTime, int edTime, QKeySequence ky, QLabel* parent = nullptr);
+	Hold(int strtTime, int edTime, const QKeySequence& ky, const QString& soundPath,
+		const QString& picturePath, const QSize& size, QLabel* parent = nullptr);
 	~Hold();
 
 	QString getType()const override { return "Hold"; }
