@@ -229,7 +229,6 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 				{
 					missCount++;
 					combo = 0;
-					maxCombo = 0;
 					//pop note and delete
 					delete noteTracks[i].dequeue();
 				}
@@ -317,7 +316,6 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 				{
 					missCount++;
 					combo = 0;
-					maxCombo = 0;
 					//dequeue the Hold and push into notesOutQueue,
 					//to draw the left part. 
 					notesOutQueue.push_back(noteTracks[i].dequeue());
@@ -342,7 +340,6 @@ void GameController::judgeNoHitMiss()
 			{
 				missCount++;
 				combo = 0;
-				maxCombo = 0;
 				//pop note and delete
 				delete noteTracks[i].dequeue();
 			}
@@ -358,7 +355,6 @@ void GameController::judgeNoHitMiss()
 			{
 				missCount++;
 				combo = 0;
-				maxCombo = 0;
 				//dequeue the Hold and push into notesOutQueue,
 				//to draw the left part. 
 				notesOutQueue.push_back(noteTracks[i].dequeue());

@@ -68,7 +68,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\confirmDialog.cpp">
-      <Filter>Generated Files</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -100,7 +100,7 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="include\confirmDialog.h">
-      <Filter>Generated Files</Filter>
+      <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

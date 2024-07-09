@@ -20,7 +20,8 @@ SOURCES += \
     src/SettingsWidget.cpp \
     src/Tap.cpp \
     src/main.cpp \
-    src/Note.cpp
+    src/Note.cpp \
+    src/confirmDialog.cpp
 
 HEADERS += \
     include/EndWidget.h \
@@ -31,7 +32,8 @@ HEADERS += \
     include/PlayWidget.h \
     include/SettingsWidget.h \
     include/Tap.h \
-    include/Note.h
+    include/Note.h \
+    include/confirmDialog.h
 
 INCLUDEPATH += \
     include
@@ -41,7 +43,8 @@ FORMS += \
     ui/MenuWidget.ui \
     ui/PauseWidget.ui \
     ui/PlayWidget.ui \
-    ui/SettingsWidget.ui
+    ui/SettingsWidget.ui \
+    ui/confirmDialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
