@@ -23,14 +23,8 @@ MenuWidget::MenuWidget(QWidget* parent)
 	connect(ui.pushButton_play, &QPushButton::clicked, this, &MenuWidget::pushButtonPlayClicked);
 
 	//connect confirmDialog related
-	connect(confirmDialog, &ConfirmDialog::backToMenu, this, [this]()
-		{
-			this->show();
-		});
-	connect(confirmDialog, &ConfirmDialog::exitGame, this, [this]()
-	{
-	QApplication::quit();
-	});
+	//connect(confirmDialog, &ConfirmDialog::backToMenu, this,&MenuWidget::show);
+	connect(confirmDialog, &ConfirmDialog::exitGame, this, &MenuWidget::close);
 }
 
 MenuWidget::~MenuWidget()

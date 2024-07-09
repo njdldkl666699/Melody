@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{8D522B2B-B43F-3672-9E66-30566A8C1B30}</ProjectGuid>
+    <ProjectGuid>{1E29321D-2711-34BB-AC29-AA228F5D1E27}</ProjectGuid>
     <RootNamespace>Melody</RootNamespace>
     <Keyword>QtVS_v304</Keyword>
-    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformMinVersion>10.0.26100.0</WindowsTargetPlatformMinVersion>
     <QtMsBuild Condition="'$(QtMsBuild)'=='' OR !Exists('$(QtMsBuild)\qt.targets')">$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
   </PropertyGroup>
@@ -32,7 +32,7 @@
     <PlatformToolset>v143</PlatformToolset>
     <OutputDirectory>debug\</OutputDirectory>
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
-    <CharacterSet>NotSet</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
     <ConfigurationType>Application</ConfigurationType>
     <IntermediateDirectory>debug\</IntermediateDirectory>
     <PrimaryOutput>Melody</PrimaryOutput>
@@ -187,7 +187,7 @@
     </QtMoc>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="confirmDialog.cpp" />
+    <ClCompile Include="src\confirmDialog.cpp" />
     <ClCompile Include="src\EndWidget.cpp" />
     <ClCompile Include="src\GameController.cpp" />
     <ClCompile Include="src\Hold.cpp" />
@@ -227,7 +227,7 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="confirmDialog.ui" />
+    <QtUic Include="ui\confirmDialog.ui" />
     <QtUic Include="ui\EndWidget.ui" />
     <QtUic Include="ui\MenuWidget.ui" />
     <QtUic Include="ui\PauseWidget.ui" />
@@ -235,7 +235,7 @@
     <QtUic Include="ui\SettingsWidget.ui" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="confirmDialog.h" />
+    <QtMoc Include="include\confirmDialog.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Import Project="$(QtMsBuild)\qt.targets" Condition="Exists('$(QtMsBuild)\qt.targets')" />

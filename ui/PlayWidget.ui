@@ -61,13 +61,13 @@
    <property name="styleSheet">
     <string notr="true">QPushButton
 {
-	background-image:url(./res/icon/pause_white_64x.png);
+	background-image:url(./res/icon/pause_black_64x.png);
 	border:0px;
 }
 
 QPushButton:pressed
 {
-	background-image:url(./res/icon/pause_black_64x.png);
+	background-image:url(./res/icon/pause_white_64x.png);
 	border:0px;
 }</string>
    </property>

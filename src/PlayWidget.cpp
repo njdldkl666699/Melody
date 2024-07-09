@@ -21,10 +21,6 @@ PlayWidget::PlayWidget(const QString& songFilePth, const QString& chartFilePth,
 	connect(pauseWidget, &PauseWidget::signalRestart, this, &PlayWidget::gameRestart);
 	connect(pauseWidget, &PauseWidget::signalContinue, this, &PlayWidget::gameContinue);
 
-	//connect EndWidget related
-	connect(endWidget, &EndWidget::signalBackMenu, this, &PlayWidget::gameClose);
-	connect(endWidget, &EndWidget::signalRestart, this, &PlayWidget::gameRestart);
-
 	//Debug
 	connect(ui.pushButton_debug, &QPushButton::clicked, this, &PlayWidget::gameEnd);
 }
@@ -99,6 +95,9 @@ void PlayWidget::gameEnd()
 {
 	gameController->stopMusic();
 	endWidget = new EndWidget(gameController);
+	//connect EndWidget related
+	connect(endWidget, &EndWidget::signalBackMenu, this, &PlayWidget::gameClose);
+	connect(endWidget, &EndWidget::signalRestart, this, &PlayWidget::gameRestart);
 	endWidget->show();
 	this->hide();
 }

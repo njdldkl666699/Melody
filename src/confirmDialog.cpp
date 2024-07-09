@@ -13,14 +13,15 @@ ConfirmDialog::~ConfirmDialog()
 
 void ConfirmDialog::on_pushButton_backMenu_clicked()
 {
-	emit backToMenu();
-	close();
+	//emit backToMenu();
+	this->close();
 }
 
 void ConfirmDialog::on_pushButton_exit_clicked()
 {
 	//accept();
 	emit exitGame();
+	this->close();
 }
 
 void ConfirmDialog::initConfirmDialog(QWidget*parent)

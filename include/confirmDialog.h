@@ -12,7 +12,7 @@ public:
 	~ConfirmDialog();
 
 signals:
-	void backToMenu();
+	//void backToMenu();
 	void exitGame();
 
 private slots:

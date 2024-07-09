@@ -28,10 +28,10 @@
   <widget class="QPushButton" name="pushButton_restart">
    <property name="geometry">
     <rect>
-     <x>1050</x>
-     <y>10</y>
-     <width>61</width>
-     <height>51</height>
+     <x>1010</x>
+     <y>20</y>
+     <width>64</width>
+     <height>64</height>
     </rect>
    </property>
    <property name="text">
@@ -43,8 +43,8 @@
    </property>
    <property name="iconSize">
     <size>
-     <width>40</width>
-     <height>40</height>
+     <width>64</width>
+     <height>64</height>
     </size>
    </property>
    <property name="checkable">
@@ -75,10 +75,10 @@
   <widget class="QPushButton" name="pushButton_backMenu">
    <property name="geometry">
     <rect>
-     <x>1120</x>
-     <y>10</y>
-     <width>71</width>
-     <height>51</height>
+     <x>1110</x>
+     <y>20</y>
+     <width>64</width>
+     <height>64</height>
     </rect>
    </property>
    <property name="text">
@@ -90,8 +90,8 @@
    </property>
    <property name="iconSize">
     <size>
-     <width>40</width>
-     <height>40</height>
+     <width>64</width>
+     <height>64</height>
     </size>
    </property>
    <property name="default">
@@ -142,7 +142,7 @@
     </rect>
    </property>
    <property name="frameShape">
-    <enum>QFrame::Box</enum>
+    <enum>QFrame::Shape::Box</enum>
    </property>
    <property name="text">
     <string/>
@@ -381,7 +381,7 @@
     </rect>
    </property>
    <property name="orientation">
-    <enum>Qt::Horizontal</enum>
+    <enum>Qt::Orientation::Horizontal</enum>
    </property>
   </widget>
   <widget class="Line" name="line_2">
@@ -394,7 +394,7 @@
     </rect>
    </property>
    <property name="orientation">
-    <enum>Qt::Horizontal</enum>
+    <enum>Qt::Orientation::Horizontal</enum>
    </property>
   </widget>
   <widget class="QLabel" name="label_scoreNum">
@@ -422,7 +422,7 @@
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:48pt; font-weight:700; font-style:italic; color:#ffff00;&quot;&gt;44542&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="textFormat">
-    <enum>Qt::AutoText</enum>
+    <enum>Qt::TextFormat::AutoText</enum>
    </property>
   </widget>
   <widget class="QLabel" name="label">
@@ -514,7 +514,7 @@
        <bool>true</bool>
       </property>
       <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+       <enum>Qt::Orientation::Horizontal</enum>
       </property>
       <property name="invertedAppearance">
        <bool>false</bool>
@@ -535,8 +535,6 @@
   <zorder>label_scoreNum</zorder>
   <zorder>label_scoreListFrame</zorder>
   <zorder>widget_scoreList</zorder>
-  <zorder>label_acc</zorder>
-  <zorder>bar_accNum</zorder>
   <zorder>widget_acc</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
