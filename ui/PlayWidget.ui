@@ -34,8 +34,8 @@
   <widget class="QPushButton" name="pushButton_pause">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>40</y>
+     <x>20</x>
+     <y>20</y>
      <width>64</width>
      <height>64</height>
     </rect>
@@ -81,9 +81,9 @@ QPushButton:pressed
   <widget class="QPushButton" name="pushButton_debug">
    <property name="geometry">
     <rect>
-     <x>520</x>
-     <y>430</y>
-     <width>211</width>
+     <x>130</x>
+     <y>50</y>
+     <width>121</width>
      <height>24</height>
     </rect>
    </property>
@@ -122,9 +122,284 @@ QPushButton:pressed
     <string/>
    </property>
   </widget>
+  <widget class="Line" name="verticalLine_0">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>0</y>
+     <width>5</width>
+     <height>675</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>5</width>
+     <height>675</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>5</width>
+     <height>675</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgba(85, 170, 255, 127);</string>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Shadow::Plain</enum>
+   </property>
+   <property name="lineWidth">
+    <number>5</number>
+   </property>
+   <property name="midLineWidth">
+    <number>0</number>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Orientation::Vertical</enum>
+   </property>
+  </widget>
+  <widget class="Line" name="verticalLine_1">
+   <property name="geometry">
+    <rect>
+     <x>450</x>
+     <y>0</y>
+     <width>5</width>
+     <height>625</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>5</width>
+     <height>625</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>5</width>
+     <height>625</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgba(255, 170, 255, 127);</string>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Shadow::Plain</enum>
+   </property>
+   <property name="lineWidth">
+    <number>5</number>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Orientation::Vertical</enum>
+   </property>
+  </widget>
+  <widget class="Line" name="verticalLine_2">
+   <property name="geometry">
+    <rect>
+     <x>600</x>
+     <y>0</y>
+     <width>5</width>
+     <height>625</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>5</width>
+     <height>625</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>5</width>
+     <height>625</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgba(85, 170, 255, 127);</string>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Shadow::Plain</enum>
+   </property>
+   <property name="lineWidth">
+    <number>5</number>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Orientation::Vertical</enum>
+   </property>
+  </widget>
+  <widget class="Line" name="verticalLine_3">
+   <property name="geometry">
+    <rect>
+     <x>750</x>
+     <y>0</y>
+     <width>5</width>
+     <height>625</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>5</width>
+     <height>625</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>5</width>
+     <height>625</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgba(255, 170, 255, 127);</string>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Shadow::Plain</enum>
+   </property>
+   <property name="lineWidth">
+    <number>5</number>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Orientation::Vertical</enum>
+   </property>
+  </widget>
+  <widget class="Line" name="verticalLine_4">
+   <property name="geometry">
+    <rect>
+     <x>900</x>
+     <y>0</y>
+     <width>5</width>
+     <height>675</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>5</width>
+     <height>675</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>5</width>
+     <height>675</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgba(85, 170, 255, 127);</string>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Shadow::Plain</enum>
+   </property>
+   <property name="lineWidth">
+    <number>5</number>
+   </property>
+   <property name="midLineWidth">
+    <number>0</number>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Orientation::Vertical</enum>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_trackPanelBackground">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>0</y>
+     <width>605</width>
+     <height>675</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>605</width>
+     <height>675</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>605</width>
+     <height>675</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgba(0, 0, 0, 128);</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="scaledContents">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="judgeline">
+   <property name="geometry">
+    <rect>
+     <x>305</x>
+     <y>625</y>
+     <width>595</width>
+     <height>15</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>595</width>
+     <height>15</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>595</width>
+     <height>15</height>
+    </size>
+   </property>
+   <property name="lineWidth">
+    <number>0</number>
+   </property>
+  </widget>
   <zorder>background</zorder>
+  <zorder>label_trackPanelBackground</zorder>
   <zorder>pushButton_pause</zorder>
   <zorder>pushButton_debug</zorder>
+  <zorder>judgeline</zorder>
+  <zorder>verticalLine_0</zorder>
+  <zorder>verticalLine_1</zorder>
+  <zorder>verticalLine_2</zorder>
+  <zorder>verticalLine_3</zorder>
+  <zorder>verticalLine_4</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

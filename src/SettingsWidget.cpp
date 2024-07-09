@@ -118,7 +118,11 @@ void SettingsWidget::saveSettings()
 	QFile file("./settings.cfg");
 	//It can always open the file for writing, 
 	//because it is always created in the constructor
-	assert(file.open(QIODevice::WriteOnly | QIODevice::Text));
+	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+	{
+		qDebug()<<"Could not open the file for writing";
+		return;
+	}
 	QTextStream out(&file);
 	out << "music: " << musicVal << "\n" <<
 		"sound: " << soundVal << "\n" <<

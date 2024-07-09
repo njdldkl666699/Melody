@@ -1,8 +1,6 @@
 #pragma once
 
 #include<QKeySequence>
-#include<QTimer>
-#include<QTime>
 #include<QLabel>
 #include<QSoundEffect>
 
@@ -23,4 +21,5 @@ protected:
 	int startTime;
 	QKeySequence key;
 	QSoundEffect sound;
+	QPixmap picture;
 };

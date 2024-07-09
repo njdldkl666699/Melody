@@ -5,7 +5,7 @@
 class Hold : public Note
 {
 	Q_OBJECT
-		
+
 public:
 	enum ToBeState
 	{

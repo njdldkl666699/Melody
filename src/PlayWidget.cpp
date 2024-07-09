@@ -9,6 +9,7 @@ PlayWidget::PlayWidget(const QString& songFilePth, const QString& chartFilePth,
 {
 	ui.setupUi(this);
 	initPlayWidget();
+	gameController->setNoteParent(this);
 
 	//connect GameController related
 	connect(this, &PlayWidget::signalKeyPressed, gameController, &GameController::judgeKeyPress);
@@ -34,11 +35,16 @@ PlayWidget::~PlayWidget()
 
 void PlayWidget::initPlayWidget()
 {
+	//set background
 	QPixmap backgroundPNG("./res/background/play.png");
 	backgroundPNG = backgroundPNG.scaled(ui.background->size(),
 		Qt::KeepAspectRatio, Qt::SmoothTransformation);
 	ui.background->setPixmap(backgroundPNG);
-	this->show();
+	//set judgeline
+	QPixmap judgeLinePNG("./res/note/judgeLine.png");
+	judgeLinePNG = judgeLinePNG.scaled(ui.judgeline->size(),
+		Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+	ui.judgeline->setPixmap(judgeLinePNG);
 }
 
 void PlayWidget::keyPressEvent(QKeyEvent* event)

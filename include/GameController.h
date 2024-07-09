@@ -1,29 +1,31 @@
 #pragma once
 
-#include <QObject>
+#include "Hold.h"
 #include "SettingsWidget.h"
-#include"Tap.h"
-#include"Hold.h"
-#include<QMediaPlayer>
-#include<QAudioOutput>
-#include<QQueue>
-#include<QVector>
-#include<QDir>
-#include<QFile>
-#include<QFileInfo>
-#include<QTextStream>
-#include<QKeyEvent>
+#include "Tap.h"
+#include <QAudioOutput>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QKeyEvent>
+#include <QMediaPlayer>
+#include <QObject>
+#include <QQueue>
+#include <QTextStream>
+#include <QTimer>
+#include <QVector>
 
 class GameController : public QObject
 {
 	Q_OBJECT
-		
+
 public:
 	GameController(const QString& songFilePth, const QString& chartFilePth,
 		const SettingsWidget* settingsWidget, QObject* parent = nullptr);
 	~GameController();
 	//## Only Use in PlayWidget.cpp ##
 	void reset();
+	void setNoteParent(QWidget* parent);
 
 public:
 	//get functions
@@ -52,7 +54,7 @@ public slots:
 
 private:
 	//init functions
-	void initData();
+	void initVals();
 	void initnoteTracks();
 	void initMusicPlayer();
 
@@ -63,7 +65,7 @@ private:
 
 private slots:
 	void judgeNoHitMiss();
-	void drawNote();
+	void updateNote();
 
 private:
 	uint perfectCount, goodCount, missCount;
@@ -73,14 +75,20 @@ private:
 
 	float bpm;
 	int offset;
+	float velocity;	//pixel per ms
+	int deltaTime;
+	int waitTime;
 
 	const SettingsWidget* settings;
 	const QString songFilePath;
 	const QString chartFilePath;
-	QQueue<Note*>noteTracks[4];
 	QString key[4];
+
+	QQueue<Note*>noteTracks[4];
+	QVector<Note*>notesOutQueue;
+	QWidget* noteParent;
+
 	QMediaPlayer musicPlayer;
 	QAudioOutput audioOutput;
-
-	QVector<Note*>notesOutQueue;
+	QTimer timer;
 };

@@ -1,12 +1,10 @@
 #pragma once
 
-#include <QWidget>
-#include<QKeyEvent>
-#include "ui_PlayWidget.h"
 #include"EndWidget.h"
+#include"GameController.h"
 #include"PauseWidget.h"
 #include"SettingsWidget.h"
-#include"GameController.h"
+#include "ui_PlayWidget.h"
 
 class PlayWidget : public QWidget
 {

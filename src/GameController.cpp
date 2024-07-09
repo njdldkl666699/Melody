@@ -5,11 +5,12 @@ GameController::GameController(const QString& songFilePth, const QString& chartF
 	: settings(settingsWidget), QObject(parent),
 	songFilePath(songFilePth), chartFilePath(chartFilePth)
 {
-	initData();
+	initVals();
 	initnoteTracks();
 	initMusicPlayer();
-	connect(&musicPlayer, &QMediaPlayer::positionChanged, this, &GameController::judgeNoHitMiss);
 	connect(&musicPlayer, &QMediaPlayer::mediaStatusChanged, this, &GameController::isMusicEnd);
+	connect(&timer, &QTimer::timeout, this, &GameController::judgeNoHitMiss);
+	connect(&timer, &QTimer::timeout, this, &GameController::updateNote);
 }
 
 GameController::~GameController()
@@ -20,14 +21,31 @@ GameController::~GameController()
 
 	for (auto& i : notesOutQueue)
 		delete i;
+
+	for (int i = 0; i < 4; i++)
+		noteTracks[i].clear();
+
+	notesOutQueue.clear();
 }
 
 void GameController::reset()
 {
-	initData();
+	initVals();
 	initnoteTracks();
+	setNoteParent(noteParent);
 	musicPlayer.setPosition(0);
-	musicPlayer.play();
+	timer.start(deltaTime);
+	//musicPlayer.play();
+}
+
+void GameController::setNoteParent(QWidget* parent)
+{
+	noteParent = parent;
+	for (int i = 0; i < 4; i++)
+		for (auto& note : noteTracks[i])
+			note->setParent(parent);
+	for (auto& note : notesOutQueue)
+		note->setParent(parent);
 }
 
 QString GameController::getSongName()const
@@ -58,7 +76,7 @@ QPixmap GameController::getSongPicture()const
 	return QPixmap(songPicPath);
 }
 
-void GameController::initData()
+void GameController::initVals()
 {
 	perfectCount = 0;
 	goodCount = 0;
@@ -67,6 +85,10 @@ void GameController::initData()
 	score = 0;
 	combo = 0;
 	maxCombo = 0;
+	// speedVal is -20 ~ 20, because velocity should in 1 ~ 20.25
+	velocity = 1.1 + settings->getSpeedVal() / 20.0;
+	deltaTime = 1000 / settings->getFpsVal();
+	waitTime = 3000;
 	key[0] = settings->getKey_1().toString();
 	key[1] = settings->getKey_2().toString();
 	key[2] = settings->getKey_3().toString();
@@ -76,8 +98,27 @@ void GameController::initData()
 	offset = 0;
 }
 
+void GameController::initMusicPlayer()
+{
+	musicPlayer.setSource(QUrl::fromLocalFile(songFilePath));
+	musicPlayer.setAudioOutput(&audioOutput);
+	audioOutput.setVolume(settings->getMusicVal() / 100.0f);
+	timer.start(deltaTime);
+	//musicPlayer.play();
+}
+
 void GameController::initnoteTracks()
 {
+	//clear notes in queue and out queue
+	for (int i = 0; i < 4; i++)
+		while (!noteTracks[i].isEmpty())
+			delete noteTracks[i].dequeue();
+	for (auto& i : notesOutQueue)
+		delete i;
+	for (int i = 0; i < 4; i++)
+		noteTracks[i].clear();
+	notesOutQueue.clear();
+
 	//read chart file
 	QFile chartFile(chartFilePath);
 	if (!chartFile.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -87,7 +128,7 @@ void GameController::initnoteTracks()
 	}
 	QTextStream in(&chartFile);
 
-	////read bpm and offset
+	//read bpm and offset
 	QStringList bpmLine = in.readLine().split(",");
 	if (bpmLine.first() == "bpm")
 		bpm = bpmLine.last().toFloat();
@@ -133,30 +174,39 @@ void GameController::initnoteTracks()
 		Note* note = nullptr;
 		QString soundPath = "./res/note/sound.wav";
 		QString picturePath;
+		QSize noteSize(150, 50);
 		if (!isHold)
 		{
 			//Tap note
 			if (key == 0 || key == 3)		//Outer Track
-				picturePath = "./res/note/note_blue.png";
+				picturePath = "./res/note/tap_blue.png";
 			else if (key == 1 || key == 2)	//Inner Track
-				picturePath = "./res/note/note_pink.png";
+				picturePath = "./res/note/tap_pink.png";
 			else							//not happen	
 				return;
-			note = new Tap(startTime, keySequence, soundPath, picturePath, QSize(10, 10));
+			note = new Tap(startTime, keySequence,
+				soundPath, picturePath, noteSize);
 		}
 		else
 		{
 			//Hold note
 			QString endTimeRaw = noteData.at(2);
 			int endTime = getNoteTime(endTimeRaw);
+			int height = (endTime - startTime) * velocity;
+			noteSize.setHeight(height);
 			if (key == 0 || key == 3)		//Outer Track
 				picturePath = "./res/note/hold_blue.png";
 			else if (key == 1 || key == 2)	//Inner Track
 				picturePath = "./res/note/hold_pink.png";
 			else							//not happen	
 				return;
-			note = new Hold(startTime, endTime, keySequence, soundPath, picturePath, QSize(10, 10));
+			note = new Hold(startTime, endTime, keySequence,
+				soundPath, picturePath, noteSize);
 		}
+		//set note x, y
+		int xPos = 300 + key * 150;
+		int yPos = 625 - noteSize.height() - velocity * (startTime + waitTime);
+		note->move(xPos, yPos);
 
 		//push note to noteTracks
 		/*
@@ -168,14 +218,6 @@ void GameController::initnoteTracks()
 
 	//close file
 	chartFile.close();
-}
-
-void GameController::initMusicPlayer()
-{
-	musicPlayer.setSource(QUrl::fromLocalFile(songFilePath));
-	musicPlayer.setAudioOutput(&audioOutput);
-	audioOutput.setVolume(settings->getMusicVal() / 100.0f);
-	musicPlayer.play();
 }
 
 void GameController::isMusicEnd(QMediaPlayer::MediaStatus status)
@@ -199,11 +241,10 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 	for (int i = 0; i < 4; i++)
 	{
 		QString eventKey = event->text().toUpper();
-		qDebug() << key[i] << '\n' << eventKey;
+		//qDebug() << key[i] << '\n' << eventKey;
 		if (key[i] == eventKey)
 		{
-			qDebug() << "Hit!";
-			const auto& headNote = noteTracks[i].head();
+			Note* headNote = noteTracks[i].head();
 			int musicCurrentTime = getMusicCurrentTime();
 			int noteStartTime = headNote->getStartTime();
 			/*
@@ -211,6 +252,10 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 					2¡¢difference < 0 means you press the key late, > 0 means early
 			*/
 			int difference = noteStartTime - musicCurrentTime;
+			qDebug() << "Hit!" << "difference: " << difference
+				<< "musicCurrentTime: " << musicCurrentTime
+				<< "noteStartTime: " << noteStartTime
+				<< "x: " << headNote->x() << "y: " << headNote->y();
 
 			//case Tap note
 			if (headNote->getType() == "Tap")
@@ -330,6 +375,12 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 				{
 					missCount++;
 					combo = 0;
+					// hold->setState(Hold::Miss);	//had set in Hold()
+					// set Hold picture miss version
+					if (i == 0 || i == 3)
+						hold->setPixmap(QPixmap("./res/note/hold_blue_miss.png"));
+					else if (i == 1 || i == 2)
+						hold->setPixmap(QPixmap("./res/note/hold_pink_miss.png"));
 					//dequeue the Hold and push into notesOutQueue,
 					//to draw the left part. 
 					notesOutQueue.push_back(noteTracks[i].dequeue());
@@ -343,7 +394,7 @@ void GameController::judgeNoHitMiss()
 {
 	for (int i = 0; i < 4; i++)
 	{
-		const auto& head = noteTracks[i].head();
+		Note* head = noteTracks[i].head();
 		int musicCurrentTime = getMusicCurrentTime();
 		int noteStartTime = head->getStartTime();
 		int difference = noteStartTime - musicCurrentTime;
@@ -354,6 +405,11 @@ void GameController::judgeNoHitMiss()
 			{
 				missCount++;
 				combo = 0;
+				qDebug() << "y: " << head->y() << "difference: " << difference
+					<< "musicCurrentTime: " << musicCurrentTime
+					<< "noteStartTime: " << noteStartTime
+					<< "x: " << head->x();
+
 				//pop note and delete
 				delete noteTracks[i].dequeue();
 			}
@@ -369,6 +425,13 @@ void GameController::judgeNoHitMiss()
 			{
 				missCount++;
 				combo = 0;
+				// hold->setState(Hold::Miss);	//had set in Hold()
+				// set Hold picture miss version
+				if (i == 0 || i == 3)
+					hold->setPixmap(QPixmap("./res/note/hold_blue_miss.png"));
+				else if (i == 1 || i == 2)
+					hold->setPixmap(QPixmap("./res/note/hold_pink_miss.png"));
+
 				//dequeue the Hold and push into notesOutQueue,
 				//to draw the left part. 
 				notesOutQueue.push_back(noteTracks[i].dequeue());
@@ -377,9 +440,29 @@ void GameController::judgeNoHitMiss()
 	}
 }
 
-void GameController::drawNote()
+void GameController::updateNote()
 {
-	//draw notes on Queue
-
-	//draw notes out Queue
+	static int count = 0;
+	count++;
+	if (count >= waitTime / deltaTime && count < waitTime / deltaTime + 1)
+	{
+		musicPlayer.play();
+	}
+	//move notes in queue
+	for (int i = 0; i < 4; i++)
+	{
+		for (Note* note : noteTracks[i])
+		{
+			QPoint pos = note->pos();
+			pos.setY(pos.y() + velocity * deltaTime);
+			note->move(pos);
+		}
+	}
+	//move notes in vector
+	for (Note* note : notesOutQueue)
+	{
+		QPoint pos = note->pos();
+		pos.setY(pos.y() + velocity * deltaTime);
+		note->move(pos);
+	}
 }
