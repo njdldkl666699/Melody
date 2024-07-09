@@ -70,6 +70,9 @@
     <ClCompile Include="src\confirmDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\StartWidget.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="include\EndWidget.h">
@@ -102,6 +105,9 @@
     <QtMoc Include="include\confirmDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="include\StartWidget.h">
+      <Filter>Generated Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -130,5 +136,11 @@
     <QtUic Include="ui\confirmDialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="ui\StartWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Melody.pro" />
   </ItemGroup>
 </Project>

@@ -5,6 +5,7 @@
 #include<QPropertyAnimation>
 
 
+
 EndWidget::EndWidget(const GameController* game, QWidget* parent)
 	: gameController(game), QWidget(parent)
 {

@@ -196,6 +196,7 @@
     <ClCompile Include="src\PauseWidget.cpp" />
     <ClCompile Include="src\PlayWidget.cpp" />
     <ClCompile Include="src\SettingsWidget.cpp" />
+    <ClCompile Include="src\StartWidget.cpp" />
     <ClCompile Include="src\Tap.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
@@ -233,9 +234,16 @@
     <QtUic Include="ui\PauseWidget.ui" />
     <QtUic Include="ui\PlayWidget.ui" />
     <QtUic Include="ui\SettingsWidget.ui" />
+    <QtUic Include="ui\StartWidget.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="include\confirmDialog.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="include\StartWidget.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Melody.pro" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Import Project="$(QtMsBuild)\qt.targets" Condition="Exists('$(QtMsBuild)\qt.targets')" />

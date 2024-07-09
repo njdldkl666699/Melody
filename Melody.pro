@@ -18,10 +18,12 @@ SOURCES += \
     src/PauseWidget.cpp \
     src/PlayWidget.cpp \
     src/SettingsWidget.cpp \
+    src/StartWidget.cpp \
     src/Tap.cpp \
     src/main.cpp \
     src/Note.cpp \
-    src/confirmDialog.cpp
+    src/confirmDialog.cpp \
+    ui/StartWidget.cpp
 
 HEADERS += \
     include/EndWidget.h \
@@ -31,9 +33,11 @@ HEADERS += \
     include/PauseWidget.h \
     include/PlayWidget.h \
     include/SettingsWidget.h \
+    include/StartWidget.h \
     include/Tap.h \
     include/Note.h \
-    include/confirmDialog.h
+    include/confirmDialog.h \
+    ui/StartWidget.h
 
 INCLUDEPATH += \
     include
@@ -44,6 +48,7 @@ FORMS += \
     ui/PauseWidget.ui \
     ui/PlayWidget.ui \
     ui/SettingsWidget.ui \
+    ui/StartWidget.ui \
     ui/confirmDialog.ui
 
 # Default rules for deployment.
