@@ -4,6 +4,10 @@
 #include"GameController.h"
 #include "ui_EndWidget.h"
 #include<QMovie>
+#include<QMediaPlayer>
+#include<QVideoWidget>
+#include<QAudioOutput>
+
 
 class EndWidget : public QWidget
 {
@@ -24,7 +28,9 @@ private:
 	void setScore(int bestNum,  int goodNum, int missNum, int comboNum, int accNum, int score);
 	void showScore();
 	void showRank();
-
+	void musicSet();
+	void musicPlay();
+	void toolTips();
 private slots:
 private:
 	int bestNum;
@@ -34,6 +40,12 @@ private:
 	int comboNum;
 	int accNum;
 	int score;
+	int rank; //1:Fai 2:BV£¨À¶V 3:WV(°×V 4:A 5: B 6:C 7£ºF
+
+	QList<QUrl> musicList;
+	QMediaPlayer* player;
+	QMediaPlayer* music;
+	QAudioOutput* audio;
 
 	Ui::EndWidgetClass ui;
 	const GameController* gameController;

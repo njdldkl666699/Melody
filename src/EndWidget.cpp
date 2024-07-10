@@ -19,17 +19,20 @@ EndWidget::EndWidget(const GameController* game, QWidget* parent)
 	//setScore(1123, 123, 0, 1333, 100, 114514);
 	showScore();
 	showRank();
-	ui.pushButton_restart->setToolTip("Restart");
-	ui.pushButton_restart->setStyleSheet("QToolTip { color: black; background-color: white; border: 1px solid black; }");
-	ui.pushButton_backMenu->setToolTip("Back To Menu");
-	ui.pushButton_backMenu->setStyleSheet("QToolTip { color: black; background-color: white; border: 1px solid black; }");
+	musicSet();
+	musicPlay();
+	toolTips();
+
+
 	connect(ui.pushButton_backMenu, &QPushButton::clicked, this, [this]()
 		{
+			player->stop();
 			emit signalBackMenu();
 			this->close();
 		});
 	connect(ui.pushButton_restart, &QPushButton::clicked, this, [this]()
 		{
+			player->stop();
 			emit signalRestart();
 			this->close();
 		});
@@ -202,17 +205,18 @@ void EndWidget::showScore()
 
 void EndWidget::showRank()
 {
-	int rank; //1:Fai 2:BV（蓝V 3:WV(白V 4:A 5: B 6:C 7：F
+	
 
 
 	//此处应计算rank 在此先随便设计一个测试
 	if (accNum == 100) rank = 1;
-	else if ((accNum >= 98.5 && accNum < 100)||missNum==0) rank = 2;
-	else if (accNum >= 97.5 && accNum < 98.5) rank = 3;
-	else if (accNum >= 95 && accNum < 97.5) rank = 4;
-	else if (accNum >= 90 && accNum < 95) rank = 5;
-	else if (accNum >= 85 && accNum < 90) rank = 6;
-	else if (accNum >= 0 && accNum < 85) rank = 7;
+	else if (missNum == 0) rank = 2;
+	else if (accNum >= 98.5 && accNum < 100)  rank = 3;
+	else if (accNum >= 97.5 && accNum < 98.5) rank = 4;
+	else if (accNum >= 95 && accNum < 97.5) rank = 5;
+	else if (accNum >= 90 && accNum < 95) rank = 6;
+	else if (accNum >= 85 && accNum < 90) rank = 7;
+	else if (accNum >= 0 && accNum < 85) rank = 8;
 
 
 	QLabel* label_rank = new QLabel(this);
@@ -223,23 +227,29 @@ void EndWidget::showRank()
 		"max-height:400px;"
 		"}");
 	label_rank->move(25, 20);
+
+	ui.pushButton_restart->setStyleSheet("QToolTip { color: black; background-color: white; border: 1px solid black; }");
+
+
 	QString rankPath;
 	switch (rank)
 	{
 	case 1:
-		rankPath = "./res/icon/rankFai"; break;
+		rankPath = "./res/icon/rankFai";label_rank->setToolTip("Genius!Perfect!"); break;
 	case 2:
-		rankPath = "./res/icon/rankBV";  break;
+		rankPath = "./res/icon/rankBV"; label_rank->setToolTip("No Miss!? unbelievable"); break;
 	case 3:
-		rankPath = "./res/icon/ranWV"; break;
+		rankPath = "./res/icon/ranWV";  label_rank->setToolTip("nothing can stop you "); break;
 	case 4:
-		rankPath = "./res/icon/rankA";  break;
+		rankPath = "./res/icon/rankS";  label_rank->setToolTip("so good at it"); break;
 	case 5:
-		rankPath = "./res/icon/rankB";  break;
+		rankPath = "./res/icon/rankA";  label_rank->setToolTip("so easy"); break;
 	case 6:
-		rankPath = "./res/icon/rankC"; break;
+		rankPath = "./res/icon/rankB";  label_rank->setToolTip("just a little miss"); break;
 	case 7:
-		rankPath = "./res/icon/rankF"; break;
+		rankPath = "./res/icon/rankC"; label_rank->setToolTip("need practice"); break;
+	case 8:
+		rankPath = "./res/icon/rankF";  label_rank->setToolTip("quite bad"); break;
 	}
 
 	QPixmap rankPic(rankPath);
@@ -257,3 +267,45 @@ void EndWidget::showRank()
 
 }
 
+
+
+void EndWidget::musicSet()
+{
+
+	player = new QMediaPlayer(this);
+	audio = new QAudioOutput(this);
+	player->setAudioOutput(audio);
+	audio->setVolume(0.5);
+	//播放列表
+	musicList = {
+		QUrl::fromLocalFile("./res/video/endMusic/Fai.mp3"),
+		QUrl::fromLocalFile("./res/video/endMusic/BV.mp3"),
+		QUrl::fromLocalFile("./res/video/endMusic/WV.mp3"),
+		QUrl::fromLocalFile("./res/video/endMusic/S.mp3"),
+		QUrl::fromLocalFile("./res/video/endMusic/A.mp3"),
+		QUrl::fromLocalFile("./res/video/endMusic/B.mp3"),
+		QUrl::fromLocalFile("./res/video/endMusic/C.mp3"),
+		QUrl::fromLocalFile("./res/video/endMusic/F.mp3")
+	};
+	player->play();
+}
+
+void EndWidget::musicPlay()
+{
+	QUrl musicc(musicList.at(rank-1));
+	player->setSource(musicc);
+	//player->setVolume(100);
+	player->play();
+}
+
+void EndWidget::toolTips()
+{
+	ui.pushButton_restart->setToolTip("Restart");
+	ui.pushButton_restart->setStyleSheet("QToolTip { color: black; background-color: white; border: 1px solid black; }");
+
+	ui.pushButton_backMenu->setToolTip("Back To Menu");
+	ui.pushButton_backMenu->setStyleSheet("QToolTip { color: black; background-color: white; border: 1px solid black; }");
+
+	
+
+}

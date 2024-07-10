@@ -34,9 +34,10 @@ private:
     Ui::StartWidget *ui;
     QMediaPlayer* player;
     QMediaPlayer* music;
+    QAudioOutput* audio;
     QVideoWidget* videoWidget;
     QList<QUrl> mediaList;
-    QAudioOutput* audio;
+
     QAudioOutput* audioLoop;
     int currentMediaIndex;
     MenuWidget* w;
