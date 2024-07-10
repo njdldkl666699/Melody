@@ -29,15 +29,10 @@ PlayWidget::PlayWidget(const QString& songFilePth, const QString& chartFilePth,
 	connect(gameController, &GameController::signalUpdate, this, &PlayWidget::updateUI);
 	connect(gameController, &GameController::judgeResult,this,&PlayWidget::updateComment);
 	connect(&commentTimer, &QTimer::timeout, ui.label_comment, &QLabel::clear);
+	ButtonClickSound::buttonClickSound(ui.pushButton_pause);
 
 	//Debug
 	connect(ui.pushButton_debug, &QPushButton::clicked, this, &PlayWidget::gameEnd);
-
-	//
-	ButtonClickSound::buttonClickSound(ui.pushButton_pause);
-
-
-
 }
 
 PlayWidget::~PlayWidget()
@@ -93,6 +88,7 @@ void PlayWidget::keyPressEvent(QKeyEvent* event)
 
 void PlayWidget::keyReleaseEvent(QKeyEvent* event)
 {
+	qDebug() << "keyReleaseEvent";
 	emit signalKeyReleased(event);
 }
 

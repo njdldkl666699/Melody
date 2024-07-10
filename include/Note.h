@@ -21,5 +21,4 @@ protected:
 	int startTime;
 	QKeySequence key;
 	QSoundEffect sound;
-	QPixmap picture;
 };
