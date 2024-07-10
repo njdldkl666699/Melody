@@ -11,6 +11,7 @@ GameController::GameController(const QString& songFilePth, const QString& chartF
 	timer.setTimerType(Qt::PreciseTimer);
 	wait();
 	connect(&musicPlayer, &QMediaPlayer::mediaStatusChanged, this, &GameController::isMusicEnd);
+	connect(&countdownTimer, &QTimer::timeout, this, &GameController::gamePlay);
 	connect(&timer, &QTimer::timeout, this, &GameController::judgeNoHitMiss);
 	connect(&timer, &QTimer::timeout, this, &GameController::updateNote);
 	connect(&timer, &QTimer::timeout, this, &GameController::signalUpdate);
@@ -110,7 +111,9 @@ void GameController::initMusicPlayer()
 void GameController::wait()
 {
 	gamePause();
-	QTimer::singleShot(3000, this, &GameController::gamePlay);
+	countdownTimer.setSingleShot(true);
+	countdownTimer.setInterval(waitTime);
+	countdownTimer.start();
 }
 
 void GameController::isMusicEnd(QMediaPlayer::MediaStatus status)
@@ -125,6 +128,7 @@ void GameController::isMusicEnd(QMediaPlayer::MediaStatus status)
 
 void GameController::gamePause()
 {
+	countdownTimer.stop();
 	velocity = 0;
 	musicPlayer.pause();
 	timer.stop();
@@ -277,17 +281,28 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 		if (key[i] == eventKey)
 		{
 			Note* headNote = noteTracks[i].head();
-			int musicCurrentTime = getMusicCurrentTime();
-			int noteStartTime = headNote->getStartTime();
-			/*
-			notes:	1、musicCurrentTime is current time you press the key
-					2、difference < 0 means you press the key late, > 0 means early
-			*/
-			int difference = noteStartTime - musicCurrentTime;
-			qDebug() << "Hit!\tx: " << headNote->x() << "\ty: " << headNote->y()
-				<< "\tnoteStartTime: " << noteStartTime
-				<< "\tmusicCurrentTime: " << musicCurrentTime
-				<< "\tdifference: " << difference;
+
+			////#######Judge By the difference of time#######
+			//int musicCurrentTime = getMusicCurrentTime();
+			//int noteStartTime = headNote->getStartTime();
+			///*
+			//notes:	1、musiccurrenttime is current time you press the key
+			//		2、difference < 0 means you press the key late, > 0 means early
+			//*/
+			//int difference = noteStartTime - musicCurrentTime;
+			//qDebug() << "hit!\tx: " << headNote->x() << "\ty: " << headNote->y()
+			//<< "\tnoteStartTime: " << noteStartTime
+			//	<< "\tmusicCurrentTime: " << musicCurrentTime
+			//	<< "\tdifference: " << difference; 
+			////###############################################
+
+			//######Judge By the distance of note and judgeline######
+			int currentY = headNote->y() + headNote->height();
+			int deltaY = 625 - currentY;
+			float difference = deltaY / velocity;
+			qDebug() << "hit!\tx:" << headNote->x() << "\ty: " << headNote->y()
+				<< "\tdeltaY: " << deltaY << "\tdifference: " << difference;
+			//#######################################################
 
 			//case Tap note
 			if (headNote->getType() == "Tap")
@@ -370,17 +385,24 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 		if (key[i] == event->text())
 		{
 			qDebug() << "Released!";
-			const auto& head = noteTracks[i].head();
-			if (head->getType() == "Hold")
+			const auto& headNote = noteTracks[i].head();
+			if (headNote->getType() == "Hold")
 			{
 				//always to be Hold, because getType() tells us.
-				assert(dynamic_cast<Hold*>(head));
-				Hold* hold = dynamic_cast<Hold*>(head);
+				assert(dynamic_cast<Hold*>(headNote));
+				Hold* hold = dynamic_cast<Hold*>(headNote);
 
-				//judge
-				int noteEndTime = hold->getEndTime();
-				int musicCurrentTime = getMusicCurrentTime();
-				int difference = noteEndTime - musicCurrentTime;
+				////#######Judge By the difference of time#######
+				//int noteEndTime = hold->getEndTime();
+				//int musicCurrentTime = getMusicCurrentTime();
+				//int difference = noteEndTime - musicCurrentTime;
+				////#############################################
+
+				//######Judge By the distance of note and judgeline######
+				int currentY = headNote->y();
+				int deltaY = 625 - currentY;
+				float difference = deltaY / velocity;
+				//#######################################################
 
 				//judgement of ending, > 50ms means release too early
 				if (difference >= -50 && difference <= 50)
@@ -439,18 +461,31 @@ void GameController::judgeNoHitMiss()
 	for (int i = 0; i < 4; i++)
 	{
 		Note* headNote = noteTracks[i].head();
-		int musicCurrentTime = getMusicCurrentTime();
-		int noteStartTime = headNote->getStartTime();
-		int difference = noteStartTime - musicCurrentTime;
+
+		////#######Judge By the difference of time#######
+		//int musicCurrentTime = getMusicCurrentTime();
+		//int noteStartTime = headNote->getStartTime();
+		//int difference = noteStartTime - musicCurrentTime;
+		////#############################################
+
+		//######Judge By the distance of note and judgeline######
+		int currentY = headNote->y() + headNote->height();
+		int deltaY = 625 - currentY;
+		float difference = deltaY / velocity;
+		//#######################################################
+
 		if (headNote->getType() == "Tap")
 		{
 			//case Miss, too late
 			if (difference < -100)
 			{
-				qDebug() << "Miss!\tx: " << headNote->x() << "\ty: " << headNote->y()
+				/*qDebug() << "Miss!\tx: " << headNote->x() << "\ty: " << headNote->y()
 					<< "\tnoteStartTime: " << noteStartTime
 					<< "\tmusicCurrentTime: " << musicCurrentTime
-					<< "\tdifference: " << difference;
+					<< "\tdifference: " << difference;*/
+
+				qDebug() << "hit!\tx:" << headNote->x() << "\ty: " << headNote->y()
+					<< "\tdeltaY: " << deltaY << "\tdifference: " << difference;
 
 				missCount++;
 				combo = 0;

@@ -96,4 +96,5 @@ private:
 	QMediaPlayer musicPlayer;
 	QAudioOutput audioOutput;
 	QTimer timer;
+	QTimer countdownTimer;
 };
