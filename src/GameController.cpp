@@ -137,8 +137,8 @@ void GameController::gamePause()
 void GameController::gamePlay()
 {
 	velocity = 1.1 + settings->getSpeedVal() / 20.0;
-	musicPlayer.play();
 	timer.start(deltaTime);
+	musicPlayer.play();
 }
 
 void GameController::initnoteTracks()
@@ -276,6 +276,8 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 {
 	for (int i = 0; i < 4; i++)
 	{
+		if (noteTracks[i].isEmpty())
+			continue;
 		QString eventKey = event->text().toUpper();
 		//qDebug() << key[i] << '\n' << eventKey;
 		if (key[i] == eventKey)
@@ -300,8 +302,8 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 			int currentY = headNote->y() + headNote->height();
 			int deltaY = 625 - currentY;
 			float difference = deltaY / velocity;
-			qDebug() << "hit!\tx:" << headNote->x() << "\ty: " << headNote->y()
-				<< "\tdeltaY: " << deltaY << "\tdifference: " << difference;
+			/*qDebug() << "hit!\tx:" << headNote->x() << "\ty: " << headNote->y()
+				<< "\tdeltaY: " << deltaY << "\tdifference: " << difference;*/
 			//#######################################################
 
 			//case Tap note
@@ -352,6 +354,15 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 				assert(dynamic_cast<Hold*>(headNote));
 				Hold* hold = dynamic_cast<Hold*>(headNote);
 
+				//if have been Miss, don't judge again
+				//acctually it's impossible to reach here, because
+				//if Hold is Miss, it will be transfered to notesOutQueue
+				if (hold->getState() == Hold::Miss)
+					continue;
+
+				qDebug() << "Pressed!\tx:" << headNote->x() << "\tcurrentY: " << currentY
+					<< "\tdeltaY: " << deltaY << "\tdifference: " << difference;
+
 				//judge
 				//case Perfect
 				if (difference >= -50 && difference <= 50)
@@ -382,10 +393,12 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 {
 	for (int i = 0; i < 4; i++)
 	{
-		if (key[i] == event->text())
+		if (noteTracks[i].isEmpty())
+			continue;
+		QString eventKey = event->text().toUpper();
+		if (key[i] == eventKey)
 		{
-			qDebug() << "Released!";
-			const auto& headNote = noteTracks[i].head();
+			Note* headNote = noteTracks[i].head();
 			if (headNote->getType() == "Hold")
 			{
 				//always to be Hold, because getType() tells us.
@@ -399,16 +412,24 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 				////#############################################
 
 				//######Judge By the distance of note and judgeline######
-				int currentY = headNote->y();
+				int currentY = hold->y();
 				int deltaY = 625 - currentY;
 				float difference = deltaY / velocity;
+				qDebug() << "Released!\tx:" << hold->x() << "\tcurrentY: " << currentY
+					<< "\tdeltaY: " << deltaY << "\tdifference: " << difference;
 				//#######################################################
 
+
 				//judgement of ending, > 50ms means release too early
-				if (difference >= -50 && difference <= 50)
+				Hold::ToBeState state=hold->getState();
+				//case None, not press, don't judge
+				if(state == Hold::None)
+					continue;
+				if (difference <= 50)
 				{
+					//if difference < 0, means release too late, but no problem
 					//case Perfect
-					if (hold->getState() == Hold::Perfect)
+					if (state == Hold::Perfect)
 					{
 						perfectCount++;
 						combo++;
@@ -421,7 +442,7 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 						delete noteTracks[i].dequeue();
 					}
 					//case Good
-					else if (hold->getState() == Hold::Good)
+					else if (state == Hold::Good)
 					{
 						goodCount++;
 						combo++;
@@ -437,6 +458,7 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 				//case Miss, release too early
 				else if (difference > 50)
 				{
+					hold->setState(Hold::Miss);
 					missCount++;
 					combo = 0;
 					calculateAcc();
@@ -460,6 +482,8 @@ void GameController::judgeNoHitMiss()
 {
 	for (int i = 0; i < 4; i++)
 	{
+		if (noteTracks[i].isEmpty())
+			continue;
 		Note* headNote = noteTracks[i].head();
 
 		////#######Judge By the difference of time#######
@@ -484,8 +508,8 @@ void GameController::judgeNoHitMiss()
 					<< "\tmusicCurrentTime: " << musicCurrentTime
 					<< "\tdifference: " << difference;*/
 
-				qDebug() << "hit!\tx:" << headNote->x() << "\ty: " << headNote->y()
-					<< "\tdeltaY: " << deltaY << "\tdifference: " << difference;
+				/*qDebug() << "Miss!\tx:" << headNote->x() << "\ty: " << headNote->y()
+					<< "\tdeltaY: " << deltaY << "\tdifference: " << difference;*/
 
 				missCount++;
 				combo = 0;
@@ -501,23 +525,64 @@ void GameController::judgeNoHitMiss()
 			assert(dynamic_cast<Hold*>(headNote));
 			Hold* hold = dynamic_cast<Hold*>(headNote);
 
-			//case Miss, too late
-			if (hold->getState() != Hold::Miss && difference < -100)
+			//too late or don't press the whole time
+			if (difference < -100 || hold->y() > 625)
 			{
-				missCount++;
-				combo = 0;
-				calculateAcc();
-				emit judgeResult("Miss");
-				// hold->setState(Hold::Miss);	//had set in Hold()
-				// set Hold picture miss version
-				if (i == 0 || i == 3)
-					hold->setPixmap(QPixmap("./res/note/hold_blue_miss.png"));
-				else if (i == 1 || i == 2)
-					hold->setPixmap(QPixmap("./res/note/hold_pink_miss.png"));
+				qDebug() << "NoHit!\tx:" << hold->x() << "\ty: " << hold->y()
+					<< "\tdeltaY: " << deltaY << "\tdifference: " << difference;
 
-				//dequeue the Hold and push into notesOutQueue,
-				//to draw the left part. 
-				notesOutQueue.push_back(noteTracks[i].dequeue());
+				Hold::ToBeState state = hold->getState();
+				//case Perfect
+				if (state == Hold::Perfect)
+				{
+					perfectCount++;
+					combo++;
+					if (combo > maxCombo)
+						maxCombo = combo;
+					score += 100;
+					calculateAcc();
+					emit judgeResult("Perfect");
+					//pop note and delete
+					delete noteTracks[i].dequeue();
+				}
+				//case Good
+				else if (state == Hold::Good)
+				{
+					goodCount++;
+					combo++;
+					if (combo > maxCombo)
+						maxCombo = combo;
+					score += 50;
+					calculateAcc();
+					emit judgeResult("Good");
+					//pop note and delete
+					delete noteTracks[i].dequeue();
+				}
+				//None->Miss
+				else if (state == Hold::None)
+				{
+					qDebug() << "In Miss";
+					hold->setState(Hold::Miss);
+					missCount++;
+					combo = 0;
+					calculateAcc();
+					emit judgeResult("Miss");
+					// hold->setState(Hold::Miss);	//had set in Hold()
+					// set Hold picture miss version
+					if (i == 0 || i == 3)
+						hold->setPixmap(QPixmap("./res/note/hold_blue_miss.png"));
+					else if (i == 1 || i == 2)
+						hold->setPixmap(QPixmap("./res/note/hold_pink_miss.png"));
+
+					//dequeue the Hold and push into notesOutQueue,
+					//to draw the left part. 
+					notesOutQueue.push_back(noteTracks[i].dequeue());
+				}
+				//Miss from release too early
+				else if(state == Hold::Miss)
+				{
+					
+				}
 			}
 		}
 	}
@@ -538,8 +603,11 @@ void GameController::updateNote()
 	//move notes in vector
 	for (Note* note : notesOutQueue)
 	{
-		QPoint pos = note->pos();
-		pos.setY(pos.y() + velocity * deltaTime);
-		note->move(pos);
+		if (note != nullptr)
+		{
+			QPoint pos = note->pos();
+			pos.setY(pos.y() + velocity * deltaTime);
+			note->move(pos);
+		}
 	}
 }

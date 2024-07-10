@@ -1,6 +1,7 @@
 #pragma once
 
 #include"Note.h"
+#include<QPainter>
 
 class Hold : public Note
 {
@@ -11,7 +12,8 @@ public:
 	{
 		Perfect,
 		Good,
-		Miss
+		Miss,
+		None
 	};
 
 public:
@@ -23,6 +25,9 @@ public:
 	int getEndTime()const { return endTime; }
 	ToBeState getState()const { return state; }
 	void setState(ToBeState stat) { state = stat; }
+
+protected:
+	void paintEvent(QPaintEvent* event) override;
 
 private:
 	int endTime;
