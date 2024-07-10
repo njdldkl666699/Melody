@@ -14,7 +14,7 @@ void ButtonClickSound::buttonClickSound(QPushButton* button)
 
 void ButtonClickSound::buttonClickSound(QComboBox* button)
 {
-	ButtonClickSound::sound.setSource(QUrl::fromLocalFile("./res/click.wav"));
+	ButtonClickSound::sound.setSource(QUrl::fromLocalFile("./res/click2.WAV"));
 	ButtonClickSound::sound.setVolume(1);
 	connect(button, &QComboBox::highlighted, &sound, &QSoundEffect::play);
 	//qDebug() << "sound";
