@@ -4,7 +4,11 @@
 #include<QPainter>
 #include<QPropertyAnimation>
 #include "ButtonClickSound.h"
-
+#include<QDateTime>
+#include<QFile>
+#include<QTreeWidget>
+#include<QJsonArray>
+#include<QTextStream>
 
 EndWidget::EndWidget(const GameController* game, QWidget* parent)
 	: gameController(game), QWidget(parent)
@@ -14,6 +18,7 @@ EndWidget::EndWidget(const GameController* game, QWidget* parent)
 	initScoreList();
 	initChartIntro(game);
 	setWindowTitle("Meolide");
+
 	//void setScore(int bestNum, int goodNum, int missNum, int comboNum, int accNum, int score);
 	setScore(game->getPerfectCount(), game->getGoodCount(), game->getMissCount(), game->getMaxCombo(), game->getAccuracy(), game->getScore());
 	//setScore(1123, 123, 0, 1333, 100, 114514);
@@ -40,6 +45,14 @@ EndWidget::EndWidget(const GameController* game, QWidget* parent)
 	ButtonClickSound::buttonClickSound(ui.pushButton_backMenu);
 	ButtonClickSound::buttonClickSound(ui.pushButton_restart);
 
+
+	filename = "./history/" + game->getSongName() + "_" + game->getChartName() + ".txt";
+
+	ui.treeWidget_history->hide();
+	connect(ui.pushButton_history, &QPushButton::clicked, this, &EndWidget::historyOn);
+	writeHistory();
+	getHistory();
+	setHistoryList();
 }
 
 EndWidget::~EndWidget()
@@ -56,6 +69,7 @@ void EndWidget::initBackgroundGIF()
 
 	ui.pushButton_restart->setIcon(QIcon("./res/icon/restart_black_64x.png"));
 	ui.pushButton_backMenu->setIcon(QIcon("./res/icon/home_black_64x.png"));
+	ui.pushButton_history->setIcon(QIcon("./res/icon/history.png"));
 }
 
 void EndWidget::initScoreList()
@@ -148,6 +162,15 @@ void EndWidget::initChartIntro(const GameController* game) //³õÊ¼»¯¸èÇúµÄÍ¼Æ¬ºÍÆ
 	QString chartIntro;
 	chartIntro = game->getSongName() + "/Chart:" + game->getChartName();
 	ui.label_chartIntro->setText(chartIntro);
+
+	//ÈÕÆÚ
+	now = QDateTime::currentDateTime();
+	today = now.date();
+    datetime = now.toString("yyyy-MM-dd HH:mm:ss");
+	ui.label_date->setText(datetime);
+	ui.label_date->setStyleSheet("QLabel{"
+	"color:rgba(0,85,255,1);"
+	"}");
 }
 
 void EndWidget::setScore(int b, int g, int m, int combo, int a, int s)
@@ -235,21 +258,21 @@ void EndWidget::showRank()
 	switch (rank)
 	{
 	case 1:
-		rankPath = "./res/icon/rankFai";label_rank->setToolTip("Genius!Perfect!"); break;
+		rankPath = "./res/icon/rankFai"; label_rank->setToolTip("Genius!Perfect!"); rankk = "¦Õ "; break;
 	case 2:
-		rankPath = "./res/icon/rankBV"; label_rank->setToolTip("No Miss!? unbelievable"); break;
+		rankPath = "./res/icon/rankBV"; label_rank->setToolTip("No Miss!? unbelievable"); rankk = "Blue V"; break;
 	case 3:
-		rankPath = "./res/icon/ranWV";  label_rank->setToolTip("nothing can stop you "); break;
+		rankPath = "./res/icon/ranWV";  label_rank->setToolTip("nothing can stop you "); rankk = "White V"; break;
 	case 4:
-		rankPath = "./res/icon/rankS";  label_rank->setToolTip("so good at it"); break;
+		rankPath = "./res/icon/rankS";  label_rank->setToolTip("so good at it"); rankk = "S"; break;
 	case 5:
-		rankPath = "./res/icon/rankA";  label_rank->setToolTip("so easy"); break;
+		rankPath = "./res/icon/rankA";  label_rank->setToolTip("so easy");  rankk = "A"; break;
 	case 6:
-		rankPath = "./res/icon/rankB";  label_rank->setToolTip("just a little miss"); break;
+		rankPath = "./res/icon/rankB";  label_rank->setToolTip("just a little miss");  rankk = "B"; break;
 	case 7:
-		rankPath = "./res/icon/rankC"; label_rank->setToolTip("need practice"); break;
+		rankPath = "./res/icon/rankC"; label_rank->setToolTip("need practice");  rankk = "C"; break;
 	case 8:
-		rankPath = "./res/icon/rankF";  label_rank->setToolTip("quite bad"); break;
+		rankPath = "./res/icon/rankF";  label_rank->setToolTip("quite bad");  rankk = "F"; break;
 	}
 
 	QPixmap rankPic(rankPath);
@@ -267,7 +290,19 @@ void EndWidget::showRank()
 
 }
 
-
+void EndWidget::historyOn()
+{
+	if (ifHistoryOn == 0)
+	{
+		ui.treeWidget_history->show();
+		ifHistoryOn = 1;
+	}
+	else
+	{
+		ui.treeWidget_history->hide();
+		ifHistoryOn = 0;
+	}
+}
 
 void EndWidget::musicSet()
 {
@@ -309,3 +344,60 @@ void EndWidget::toolTips()
 	
 
 }
+
+void EndWidget::writeHistory()
+{
+	QFile file(filename);
+	if (!file.open(QIODevice::Append))
+	{
+		qDebug() << "cannotwrite";
+		return;
+	}
+	else qDebug() << "write";
+	QDataStream fout(&file);
+	//fout.setAutoDetectUnicode(true);
+	fout << datetime;
+	fout<< QString::number(score);
+	fout << QString::number(accNum);
+	fout << QString::number(missNum);
+	fout << rankk;
+	file.close();
+}
+
+void EndWidget::getHistory()
+{
+	QFile file(filename);
+	if (!file.open(QIODevice::ReadOnly))
+		return;
+	QDataStream fin(&file);
+	HistoryList historyTmp;
+	//fin.setAutoDetectUnicode(true);
+	while (!fin.atEnd())
+	{
+		fin >> historyTmp.time;
+		fin >> historyTmp.score;
+		fin >> historyTmp.acc;
+		fin >> historyTmp.miss;
+		fin>> historyTmp.rank;
+		historyList.push_back(historyTmp);
+	}
+	file.close();
+}
+
+void EndWidget::setHistoryList()
+{
+	int num = historyList.size();
+	for (int i = 0; i < num; i++)
+	{
+		QTreeWidgetItem* childItem = new QTreeWidgetItem(ui.treeWidget_history);
+		childItem->setText(0, historyList[i].time);
+		childItem->setText(1, historyList[i].rank);
+		childItem->setText(2, historyList[i].score);
+		childItem->setText(3, historyList[i].acc+"%");
+		childItem->setText(4, historyList[i].miss);
+
+	}
+
+}
+
+

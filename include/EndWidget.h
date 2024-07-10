@@ -7,6 +7,11 @@
 #include<QMediaPlayer>
 #include<QVideoWidget>
 #include<QAudioOutput>
+#include<QDateTime>
+#include <QJsonObject>
+#include <QJsonDocument>
+
+
 
 
 class EndWidget : public QWidget
@@ -16,6 +21,14 @@ class EndWidget : public QWidget
 public:
 	EndWidget(const GameController* game, QWidget* parent = nullptr);
 	~EndWidget();
+	struct HistoryList
+	{
+		QString time;
+		QString score;
+		QString acc;
+		QString miss;
+		QString rank;
+	};
 
 signals:
 	void signalBackMenu();
@@ -31,6 +44,12 @@ private:
 	void musicSet();
 	void musicPlay();
 	void toolTips();
+	void historyOn();
+	void getHistory();
+	void writeHistory();
+	void setHistoryList();
+
+
 private slots:
 private:
 	int bestNum;
@@ -41,12 +60,19 @@ private:
 	int accNum;
 	int score;
 	int rank; //1:Fai 2:BV£¨À¶V 3:WV(°×V 4:A 5: B 6:C 7£ºF
+	QString rankk;
+	QString filename;
+	bool ifHistoryOn = 0;
+	
+	QVector<HistoryList> historyList;
 
 	QList<QUrl> musicList;
 	QMediaPlayer* player;
 	QMediaPlayer* music;
 	QAudioOutput* audio;
-
+	QDateTime now;
+	QDate today;
+	QString datetime;
 	Ui::EndWidgetClass ui;
 	const GameController* gameController;
 	QMovie* backgroundGIF;
