@@ -13,8 +13,11 @@ StartWidget::StartWidget(QWidget* parent)
 {
 	ui->setupUi(this);
 	w = new MenuWidget(nullptr);
+	setWindowTitle("Meolide");
+
 	mediaSet();
 	mediaPlay();
+
 }
 
 StartWidget::~StartWidget()

@@ -13,6 +13,7 @@ EndWidget::EndWidget(const GameController* game, QWidget* parent)
 	initBackgroundGIF();
 	initScoreList();
 	initChartIntro(game);
+	setWindowTitle("Meolide");
 	//void setScore(int bestNum, int goodNum, int missNum, int comboNum, int accNum, int score);
 	setScore(game->getPerfectCount(), game->getGoodCount(), game->getMissCount(), game->getMaxCombo(), game->getAccuracy(), game->getScore());
 	//setScore(1123, 123, 0, 1333, 100, 114514);

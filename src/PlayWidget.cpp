@@ -10,6 +10,7 @@ PlayWidget::PlayWidget(const QString& songFilePth, const QString& chartFilePth,
 {
 	ui.setupUi(this);
 	initPlayWidget();
+	setWindowTitle("Meolide");
 	commentTimer.setSingleShot(true);
 	gameController->setNoteParent(this);
 

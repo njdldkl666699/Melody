@@ -9,6 +9,8 @@ MenuWidget::MenuWidget(QWidget* parent)
 	initBackgroundGIF();
 	initLogoGIF();
 
+	setWindowTitle("Meolide");
+
 	// SongComboBox related
 	initSongComboBox();
 	connect(ui.comboBox_song, &QComboBox::currentTextChanged, this, &MenuWidget::comboBoxSongSelected);

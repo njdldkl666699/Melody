@@ -6,7 +6,7 @@ PauseWidget::PauseWidget(QWidget* parent)
 {
 	ui.setupUi(this);
 	initBackgroundGIF();
-
+	setWindowTitle("Meolide");
 	connect(ui.pushButton_backMenu, &QPushButton::clicked, this, [this]()
 		{
 			emit signalBackMenu();
