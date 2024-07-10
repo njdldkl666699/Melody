@@ -73,6 +73,9 @@
     <ClCompile Include="src\StartWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\ButtonClickSound.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="include\EndWidget.h">
@@ -107,6 +110,9 @@
     </QtMoc>
     <QtMoc Include="include\StartWidget.h">
       <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ButtonClickSound.h">
+      <Filter>Generated Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

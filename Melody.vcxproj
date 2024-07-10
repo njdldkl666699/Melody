@@ -269,6 +269,7 @@
   <ItemGroup>
     <ClCompile Include="src\confirmDialog.cpp" />
     <ClCompile Include="src\EndWidget.cpp" />
+    <ClCompile Include="src\ButtonClickSound.cpp" />
     <ClCompile Include="src\GameController.cpp" />
     <ClCompile Include="src\Hold.cpp" />
     <ClCompile Include="src\MenuWidget.cpp" />
@@ -328,6 +329,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Melody.pro" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="include\ButtonClickSound.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Import Project="$(QtMsBuild)\qt.targets" Condition="Exists('$(QtMsBuild)\qt.targets')" />

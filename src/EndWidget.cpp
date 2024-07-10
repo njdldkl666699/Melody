@@ -3,7 +3,7 @@
 #include<QPixmap>
 #include<QPainter>
 #include<QPropertyAnimation>
-
+#include "ButtonClickSound.h"
 
 
 EndWidget::EndWidget(const GameController* game, QWidget* parent)
@@ -32,6 +32,10 @@ EndWidget::EndWidget(const GameController* game, QWidget* parent)
 			emit signalRestart();
 			this->close();
 		});
+
+	ButtonClickSound::buttonClickSound(ui.pushButton_backMenu);
+	ButtonClickSound::buttonClickSound(ui.pushButton_restart);
+
 }
 
 EndWidget::~EndWidget()

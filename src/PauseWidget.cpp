@@ -1,4 +1,5 @@
 #include "PauseWidget.h"
+#include "ButtonClickSound.h"
 
 PauseWidget::PauseWidget(QWidget* parent)
 	:QWidget(parent)
@@ -21,6 +22,12 @@ PauseWidget::PauseWidget(QWidget* parent)
 			emit signalContinue();
 			this->hide();
 		});
+
+	ButtonClickSound::buttonClickSound(ui.pushButton_backMenu);
+	ButtonClickSound::buttonClickSound(ui.pushButton_restart);
+	ButtonClickSound::buttonClickSound(ui.pushButton_continue);
+
+
 }
 
 PauseWidget::~PauseWidget()

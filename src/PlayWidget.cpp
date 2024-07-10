@@ -1,4 +1,5 @@
 #include "PlayWidget.h"
+#include "ButtonClickSound.h"
 
 PlayWidget::PlayWidget(const QString& songFilePth, const QString& chartFilePth,
 	const SettingsWidget* settingsWidget, QWidget* parent)
@@ -30,6 +31,12 @@ PlayWidget::PlayWidget(const QString& songFilePth, const QString& chartFilePth,
 
 	//Debug
 	connect(ui.pushButton_debug, &QPushButton::clicked, this, &PlayWidget::gameEnd);
+
+	//
+	ButtonClickSound::buttonClickSound(ui.pushButton_pause);
+
+
+
 }
 
 PlayWidget::~PlayWidget()
