@@ -3,6 +3,7 @@
 
 
 QSoundEffect ButtonClickSound::sound = QSoundEffect();
+QSoundEffect ButtonClickSound::sound2 = QSoundEffect();
 
 void ButtonClickSound::buttonClickSound(QPushButton* button)
 {
@@ -14,17 +15,17 @@ void ButtonClickSound::buttonClickSound(QPushButton* button)
 
 void ButtonClickSound::buttonClickSound(QComboBox* button)
 {
-	ButtonClickSound::sound.setSource(QUrl::fromLocalFile("./res/click2.WAV"));
-	ButtonClickSound::sound.setVolume(1);
-	connect(button, &QComboBox::highlighted, &sound, &QSoundEffect::play);
+	ButtonClickSound::sound2.setSource(QUrl::fromLocalFile("./res/click2.WAV"));
+	ButtonClickSound::sound2.setVolume(0.6);
+	connect(button, &QComboBox::highlighted, &sound2, &QSoundEffect::play);
 	//qDebug() << "sound";
 }
 
 void ButtonClickSound::buttonClickSound(QSlider* button)
 {
-	ButtonClickSound::sound.setSource(QUrl::fromLocalFile("./res/click.wav"));
-	ButtonClickSound::sound.setVolume(1);
-	connect(button, &QSlider::sliderMoved, &sound, &QSoundEffect::play);
+	ButtonClickSound::sound2.setSource(QUrl::fromLocalFile("./res/click.wav"));
+	ButtonClickSound::sound2.setVolume(0.6);
+	connect(button, &QSlider::sliderMoved, &sound2, &QSoundEffect::play);
 	//qDebug() << "sound";
 }
 

@@ -63,7 +63,8 @@ private:
 	QString rankk;
 	QString filename;
 	bool ifHistoryOn = 0;
-	
+	QDir dir;
+
 	QVector<HistoryList> historyList;
 
 	QList<QUrl> musicList;

@@ -18,5 +18,6 @@ public:
 
 	static QSoundEffect sound;
 
+	static QSoundEffect sound2;
 };
 

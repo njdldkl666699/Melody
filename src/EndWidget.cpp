@@ -9,6 +9,7 @@
 #include<QTreeWidget>
 #include<QJsonArray>
 #include<QTextStream>
+#include<QDir>
 
 EndWidget::EndWidget(const GameController* game, QWidget* parent)
 	: gameController(game), QWidget(parent)
@@ -18,6 +19,18 @@ EndWidget::EndWidget(const GameController* game, QWidget* parent)
 	initScoreList();
 	initChartIntro(game);
 	setWindowTitle("Meolide");
+
+	dir.setPath(QString("./history"));
+	if (dir.exists())
+	{
+		qDebug() << "have folder";
+	}
+	else
+	{
+		bool success = dir.mkpath(QString("./history"));
+		if (success == 0) qDebug() << "fail to create";
+		qDebug() << "folder create";
+	}
 
 	//void setScore(int bestNum, int goodNum, int missNum, int comboNum, int accNum, int score);
 	setScore(game->getPerfectCount(), game->getGoodCount(), game->getMissCount(), game->getMaxCombo(), game->getAccuracy(), game->getScore());
@@ -46,7 +59,7 @@ EndWidget::EndWidget(const GameController* game, QWidget* parent)
 	ButtonClickSound::buttonClickSound(ui.pushButton_restart);
 
 
-	filename = "./history/" + game->getSongName() + "_" + game->getChartName() + ".txt";
+	filename = "./history/" + game->getSongName() + "_" + game->getChartName() + ".dat";
 
 	ui.treeWidget_history->hide();
 	connect(ui.pushButton_history, &QPushButton::clicked, this, &EndWidget::historyOn);
