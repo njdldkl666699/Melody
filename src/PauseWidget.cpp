@@ -1,11 +1,12 @@
 #include "PauseWidget.h"
+#include "ButtonClickSound.h"
 
 PauseWidget::PauseWidget(QWidget* parent)
 	:QWidget(parent)
 {
 	ui.setupUi(this);
 	initBackgroundGIF();
-
+	setWindowTitle("Meolide");
 	connect(ui.pushButton_backMenu, &QPushButton::clicked, this, [this]()
 		{
 			emit signalBackMenu();
@@ -21,6 +22,12 @@ PauseWidget::PauseWidget(QWidget* parent)
 			emit signalContinue();
 			this->hide();
 		});
+
+	ButtonClickSound::buttonClickSound(ui.pushButton_backMenu);
+	ButtonClickSound::buttonClickSound(ui.pushButton_restart);
+	ButtonClickSound::buttonClickSound(ui.pushButton_continue);
+
+
 }
 
 PauseWidget::~PauseWidget()

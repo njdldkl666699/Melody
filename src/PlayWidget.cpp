@@ -1,4 +1,5 @@
 #include "PlayWidget.h"
+#include "ButtonClickSound.h"
 
 PlayWidget::PlayWidget(const QString& songFilePth, const QString& chartFilePth,
 	const SettingsWidget* settingsWidget, QWidget* parent)
@@ -9,6 +10,7 @@ PlayWidget::PlayWidget(const QString& songFilePth, const QString& chartFilePth,
 {
 	ui.setupUi(this);
 	initPlayWidget();
+	setWindowTitle("Meolide");
 	commentTimer.setSingleShot(true);
 	gameController->setNoteParent(this);
 
@@ -27,6 +29,7 @@ PlayWidget::PlayWidget(const QString& songFilePth, const QString& chartFilePth,
 	connect(gameController, &GameController::signalUpdate, this, &PlayWidget::updateUI);
 	connect(gameController, &GameController::judgeResult,this,&PlayWidget::updateComment);
 	connect(&commentTimer, &QTimer::timeout, ui.label_comment, &QLabel::clear);
+	ButtonClickSound::buttonClickSound(ui.pushButton_pause);
 
 	//Debug
 	connect(ui.pushButton_debug, &QPushButton::clicked, this, &PlayWidget::gameEnd);
@@ -85,6 +88,7 @@ void PlayWidget::keyPressEvent(QKeyEvent* event)
 
 void PlayWidget::keyReleaseEvent(QKeyEvent* event)
 {
+	qDebug() << "keyReleaseEvent";
 	emit signalKeyReleased(event);
 }
 

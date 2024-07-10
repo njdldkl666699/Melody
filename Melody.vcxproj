@@ -185,6 +185,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\EndWidget.cpp" />
+    <ClCompile Include="src\ButtonClickSound.cpp" />
     <ClCompile Include="src\GameController.cpp" />
     <ClCompile Include="src\Hold.cpp" />
     <ClCompile Include="src\MenuWidget.cpp" />
@@ -267,6 +268,9 @@
     <QtUic Include="ui\SettingsWidget.ui" />
     <QtUic Include="ui\StartWidget.ui" />
     <QtUic Include="ui\confirmDialog.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="include\ButtonClickSound.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Import Project="$(QtMsBuild)\qt.targets" Condition="Exists('$(QtMsBuild)\qt.targets')" />

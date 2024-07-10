@@ -1,4 +1,5 @@
 #include "SettingsWidget.h"
+#include "ButtonClickSound.h"
 #ifdef _DEBUG
 #include<cassert>
 #endif // _DEBUG
@@ -12,6 +13,18 @@ SettingsWidget::SettingsWidget(QWidget* parent)
 	initBackground();
 	initSettings();
 	initUIValues();
+	setWindowTitle("Meolide");
+
+	ButtonClickSound::buttonClickSound(ui.pushButton_backMenu);
+	ButtonClickSound::buttonClickSound(ui.slider_bias);
+	ButtonClickSound::buttonClickSound(ui.slider_music);
+	ButtonClickSound::buttonClickSound(ui.slider_sound);
+	ButtonClickSound::buttonClickSound(ui.slider_speed);
+	ButtonClickSound::buttonClickSound(ui.comboBox_fps);
+	ButtonClickSound::buttonClickSound(ui.keySequenceEdit_1);
+	ButtonClickSound::buttonClickSound(ui.keySequenceEdit_2);
+	ButtonClickSound::buttonClickSound(ui.keySequenceEdit_3);
+	ButtonClickSound::buttonClickSound(ui.keySequenceEdit_4);
 
 	connect(ui.pushButton_backMenu, &QPushButton::clicked, this, [this]()
 		{
@@ -19,6 +32,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
 			this->saveSettings();
 			this->close();
 		});
+
 }
 
 SettingsWidget::~SettingsWidget()

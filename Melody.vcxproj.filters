@@ -73,6 +73,9 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\ButtonClickSound.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="include\EndWidget.h">
@@ -108,6 +111,15 @@
     <QtMoc Include="include\confirmDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+<<<<<<< HEAD
+=======
+    <QtMoc Include="include\StartWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="include\ButtonClickSound.h">
+      <Filter>Generated Files</Filter>
+    </QtMoc>
+>>>>>>> df4980b3aedd77cc7d27f0beebbd1a6b73c69b3f
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">

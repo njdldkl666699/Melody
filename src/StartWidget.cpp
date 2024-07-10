@@ -2,10 +2,11 @@
 #include "ui_StartWidget.h"
 #include<QMediaPlayer>
 #include<QVideoWidget>
+#include<QAudioOutput>
 #include<QDebug>
 #include <QList>
 #include <QUrl>
-#include<QAudioOutput>
+
 #include<QTimer>
 
 StartWidget::StartWidget(QWidget* parent)
@@ -13,8 +14,11 @@ StartWidget::StartWidget(QWidget* parent)
 {
 	ui->setupUi(this);
 	w = new MenuWidget(nullptr);
+	setWindowTitle("Meolide");
+
 	mediaSet();
 	mediaPlay();
+
 }
 
 StartWidget::~StartWidget()

@@ -1,5 +1,6 @@
 #include "MenuWidget.h"
 #include<QPixmap>
+#include "ButtonClickSound.h"
 
 MenuWidget::MenuWidget(QWidget* parent)
 	: QWidget(parent), settingsWidget(new SettingsWidget(parent)), playWidget(nullptr),confirmDialog(new ConfirmDialog(parent,this->grab()))
@@ -8,24 +9,36 @@ MenuWidget::MenuWidget(QWidget* parent)
 	initBackgroundGIF();
 	initLogoGIF();
 
+	setWindowTitle("Meolide");
+
 	// SongComboBox related
 	initSongComboBox();
 	connect(ui.comboBox_song, &QComboBox::currentTextChanged, this, &MenuWidget::comboBoxSongSelected);
 
 	// connect SettingsWidget related
+	
 	connect(ui.pushButton_settings, &QPushButton::clicked, this, [this]()
 		{
 			settingsWidget->show();
 			this->hide();
 		});
+
 	connect(settingsWidget, &SettingsWidget::pushButtonBackMenuClicked, this, &MenuWidget::show);
 
 	// connect PlayWidget related
+	
 	connect(ui.pushButton_play, &QPushButton::clicked, this, &MenuWidget::pushButtonPlayClicked);
 
 	//connect confirmDialog related
 	//connect(confirmDialog, &ConfirmDialog::backToMenu, this,&MenuWidget::show);
 	connect(confirmDialog, &ConfirmDialog::exitGame, this, &MenuWidget::close);
+
+	//connect buttonClickSound
+	ButtonClickSound::buttonClickSound(ui.pushButton_settings);
+	ButtonClickSound::buttonClickSound(ui.pushButton_play);
+	ButtonClickSound::buttonClickSound(ui.comboBox_chart); 
+	ButtonClickSound::buttonClickSound(ui.comboBox_song);
+
 }
 
 MenuWidget::~MenuWidget()
