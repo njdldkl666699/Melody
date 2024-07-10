@@ -2,11 +2,12 @@
 # ----------------------------------------------------------------------------
 
 #Cola Add Files
-debug
-release
+[d,D]ebug
+[p,P]rofile
+[r,R]elease
 .vs
 *.qtvscr
-build
+[b,B]uild
 
 *~
 *.autosave
