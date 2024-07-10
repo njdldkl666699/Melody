@@ -8,9 +8,12 @@ GameController::GameController(const QString& songFilePth, const QString& chartF
 	initVals();
 	initnoteTracks();
 	initMusicPlayer();
+	timer.setTimerType(Qt::PreciseTimer);
+	wait();
 	connect(&musicPlayer, &QMediaPlayer::mediaStatusChanged, this, &GameController::isMusicEnd);
 	connect(&timer, &QTimer::timeout, this, &GameController::judgeNoHitMiss);
 	connect(&timer, &QTimer::timeout, this, &GameController::updateNote);
+	connect(&timer, &QTimer::timeout, this, &GameController::signalUpdate);
 }
 
 GameController::~GameController()
@@ -34,8 +37,7 @@ void GameController::reset()
 	initnoteTracks();
 	setNoteParent(noteParent);
 	musicPlayer.setPosition(0);
-	timer.start(deltaTime);
-	//musicPlayer.play();
+	wait();
 }
 
 void GameController::setNoteParent(QWidget* parent)
@@ -103,8 +105,36 @@ void GameController::initMusicPlayer()
 	musicPlayer.setSource(QUrl::fromLocalFile(songFilePath));
 	musicPlayer.setAudioOutput(&audioOutput);
 	audioOutput.setVolume(settings->getMusicVal() / 100.0f);
+}
+
+void GameController::wait()
+{
+	gamePause();
+	QTimer::singleShot(3000, this, &GameController::gamePlay);
+}
+
+void GameController::isMusicEnd(QMediaPlayer::MediaStatus status)
+{
+	if (status == QMediaPlayer::EndOfMedia)
+	{
+		timer.stop();
+		musicPlayer.stop();
+		emit gameEnded();
+	}
+}
+
+void GameController::gamePause()
+{
+	velocity = 0;
+	musicPlayer.pause();
+	timer.stop();
+}
+
+void GameController::gamePlay()
+{
+	velocity = 1.1 + settings->getSpeedVal() / 20.0;
+	musicPlayer.play();
 	timer.start(deltaTime);
-	//musicPlayer.play();
 }
 
 void GameController::initnoteTracks()
@@ -205,7 +235,7 @@ void GameController::initnoteTracks()
 		}
 		//set note x, y
 		int xPos = 300 + key * 150;
-		int yPos = 625 - noteSize.height() - velocity * (startTime + waitTime);
+		int yPos = 625 - noteSize.height() - velocity * startTime;
 		note->move(xPos, yPos);
 
 		//push note to noteTracks
@@ -220,12 +250,6 @@ void GameController::initnoteTracks()
 	chartFile.close();
 }
 
-void GameController::isMusicEnd(QMediaPlayer::MediaStatus status)
-{
-	if (status == QMediaPlayer::EndOfMedia)
-		emit musicEnded();
-}
-
 int GameController::getNoteTime(const QString& rawTimeData)const
 {
 	QStringList timeData = rawTimeData.split(",");
@@ -234,6 +258,14 @@ int GameController::getNoteTime(const QString& rawTimeData)const
 	double totalPos = timeData.at(2).toInt();
 	int miliseconds = settings->getBiasVal() - offset + (beat + pos / totalPos) * 60000 / bpm;
 	return miliseconds;
+}
+
+void GameController::calculateAcc()
+{
+	uint total = perfectCount + goodCount + missCount;
+	if (total == 0)
+		accuracy = 0;
+	accuracy = (perfectCount * 100.0f + goodCount * 50) / total;
 }
 
 void GameController::judgeKeyPress(QKeyEvent* event)
@@ -252,10 +284,10 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 					2¡¢difference < 0 means you press the key late, > 0 means early
 			*/
 			int difference = noteStartTime - musicCurrentTime;
-			qDebug() << "Hit!" << "difference: " << difference
-				<< "musicCurrentTime: " << musicCurrentTime
-				<< "noteStartTime: " << noteStartTime
-				<< "x: " << headNote->x() << "y: " << headNote->y();
+			qDebug() << "Hit!\tx: " << headNote->x() << "\ty: " << headNote->y()
+				<< "\tnoteStartTime: " << noteStartTime
+				<< "\tmusicCurrentTime: " << musicCurrentTime
+				<< "\tdifference: " << difference;
 
 			//case Tap note
 			if (headNote->getType() == "Tap")
@@ -268,6 +300,8 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 					if (combo > maxCombo)
 						maxCombo = combo;
 					score += 100;
+					calculateAcc();
+					emit judgeResult("Perfect");
 					//pop note and delete
 					delete noteTracks[i].dequeue();
 				}
@@ -279,6 +313,8 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 					if (combo > maxCombo)
 						maxCombo = combo;
 					score += 50;
+					calculateAcc();
+					emit judgeResult("Good");
 					//pop note and delete
 					delete noteTracks[i].dequeue();
 				}
@@ -288,6 +324,8 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 				{
 					missCount++;
 					combo = 0;
+					calculateAcc();
+					emit judgeResult("Miss");
 					//pop note and delete
 					delete noteTracks[i].dequeue();
 				}
@@ -355,6 +393,8 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 						if (combo > maxCombo)
 							maxCombo = combo;
 						score += 100;
+						calculateAcc();
+						emit judgeResult("Perfect");
 						//pop note and delete
 						delete noteTracks[i].dequeue();
 					}
@@ -366,6 +406,8 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 						if (combo > maxCombo)
 							maxCombo = combo;
 						score += 50;
+						calculateAcc();
+						emit judgeResult("Good");
 						//pop note and delete
 						delete noteTracks[i].dequeue();
 					}
@@ -375,6 +417,8 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 				{
 					missCount++;
 					combo = 0;
+					calculateAcc();
+					emit judgeResult("Miss");
 					// hold->setState(Hold::Miss);	//had set in Hold()
 					// set Hold picture miss version
 					if (i == 0 || i == 3)
@@ -394,37 +438,41 @@ void GameController::judgeNoHitMiss()
 {
 	for (int i = 0; i < 4; i++)
 	{
-		Note* head = noteTracks[i].head();
+		Note* headNote = noteTracks[i].head();
 		int musicCurrentTime = getMusicCurrentTime();
-		int noteStartTime = head->getStartTime();
+		int noteStartTime = headNote->getStartTime();
 		int difference = noteStartTime - musicCurrentTime;
-		if (head->getType() == "Tap")
+		if (headNote->getType() == "Tap")
 		{
 			//case Miss, too late
 			if (difference < -100)
 			{
+				qDebug() << "Miss!\tx: " << headNote->x() << "\ty: " << headNote->y()
+					<< "\tnoteStartTime: " << noteStartTime
+					<< "\tmusicCurrentTime: " << musicCurrentTime
+					<< "\tdifference: " << difference;
+
 				missCount++;
 				combo = 0;
-				qDebug() << "y: " << head->y() << "difference: " << difference
-					<< "musicCurrentTime: " << musicCurrentTime
-					<< "noteStartTime: " << noteStartTime
-					<< "x: " << head->x();
-
+				calculateAcc();
+				emit judgeResult("Miss");
 				//pop note and delete
 				delete noteTracks[i].dequeue();
 			}
 		}
-		else if (head->getType() == "Hold")
+		else if (headNote->getType() == "Hold")
 		{
 			//always to be Hold, because getType() tells us.
-			assert(dynamic_cast<Hold*>(head));
-			Hold* hold = dynamic_cast<Hold*>(head);
+			assert(dynamic_cast<Hold*>(headNote));
+			Hold* hold = dynamic_cast<Hold*>(headNote);
 
 			//case Miss, too late
 			if (hold->getState() != Hold::Miss && difference < -100)
 			{
 				missCount++;
 				combo = 0;
+				calculateAcc();
+				emit judgeResult("Miss");
 				// hold->setState(Hold::Miss);	//had set in Hold()
 				// set Hold picture miss version
 				if (i == 0 || i == 3)
@@ -442,12 +490,6 @@ void GameController::judgeNoHitMiss()
 
 void GameController::updateNote()
 {
-	static int count = 0;
-	count++;
-	if (count >= waitTime / deltaTime && count < waitTime / deltaTime + 1)
-	{
-		musicPlayer.play();
-	}
 	//move notes in queue
 	for (int i = 0; i < 4; i++)
 	{

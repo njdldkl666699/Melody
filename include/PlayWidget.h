@@ -34,6 +34,8 @@ private slots:
 	void gameRestart();
 	void gameClose();
 	void gameEnd();
+	void updateUI();
+	void updateComment(const QString& comment);
 
 private:
 	Ui::PlayWidgetClass ui;
@@ -44,4 +46,6 @@ private:
 	const SettingsWidget* settings;
 	const QString& songFilePath;
 	const QString& chartFilePath;
+
+	QTimer commentTimer;
 };

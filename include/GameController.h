@@ -34,34 +34,39 @@ public:
 	uint getMissCount() const { return missCount; }
 	float getAccuracy() const { return accuracy; }
 	uint getScore() const { return score; }
+	uint getCombo() const { return combo; }
 	uint getMaxCombo() const { return maxCombo; }
 	QString getSongName()const;
 	QString getChartName()const;
 	QPixmap getSongPicture()const;
 
 signals:
-	void musicEnded();
+	void gameEnded();
+	void signalUpdate();
+	void judgeResult(const QString& comment);
 
 public slots:
 	//judge related
 	void judgeKeyPress(QKeyEvent* event);
 	void judgeKeyRelease(QKeyEvent* event);
-	//music related
-	void isMusicEnd(QMediaPlayer::MediaStatus status);
-	void pauseMusic() { musicPlayer.pause(); }
-	void playMusic() { musicPlayer.play(); }
-	void stopMusic() { musicPlayer.stop(); }
+	//game related
+	void gamePause();
+	void gamePlay();
 
 private:
 	//init functions
 	void initVals();
 	void initnoteTracks();
 	void initMusicPlayer();
+	void wait();
 
 	//get Unbiased Note Time (ms)
 	int getNoteTime(const QString& rawTimeData)const;
 	//get Music Current Time (ms)
 	int getMusicCurrentTime()const { return musicPlayer.position(); }
+	void calculateAcc();
+	//music related
+	void isMusicEnd(QMediaPlayer::MediaStatus status);
 
 private slots:
 	void judgeNoHitMiss();
