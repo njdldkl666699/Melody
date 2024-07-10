@@ -61,16 +61,16 @@
     <ClCompile Include="src\SettingsWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Tap.cpp">
+    <ClCompile Include="src\StartWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\main.cpp">
+    <ClCompile Include="src\Tap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\confirmDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\StartWidget.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -99,13 +99,13 @@
     <QtMoc Include="include\SettingsWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="include\StartWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
     <QtMoc Include="include\Tap.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="include\confirmDialog.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="include\StartWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -133,14 +133,11 @@
     <QtUic Include="ui\SettingsWidget.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="ui\confirmDialog.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
     <QtUic Include="ui\StartWidget.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Melody.pro" />
+    <QtUic Include="ui\confirmDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
 </Project>

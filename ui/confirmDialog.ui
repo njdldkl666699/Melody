@@ -6,21 +6,46 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>648</width>
-    <height>439</height>
+    <width>800</width>
+    <height>450</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>450</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>800</width>
+    <height>450</height>
+   </size>
+  </property>
+  <property name="font">
+   <font>
+    <family>Arial</family>
+   </font>
   </property>
   <property name="windowTitle">
    <string>confirmDialog</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QDialog { background-image: url(res/background/2.png);  }</string>
+  </property>
   <widget class="QPushButton" name="pushButton_backMenu">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>230</y>
-     <width>166</width>
-     <height>24</height>
+     <x>150</x>
+     <y>325</y>
+     <width>200</width>
+     <height>50</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial Narrow</family>
+    </font>
    </property>
    <property name="text">
     <string>backMenu</string>
@@ -29,10 +54,10 @@
   <widget class="QPushButton" name="pushButton_exit">
    <property name="geometry">
     <rect>
-     <x>330</x>
-     <y>230</y>
-     <width>166</width>
-     <height>24</height>
+     <x>450</x>
+     <y>325</y>
+     <width>200</width>
+     <height>50</height>
     </rect>
    </property>
    <property name="text">
@@ -42,14 +67,20 @@
   <widget class="QLabel" name="label_background">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>30</y>
-     <width>541</width>
-     <height>371</height>
+     <x>220</x>
+     <y>100</y>
+     <width>800</width>
+     <height>100</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>28</pointsize>
+    </font>
+   </property>
    <property name="text">
-    <string/>
+    <string>确定要退出Meolide喵？</string>
    </property>
   </widget>
  </widget>

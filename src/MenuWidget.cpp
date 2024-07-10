@@ -2,7 +2,7 @@
 #include<QPixmap>
 
 MenuWidget::MenuWidget(QWidget* parent)
-	: QWidget(parent), settingsWidget(new SettingsWidget(parent)), playWidget(nullptr),confirmDialog(new ConfirmDialog(parent))
+	: QWidget(parent), settingsWidget(new SettingsWidget(parent)), playWidget(nullptr),confirmDialog(new ConfirmDialog(parent,this->grab()))
 {
 	ui.setupUi(this);
 	initBackgroundGIF();
@@ -66,6 +66,11 @@ void MenuWidget::initLogoGIF()
 	ui.logo->setMovie(logoGIF);
 	logoGIF->start();
 }
+
+
+
+
+
 
 void MenuWidget::keyPressEvent(QKeyEvent* event)
 {

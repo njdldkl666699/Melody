@@ -5,6 +5,7 @@
 #include <QDir>
 #include<QMovie>
 #include<QFile>
+#include <QGraphicsBlurEffect>	//import blur model to process the confirm widget
 #include"SettingsWidget.h"
 #include"PlayWidget.h"
 #include "confirmDialog.h"
@@ -44,4 +45,6 @@ private:
 
 	// Used to init PlayWidget
 	QString songFilePath, chartFilePath;
+
+
 };
