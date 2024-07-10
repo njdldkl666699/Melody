@@ -419,9 +419,9 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 					<< "\tdeltaY: " << deltaY << "\tdifference: " << difference;
 				//#######################################################
 
-
 				//judgement of ending, > 50ms means release too early
-				Hold::ToBeState state=hold->getState();
+				Hold::ToBeState state = hold->getState();
+				qDebug() << "state: " << state;
 				//case None, not press, don't judge
 				if(state == Hold::None)
 					continue;
