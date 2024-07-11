@@ -3,7 +3,7 @@
 #include "ButtonClickSound.h"
 
 MenuWidget::MenuWidget(QWidget* parent)
-	: QWidget(parent), settingsWidget(new SettingsWidget(parent)), playWidget(nullptr),confirmDialog(new ConfirmDialog(parent,this->grab()))
+	: QWidget(parent), settingsWidget(new SettingsWidget(parent)), playWidget(nullptr),confirmDialog(new ConfirmDialog(parent))
 {
 	ui.setupUi(this);
 	initBackgroundGIF();

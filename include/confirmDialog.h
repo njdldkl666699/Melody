@@ -15,7 +15,7 @@ class ConfirmDialog : public QDialog
 	Q_OBJECT
 
 public:
-	ConfirmDialog(QWidget *parent = nullptr,const QPixmap&bkg=QPixmap());
+	ConfirmDialog(QWidget *parent = nullptr);
 	~ConfirmDialog();
 
 signals:
@@ -29,8 +29,6 @@ private slots:
 	
 private:
 	Ui::confirmDialogClass ui;
-	QPixmap background;
 
-private:
-	void initConfirmDialog(QWidget*parent);
+	
 };
