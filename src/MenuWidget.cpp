@@ -3,7 +3,8 @@
 #include "ButtonClickSound.h"
 
 MenuWidget::MenuWidget(QWidget* parent)
-	: QWidget(parent), settingsWidget(new SettingsWidget(parent)), playWidget(nullptr),confirmDialog(new ConfirmDialog(parent,this->grab()))
+	: QWidget(parent), settingsWidget(new SettingsWidget(parent)), playWidget(nullptr),
+	confirmDialog(new ConfirmDialog(parent, this->grab()))
 {
 	ui.setupUi(this);
 	initBackgroundGIF();
@@ -55,9 +56,9 @@ void MenuWidget::initSongComboBox()
 	beatmapFilters << "*";
 	QDir::Filters beatFilter = QDir::Dirs | QDir::NoDotAndDotDot;
 	QStringList beatmapSubDirs = beatmapDir.entryList(beatmapFilters, beatFilter);
-	foreach(const QString & subDir, beatmapSubDirs)
+	for(auto &beatmap: beatmapSubDirs)
 	{
-		qDebug() << subDir;
+		qDebug() << beatmap;
 	}
 	ui.comboBox_song->addItem("[Select Song]");
 	ui.comboBox_song->addItems(beatmapSubDirs);
