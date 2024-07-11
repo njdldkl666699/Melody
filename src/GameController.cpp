@@ -19,26 +19,36 @@ GameController::GameController(const QString& songFilePth, const QString& chartF
 
 GameController::~GameController()
 {
-	for (int i = 0; i < 4; i++)
-		while (!noteTracks[i].isEmpty())
-			delete noteTracks[i].dequeue();
-
-	for (auto& i : notesOutQueue)
-		delete i;
-
-	for (int i = 0; i < 4; i++)
-		noteTracks[i].clear();
-
-	notesOutQueue.clear();
+	clear();
 }
 
 void GameController::reset()
 {
+	clear();
 	initVals();
 	initnoteTracks();
 	setNoteParent(noteParent);
 	musicPlayer.setPosition(0);
 	wait();
+}
+
+void GameController::clear()
+{
+	for (int i = 0; i < 4; i++)
+		while (!noteTracks[i].isEmpty())
+			delete noteTracks[i].dequeue();
+	for (int i = 0; i < 4; i++)
+		noteTracks[i].clear();
+
+	for (auto& i : notesOutQueue)
+	{
+		if (i != nullptr)
+		{
+			delete i;
+			i = nullptr;
+		}
+	}
+	notesOutQueue.clear();
 }
 
 void GameController::setNoteParent(QWidget* parent)
@@ -106,6 +116,8 @@ void GameController::initMusicPlayer()
 	musicPlayer.setSource(QUrl::fromLocalFile(songFilePath));
 	musicPlayer.setAudioOutput(&audioOutput);
 	audioOutput.setVolume(settings->getMusicVal() / 100.0f);
+	tapSound.setSource(QUrl::fromLocalFile("./res/note/sound.wav"));
+	tapSound.setVolume(settings->getSoundVal() / 100.0f);
 }
 
 void GameController::wait()
@@ -143,16 +155,6 @@ void GameController::gamePlay()
 
 void GameController::initnoteTracks()
 {
-	//clear notes in queue and out queue
-	for (int i = 0; i < 4; i++)
-		while (!noteTracks[i].isEmpty())
-			delete noteTracks[i].dequeue();
-	for (auto& i : notesOutQueue)
-		delete i;
-	for (int i = 0; i < 4; i++)
-		noteTracks[i].clear();
-	notesOutQueue.clear();
-
 	//read chart file
 	QFile chartFile(chartFilePath);
 	if (!chartFile.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -206,7 +208,6 @@ void GameController::initnoteTracks()
 
 		//construct note
 		Note* note = nullptr;
-		QString soundPath = "./res/note/sound.wav";
 		QString picturePath;
 		QSize noteSize(150, 50);
 		if (!isHold)
@@ -218,8 +219,7 @@ void GameController::initnoteTracks()
 				picturePath = "./res/note/tap_pink.png";
 			else							//not happen	
 				return;
-			note = new Tap(startTime, keySequence,
-				soundPath, picturePath, noteSize);
+			note = new Tap(startTime, keySequence, picturePath, noteSize);
 		}
 		else
 		{
@@ -234,8 +234,8 @@ void GameController::initnoteTracks()
 				picturePath = "./res/note/hold_pink.png";
 			else							//not happen	
 				return;
-			note = new Hold(startTime, endTime, keySequence,
-				soundPath, picturePath, noteSize);
+			note = new Hold(startTime, endTime,
+				keySequence, picturePath, noteSize);
 		}
 		//set note x, y
 		int xPos = 300 + key * 150;
@@ -318,6 +318,7 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 						maxCombo = combo;
 					score += 100;
 					calculateAcc();
+					tapSound.play();
 					emit judgeResult("Perfect");
 					//pop note and delete
 					delete noteTracks[i].dequeue();
@@ -331,6 +332,7 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 						maxCombo = combo;
 					score += 50;
 					calculateAcc();
+					tapSound.play();
 					emit judgeResult("Good");
 					//pop note and delete
 					delete noteTracks[i].dequeue();
@@ -401,6 +403,8 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 			Note* headNote = noteTracks[i].head();
 			if (headNote->getType() == "Hold")
 			{
+				qDebug() << "Release: In Hold: key[" << i << "] " 
+					<< key[i] << " eventKey: " << eventKey;
 				//always to be Hold, because getType() tells us.
 				assert(dynamic_cast<Hold*>(headNote));
 				Hold* hold = dynamic_cast<Hold*>(headNote);

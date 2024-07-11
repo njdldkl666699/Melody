@@ -1,18 +1,21 @@
 #pragma once
 
-#include "Hold.h"
 #include "SettingsWidget.h"
+#include "Hold.h"
 #include "Tap.h"
-#include <QAudioOutput>
+#include <QKeyEvent>
+
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
-#include <QKeyEvent>
-#include <QMediaPlayer>
-#include <QObject>
-#include <QQueue>
 #include <QTextStream>
+
+#include <QMediaPlayer>
+#include <QAudioOutput>
+#include <QSoundEffect>
 #include <QTimer>
+
+#include <QQueue>
 #include <QVector>
 
 class GameController : public QObject
@@ -25,6 +28,7 @@ public:
 	~GameController();
 	//## Only Use in PlayWidget.cpp ##
 	void reset();
+	void wait();
 	void setNoteParent(QWidget* parent);
 
 public:
@@ -58,7 +62,6 @@ private:
 	void initVals();
 	void initnoteTracks();
 	void initMusicPlayer();
-	void wait();
 
 	//get Unbiased Note Time (ms)
 	int getNoteTime(const QString& rawTimeData)const;
@@ -67,6 +70,8 @@ private:
 	void calculateAcc();
 	//music related
 	void isMusicEnd(QMediaPlayer::MediaStatus status);
+	//clear note memory
+	void clear();
 
 private slots:
 	void judgeNoHitMiss();
@@ -95,6 +100,8 @@ private:
 
 	QMediaPlayer musicPlayer;
 	QAudioOutput audioOutput;
+	QSoundEffect tapSound;
+
 	QTimer timer;
 	QTimer countdownTimer;
 };

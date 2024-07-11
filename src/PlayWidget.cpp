@@ -88,7 +88,9 @@ void PlayWidget::keyPressEvent(QKeyEvent* event)
 
 void PlayWidget::keyReleaseEvent(QKeyEvent* event)
 {
-	qDebug() << "keyReleaseEvent";
+	//received some event that should't be received,
+	//but I can't fix it
+	//qDebug() << "keyReleaseEvent";
 	emit signalKeyReleased(event);
 }
 
@@ -103,8 +105,8 @@ void PlayWidget::gamePause()
 
 void PlayWidget::gameContinue()
 {
-	// Continue the game
-	gameController->gamePlay();
+	//3 seconds wait, auto continue
+	gameController->wait();
 	this->show();
 }
 

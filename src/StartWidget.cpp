@@ -24,11 +24,6 @@ StartWidget::StartWidget(QWidget* parent)
 StartWidget::~StartWidget()
 {
 	delete ui;
-	delete player;
-	delete music;
-	delete audio;
-	delete videoWidget;
-	delete audioLoop;
 	delete w;
 }
 
