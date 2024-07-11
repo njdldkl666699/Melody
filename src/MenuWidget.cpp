@@ -78,11 +78,6 @@ void MenuWidget::initLogoGIF()
 	logoGIF->start();
 }
 
-
-
-
-
-
 void MenuWidget::keyPressEvent(QKeyEvent* event)
 {
 	if (event->key() == Qt::Key_Escape)
@@ -91,7 +86,6 @@ void MenuWidget::keyPressEvent(QKeyEvent* event)
 		// confirm to close the window by escape key
 		//ConfirmDialog confirmDialog(this);
 		
-
 		if (confirmDialog->exec() == QDialog::Accepted)
 		{
 			event->accept();
@@ -100,7 +94,6 @@ void MenuWidget::keyPressEvent(QKeyEvent* event)
 		{
 			event->ignore();
 		}
-		
 	}
 	else
 	{
@@ -161,11 +154,13 @@ void MenuWidget::pushButtonPlayClicked()
 		qDebug() << songFilePath << "\n" << chartFilePath;
 
 		// Initialize PlayWidget
+		if (playWidget != nullptr)
+		{
+			delete playWidget;
+			playWidget = nullptr;
+		}
 		playWidget = new PlayWidget(songFilePath, chartFilePath, settingsWidget);
-		connect(playWidget, &PlayWidget::signalBackMenu, this, [this]()
-			{
-				this->show();
-			});
+		connect(playWidget, &PlayWidget::signalBackMenu, this, &MenuWidget::show);
 		playWidget->resize(this->size());
 		playWidget->show();
 		this->hide();

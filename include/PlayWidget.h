@@ -13,7 +13,6 @@ class PlayWidget : public QWidget
 public:
 	PlayWidget(const QString& songFilePth, const QString& chartFilePth,
 		const SettingsWidget* settingsWidget, QWidget* parent = nullptr);
-
 	~PlayWidget();
 
 signals:

@@ -132,6 +132,22 @@ void GameController::isMusicEnd(QMediaPlayer::MediaStatus status)
 {
 	if (status == QMediaPlayer::EndOfMedia)
 	{
+		//if chart isn't end before music end,
+		//set a countdown timer to wait for the last note
+		
+		//#### One Way to Fix It ####
+		for (int i = 0; i < 4; i++)
+		{
+			if (!noteTracks[i].isEmpty())
+			{
+				endTimer.setSingleShot(true);
+				endTimer.setInterval(3000);
+				connect(&endTimer, &QTimer::timeout, this, &GameController::gameEnded);
+				return;
+			}
+		}
+		//############################
+
 		timer.stop();
 		musicPlayer.stop();
 		emit gameEnded();
@@ -403,7 +419,7 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 			Note* headNote = noteTracks[i].head();
 			if (headNote->getType() == "Hold")
 			{
-				qDebug() << "Release: In Hold: key[" << i << "] " 
+				qDebug() << "Release: In Hold: key[" << i << "] "
 					<< key[i] << " eventKey: " << eventKey;
 				//always to be Hold, because getType() tells us.
 				assert(dynamic_cast<Hold*>(headNote));
@@ -427,7 +443,7 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 				Hold::ToBeState state = hold->getState();
 				qDebug() << "state: " << state;
 				//case None, not press, don't judge
-				if(state == Hold::None)
+				if (state == Hold::None)
 					continue;
 				if (difference <= 50)
 				{
@@ -583,9 +599,9 @@ void GameController::judgeNoHitMiss()
 					notesOutQueue.push_back(noteTracks[i].dequeue());
 				}
 				//Miss from release too early
-				else if(state == Hold::Miss)
+				else if (state == Hold::Miss)
 				{
-					
+
 				}
 			}
 		}

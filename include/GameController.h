@@ -104,4 +104,8 @@ private:
 
 	QTimer timer;
 	QTimer countdownTimer;
+
+	//a way to fix music end,
+	//but the chart not end
+	QTimer endTimer;
 };
