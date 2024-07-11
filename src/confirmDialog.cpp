@@ -5,6 +5,7 @@ ConfirmDialog::ConfirmDialog(QWidget *parent)
 {
 	ui.setupUi(this);
 	
+<<<<<<< HEAD
 	
 	setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
 	this->setModal(true);
@@ -20,6 +21,9 @@ ConfirmDialog::ConfirmDialog(QWidget *parent)
 
 	this->connect(ui.pushButton_exit, &QPushButton::clicked, this, &ConfirmDialog::on_pushButton_exit_clicked);
 	this->connect(ui.pushButton_backMenu, &QPushButton::clicked, this, &ConfirmDialog::on_pushButton_backMenu_clicked);
+=======
+	initConfirmDialog(parent);
+>>>>>>> 0c2ecc294f1892c3810b163a0aa441da83df22bb
 
 }
 

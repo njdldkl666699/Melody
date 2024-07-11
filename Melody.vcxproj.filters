@@ -1,113 +1,81 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Form Files">
-      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
-      <Extensions>ui</Extensions>
-      <ParseFiles>false</ParseFiles>
-    </Filter>
-    <Filter Include="Form Files">
-      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
-      <Extensions>ui</Extensions>
-      <ParseFiles>false</ParseFiles>
-    </Filter>
-    <Filter Include="Generated Files">
-      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
-      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
-    </Filter>
-    <Filter Include="Generated Files">
-      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
-      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\EndWidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GameController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Hold.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MenuWidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Note.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\PauseWidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\PlayWidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SettingsWidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\StartWidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Tap.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\ButtonClickSound.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\confirmDialog.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EndWidget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameController.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hold.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>源文件</Filter>
     </ClCompile>
+<<<<<<< HEAD
+=======
+    <ClCompile Include="src\MenuWidget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Note.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PauseWidget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PlayWidget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SettingsWidget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StartWidget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tap.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+>>>>>>> 0c2ecc294f1892c3810b163a0aa441da83df22bb
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="include\EndWidget.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="include\GameController.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="include\Hold.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="include\MenuWidget.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="include\Note.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="include\PauseWidget.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="include\PlayWidget.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="include\SettingsWidget.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="include\StartWidget.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="include\Tap.h">
-      <Filter>Header Files</Filter>
+    <QtMoc Include="include\ButtonClickSound.h">
+      <Filter>头文件</Filter>
     </QtMoc>
     <QtMoc Include="include\confirmDialog.h">
-      <Filter>Header Files</Filter>
+      <Filter>头文件</Filter>
     </QtMoc>
+    <QtMoc Include="include\EndWidget.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+    <QtMoc Include="include\GameController.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+    <QtMoc Include="include\Hold.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+    <QtMoc Include="include\MenuWidget.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+    <QtMoc Include="include\Note.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+    <QtMoc Include="include\PauseWidget.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+    <QtMoc Include="include\PlayWidget.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+    <QtMoc Include="include\SettingsWidget.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+<<<<<<< HEAD
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -116,28 +84,47 @@
     <CustomBuild Include="release\moc_predefs.h.cbt">
       <Filter>Generated Files</Filter>
     </CustomBuild>
+=======
+    <QtMoc Include="include\StartWidget.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+    <QtMoc Include="include\Tap.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+>>>>>>> 0c2ecc294f1892c3810b163a0aa441da83df22bb
   </ItemGroup>
   <ItemGroup>
+    <QtUic Include="ui\confirmDialog.ui">
+      <Filter>界面文件</Filter>
+    </QtUic>
     <QtUic Include="ui\EndWidget.ui">
-      <Filter>Form Files</Filter>
+      <Filter>界面文件</Filter>
     </QtUic>
     <QtUic Include="ui\MenuWidget.ui">
-      <Filter>Form Files</Filter>
+      <Filter>界面文件</Filter>
     </QtUic>
     <QtUic Include="ui\PauseWidget.ui">
-      <Filter>Form Files</Filter>
+      <Filter>界面文件</Filter>
     </QtUic>
     <QtUic Include="ui\PlayWidget.ui">
-      <Filter>Form Files</Filter>
+      <Filter>界面文件</Filter>
     </QtUic>
     <QtUic Include="ui\SettingsWidget.ui">
-      <Filter>Form Files</Filter>
+      <Filter>界面文件</Filter>
     </QtUic>
     <QtUic Include="ui\StartWidget.ui">
-      <Filter>Form Files</Filter>
+      <Filter>界面文件</Filter>
     </QtUic>
-    <QtUic Include="ui\confirmDialog.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{88f35783-5061-4b7b-95d4-b717f5c1d8ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{779176b5-f1db-437d-b7d1-487771c03d11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="界面文件">
+      <UniqueIdentifier>{221d4bc8-2255-4231-af4f-6b6ff06cbbdc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
