@@ -64,6 +64,8 @@ private:
 	QVector<HistoryList> historyList;
 
 	QList<QUrl> musicList;
+
+
 	QMediaPlayer* player;
 	QMediaPlayer* music;
 	QAudioOutput* audio;

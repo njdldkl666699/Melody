@@ -23,7 +23,7 @@ void ButtonClickSound::buttonClickSound(QComboBox* button)
 
 void ButtonClickSound::buttonClickSound(QSlider* button)
 {
-	ButtonClickSound::sound2.setSource(QUrl::fromLocalFile("./res/click.wav"));
+	ButtonClickSound::sound2.setSource(QUrl::fromLocalFile("./res/click2.wav"));
 	ButtonClickSound::sound2.setVolume(0.6);
 	connect(button, &QSlider::sliderMoved, &sound2, &QSoundEffect::play);
 	//qDebug() << "sound";

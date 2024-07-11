@@ -1,5 +1,4 @@
-#ifndef STARTWIDGET_H
-#define STARTWIDGET_H
+#pragma once
 
 #include <QWidget>
 #include<QMediaPlayer>
@@ -44,4 +43,4 @@ private:
     bool ifLoopStart;
 };
 
-#endif // STARTWIDGET_H
+
