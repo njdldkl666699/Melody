@@ -5,8 +5,6 @@ ConfirmDialog::ConfirmDialog(QWidget *parent)
 {
 	ui.setupUi(this);
 	
-<<<<<<< HEAD
-	
 	setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
 	this->setModal(true);
 	// set half-transparent :reserve
@@ -18,13 +16,8 @@ ConfirmDialog::ConfirmDialog(QWidget *parent)
 	ui.pushButton_backMenu->raise();
 	ui.pushButton_exit->raise();
 
-
 	this->connect(ui.pushButton_exit, &QPushButton::clicked, this, &ConfirmDialog::on_pushButton_exit_clicked);
 	this->connect(ui.pushButton_backMenu, &QPushButton::clicked, this, &ConfirmDialog::on_pushButton_backMenu_clicked);
-=======
-	initConfirmDialog(parent);
->>>>>>> 0c2ecc294f1892c3810b163a0aa441da83df22bb
-
 }
 
 ConfirmDialog::~ConfirmDialog()
@@ -42,4 +35,3 @@ void ConfirmDialog::on_pushButton_exit_clicked()
 	emit exitGame();
 	this->close();
 }
-

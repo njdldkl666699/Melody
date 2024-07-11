@@ -19,8 +19,6 @@
     <ClCompile Include="src\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-<<<<<<< HEAD
-=======
     <ClCompile Include="src\MenuWidget.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -42,7 +40,6 @@
     <ClCompile Include="src\Tap.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
->>>>>>> 0c2ecc294f1892c3810b163a0aa441da83df22bb
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="include\ButtonClickSound.h">
@@ -75,23 +72,12 @@
     <QtMoc Include="include\SettingsWidget.h">
       <Filter>头文件</Filter>
     </QtMoc>
-<<<<<<< HEAD
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="debug\moc_predefs.h.cbt">
-      <Filter>Generated Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="release\moc_predefs.h.cbt">
-      <Filter>Generated Files</Filter>
-    </CustomBuild>
-=======
     <QtMoc Include="include\StartWidget.h">
       <Filter>头文件</Filter>
     </QtMoc>
     <QtMoc Include="include\Tap.h">
       <Filter>头文件</Filter>
     </QtMoc>
->>>>>>> 0c2ecc294f1892c3810b163a0aa441da83df22bb
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="ui\confirmDialog.ui">

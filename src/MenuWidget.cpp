@@ -3,12 +3,8 @@
 #include "ButtonClickSound.h"
 
 MenuWidget::MenuWidget(QWidget* parent)
-<<<<<<< HEAD
-	: QWidget(parent), settingsWidget(new SettingsWidget(parent)), playWidget(nullptr),confirmDialog(new ConfirmDialog(parent))
-=======
-	: QWidget(parent), settingsWidget(new SettingsWidget(parent)), playWidget(nullptr),
-	confirmDialog(new ConfirmDialog(parent, this->grab()))
->>>>>>> 0c2ecc294f1892c3810b163a0aa441da83df22bb
+	: QWidget(parent), settingsWidget(new SettingsWidget(parent)), 
+	playWidget(nullptr),confirmDialog(new ConfirmDialog(parent))
 {
 	ui.setupUi(this);
 	initBackgroundGIF();
@@ -21,7 +17,6 @@ MenuWidget::MenuWidget(QWidget* parent)
 	connect(ui.comboBox_song, &QComboBox::currentTextChanged, this, &MenuWidget::comboBoxSongSelected);
 
 	// connect SettingsWidget related
-	
 	connect(ui.pushButton_settings, &QPushButton::clicked, this, [this]()
 		{
 			settingsWidget->show();
@@ -31,7 +26,6 @@ MenuWidget::MenuWidget(QWidget* parent)
 	connect(settingsWidget, &SettingsWidget::pushButtonBackMenuClicked, this, &MenuWidget::show);
 
 	// connect PlayWidget related
-	
 	connect(ui.pushButton_play, &QPushButton::clicked, this, &MenuWidget::pushButtonPlayClicked);
 
 	//connect confirmDialog related
@@ -43,7 +37,6 @@ MenuWidget::MenuWidget(QWidget* parent)
 	ButtonClickSound::buttonClickSound(ui.pushButton_play);
 	ButtonClickSound::buttonClickSound(ui.comboBox_chart); 
 	ButtonClickSound::buttonClickSound(ui.comboBox_song);
-
 }
 
 MenuWidget::~MenuWidget()

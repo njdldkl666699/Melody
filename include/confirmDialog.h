@@ -1,13 +1,6 @@
 #pragma once
 
 #include <QDialog>
-#include <QGraphicsBlurEffect>	//import blur model to process the confirm widget
-#include <QGraphicsScene>		//manage 2D graphics
-#include <QGraphicsPixmapItem>	//add image element
-#include <QPainter>				//draw the bakcground
-#include <QPalette>
-#include <QPixmap>
-#include <QImage>
 #include "ui_confirmDialog.h"
 
 class ConfirmDialog : public QDialog
@@ -26,9 +19,6 @@ private slots:
 	void on_pushButton_backMenu_clicked();
 	void on_pushButton_exit_clicked();
 	
-	
 private:
 	Ui::confirmDialogClass ui;
-
-	
 };

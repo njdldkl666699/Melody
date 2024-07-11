@@ -45,6 +45,4 @@ private:
 
 	// Used to init PlayWidget
 	QString songFilePath, chartFilePath;
-
-
 };

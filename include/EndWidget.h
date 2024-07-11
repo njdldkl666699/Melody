@@ -11,9 +11,6 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-
-
-
 class EndWidget : public QWidget
 {
 	Q_OBJECT
@@ -48,7 +45,6 @@ private:
 	void getHistory();
 	void writeHistory();
 	void setHistoryList();
-
 
 private slots:
 private:

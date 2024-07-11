@@ -71,6 +71,9 @@
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Melody</TargetName>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>GeneratedFiles\$(ConfigurationName);GeneratedFiles;.;include;release;/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -185,6 +188,8 @@
     </QtMoc>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\ButtonClickSound.cpp" />
+    <ClCompile Include="src\confirmDialog.cpp" />
     <ClCompile Include="src\EndWidget.cpp" />
     <ClCompile Include="src\GameController.cpp" />
     <ClCompile Include="src\Hold.cpp" />
@@ -195,7 +200,6 @@
     <ClCompile Include="src\SettingsWidget.cpp" />
     <ClCompile Include="src\StartWidget.cpp" />
     <ClCompile Include="src\Tap.cpp" />
-    <ClCompile Include="src\confirmDialog.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -239,19 +243,21 @@
       <Include Condition="'$(Configuration)|$(Platform)'=='Release|x64'">./$(Configuration)/moc_predefs.h</Include>
       <Include Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">./$(Configuration)/moc_predefs.h</Include>
     </QtMoc>
-    <QtMoc Include="include\confirmDialog.h">
-      <Include Condition="'$(Configuration)|$(Platform)'=='Release|x64'">./$(Configuration)/moc_predefs.h</Include>
-      <Include Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">./$(Configuration)/moc_predefs.h</Include>
-    </QtMoc>
   </ItemGroup>
   <ItemGroup>
+    <QtUic Include="ui\confirmDialog.ui" />
     <QtUic Include="ui\EndWidget.ui" />
     <QtUic Include="ui\MenuWidget.ui" />
     <QtUic Include="ui\PauseWidget.ui" />
     <QtUic Include="ui\PlayWidget.ui" />
     <QtUic Include="ui\SettingsWidget.ui" />
     <QtUic Include="ui\StartWidget.ui" />
-    <QtUic Include="ui\confirmDialog.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="include\ButtonClickSound.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="include\confirmDialog.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Import Project="$(QtMsBuild)\qt.targets" Condition="Exists('$(QtMsBuild)\qt.targets')" />

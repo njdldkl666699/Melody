@@ -23,7 +23,8 @@ SOURCES += \
     src/main.cpp \
     src/Note.cpp \
     src/confirmDialog.cpp \
-    src/StartWidget.cpp
+    src/StartWidget.cpp \
+    src/ButtonClickSound.h
 
 HEADERS += \
     include/EndWidget.h \
@@ -37,7 +38,8 @@ HEADERS += \
     include/Tap.h \
     include/Note.h \
     include/confirmDialog.h \
-    include/StartWidget.h
+    include/StartWidget.h \
+    include/ButtonClickSound.h
 
 INCLUDEPATH += \
     include

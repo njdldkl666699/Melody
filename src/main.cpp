@@ -1,7 +1,6 @@
-#include "menuwidget.h"
-#include "StartWidget.h"
 #include <QApplication>
 #include<QStyleFactory>
+#include "StartWidget.h"
 
 int main(int argc, char* argv[])
 {
