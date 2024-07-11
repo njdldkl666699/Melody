@@ -1,45 +1,116 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="src\EndWidget.cpp" />
-    <ClCompile Include="src\ButtonClickSound.cpp" />
-    <ClCompile Include="src\GameController.cpp" />
-    <ClCompile Include="src\Hold.cpp" />
-    <ClCompile Include="src\MenuWidget.cpp" />
-    <ClCompile Include="src\Note.cpp" />
-    <ClCompile Include="src\PauseWidget.cpp" />
-    <ClCompile Include="src\PlayWidget.cpp" />
-    <ClCompile Include="src\SettingsWidget.cpp" />
-    <ClCompile Include="src\StartWidget.cpp" />
-    <ClCompile Include="src\Tap.cpp" />
-    <ClCompile Include="src\confirmDialog.cpp" />
-    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\ButtonClickSound.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\confirmDialog.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EndWidget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameController.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hold.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MenuWidget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Note.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PauseWidget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PlayWidget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SettingsWidget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StartWidget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tap.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="debug\moc_predefs.h.cbt" />
-    <CustomBuild Include="release\moc_predefs.h.cbt" />
+    <QtMoc Include="include\ButtonClickSound.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+    <QtMoc Include="include\confirmDialog.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+    <QtMoc Include="include\EndWidget.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+    <QtMoc Include="include\GameController.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+    <QtMoc Include="include\Hold.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+    <QtMoc Include="include\MenuWidget.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+    <QtMoc Include="include\Note.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+    <QtMoc Include="include\PauseWidget.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+    <QtMoc Include="include\PlayWidget.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+    <QtMoc Include="include\SettingsWidget.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+    <QtMoc Include="include\StartWidget.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+    <QtMoc Include="include\Tap.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="include\EndWidget.h" />
-    <QtMoc Include="include\GameController.h" />
-    <QtMoc Include="include\Hold.h" />
-    <QtMoc Include="include\MenuWidget.h" />
-    <QtMoc Include="include\Note.h" />
-    <QtMoc Include="include\PauseWidget.h" />
-    <QtMoc Include="include\PlayWidget.h" />
-    <QtMoc Include="include\SettingsWidget.h" />
-    <QtMoc Include="include\StartWidget.h" />
-    <QtMoc Include="include\Tap.h" />
-    <QtMoc Include="include\confirmDialog.h" />
-    <QtMoc Include="include\ButtonClickSound.h" />
+    <QtUic Include="ui\confirmDialog.ui">
+      <Filter>界面文件</Filter>
+    </QtUic>
+    <QtUic Include="ui\EndWidget.ui">
+      <Filter>界面文件</Filter>
+    </QtUic>
+    <QtUic Include="ui\MenuWidget.ui">
+      <Filter>界面文件</Filter>
+    </QtUic>
+    <QtUic Include="ui\PauseWidget.ui">
+      <Filter>界面文件</Filter>
+    </QtUic>
+    <QtUic Include="ui\PlayWidget.ui">
+      <Filter>界面文件</Filter>
+    </QtUic>
+    <QtUic Include="ui\SettingsWidget.ui">
+      <Filter>界面文件</Filter>
+    </QtUic>
+    <QtUic Include="ui\StartWidget.ui">
+      <Filter>界面文件</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="ui\EndWidget.ui" />
-    <QtUic Include="ui\MenuWidget.ui" />
-    <QtUic Include="ui\PauseWidget.ui" />
-    <QtUic Include="ui\PlayWidget.ui" />
-    <QtUic Include="ui\SettingsWidget.ui" />
-    <QtUic Include="ui\StartWidget.ui" />
-    <QtUic Include="ui\confirmDialog.ui" />
+    <Filter Include="源文件">
+      <UniqueIdentifier>{88f35783-5061-4b7b-95d4-b717f5c1d8ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{779176b5-f1db-437d-b7d1-487771c03d11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="界面文件">
+      <UniqueIdentifier>{221d4bc8-2255-4231-af4f-6b6ff06cbbdc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

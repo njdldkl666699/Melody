@@ -6,7 +6,7 @@ ConfirmDialog::ConfirmDialog(QWidget *parent,const QPixmap&bkg)
 {
 	ui.setupUi(this);
 	
-	initConfirmDialog(this);
+	initConfirmDialog(parent);
 
 }
 
