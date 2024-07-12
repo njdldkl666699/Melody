@@ -1,7 +1,6 @@
 #include "ButtonClickSound.h"
 #include<QObject>
 
-
 QSoundEffect ButtonClickSound::sound = QSoundEffect();
 QSoundEffect ButtonClickSound::sound2 = QSoundEffect();
 

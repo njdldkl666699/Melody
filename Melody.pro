@@ -3,7 +3,7 @@ QT       += core gui multimedia multimediawidgets
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += \
-    c++17
+    c++17 \
     resources_big
 
 # You can make your code fail to compile if it uses deprecated APIs.
@@ -24,7 +24,7 @@ SOURCES += \
     src/Note.cpp \
     src/confirmDialog.cpp \
     src/StartWidget.cpp \
-    src/ButtonClickSound.h
+    src/ButtonClickSound.cpp
 
 HEADERS += \
     include/EndWidget.h \

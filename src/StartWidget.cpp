@@ -3,10 +3,11 @@
 #include<QMediaPlayer>
 #include<QVideoWidget>
 #include<QAudioOutput>
+#ifdef _DEBUG
 #include<QDebug>
+#endif // _DEBUG
 #include <QList>
 #include <QUrl>
-
 #include<QTimer>
 
 StartWidget::StartWidget(QWidget* parent)
