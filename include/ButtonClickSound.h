@@ -6,7 +6,6 @@
 #include<QSlider>
 #include<QKeySequenceEdit>
 
-
 class ButtonClickSound :public QObject
 {
 	Q_OBJECT
@@ -16,8 +15,8 @@ public:
 	static void buttonClickSound(QSlider* button);
 	static void buttonClickSound(QKeySequenceEdit* button);
 
-	static QSoundEffect sound;
+	static QSoundEffect *sound;
 
-	static QSoundEffect sound2;
+	static QSoundEffect *sound2;
 };
 
