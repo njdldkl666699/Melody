@@ -13,12 +13,18 @@ void Hold::paintEvent(QPaintEvent* event)
 	if (state == Perfect || state == Good)
 	{
 		int bottom = this->y() + this->height();
-		if (bottom > 625)
+		int distance = bottom - 625;
+		if (distance < 0)
 		{
-			int newHeight = 625 - this->y();
+			this->move(this->x(), this->y() - distance);
+		}
+		else if (distance >= 0)
+		{
+			//int newHeight = 625 - this->y();
+			int newHeight = this->height() - distance;
 			if (newHeight > 0)
 			{
-				this->setFixedHeight(625 - this->y());
+				this->setFixedHeight(newHeight);
 				this->setPixmap(this->pixmap().scaled(this->size(),
 					Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 			}

@@ -15,6 +15,7 @@ GameController::GameController(const QString& songFilePth, const QString& chartF
 	connect(&timer, &QTimer::timeout, this, &GameController::judgeNoHitMiss);
 	connect(&timer, &QTimer::timeout, this, &GameController::updateNote);
 	connect(&timer, &QTimer::timeout, this, &GameController::signalUpdate);
+	connect(&musicPlayer, &QMediaPlayer::positionChanged, this, &GameController::amendNotePos);
 }
 
 GameController::~GameController()
@@ -619,10 +620,37 @@ void GameController::judgeNoHitMiss()
 
 void GameController::updateNote()
 {
-	/*next task is to rewrite this function in a different way: 
-	make notes move at where they should be, calculating their pos 
-	by the different of musicTime and noteTime*/
-	
+	// //##new move function##
+	// /*it seems that call getMusicCurrentTime() 
+	// frequently is not a good solution. :( 
+	// it seeeeeems that getMusicCurrentTime() 
+	// only return the last state it updated*/
+	////move notes in queue
+	//for (int i = 0; i < 4; i++)
+	//{
+	//	for (Note* note : noteTracks[i])
+	//	{
+	//		int noteStartTime = note->getStartTime();
+	//		int musicCurrentTime = getMusicCurrentTime();
+	//		int difference = noteStartTime - musicCurrentTime;
+	//		int yPos = 625 - difference * velocity;
+	//		note->move(note->x(), yPos);
+	//	}
+	//}
+	////move notes in vector
+	//for (Note* note : notesOutQueue)
+	//{
+	//	if (note != nullptr)
+	//	{
+	//		int noteStartTime = note->getStartTime();
+	//		int musicCurrentTime = getMusicCurrentTime();
+	//		int difference = noteStartTime - musicCurrentTime;
+	//		int yPos = 625 - difference * velocity;
+	//		note->move(note->x(), yPos);
+	//	}
+	//}
+
+	//##legacy move function##
 	//move notes in queue
 	for (int i = 0; i < 4; i++)
 	{
@@ -641,6 +669,43 @@ void GameController::updateNote()
 			QPoint pos = note->pos();
 			pos.setY(pos.y() + velocity * deltaTime);
 			note->move(pos);
+		}
+	}
+}
+
+void GameController::amendNotePos(qint64 musicCurrentTime)
+{
+	//##improvement on the legacy function##
+	//everytime positionChanged() is emitted, amend the position.
+	//qDebug() << "amendNotePos() called; time:" << musicCurrentTime;
+	for (int i = 0; i < 4; i++)
+	{
+		for (Note* note : noteTracks[i])
+		{
+			bool needMove = true;
+			if (note->getType() == "Hold")
+			{
+				Hold* hold = dynamic_cast<Hold*>(note);
+				if (hold->getState() != Hold::None)
+					needMove = false;
+			}
+			if (needMove)
+			{
+				int noteStartTime = note->getStartTime();
+				int difference = noteStartTime - musicCurrentTime;
+				int yPos = 625 - note->height() - difference * velocity;
+				note->move(note->x(), yPos);
+			}
+		}
+	}
+	for (Note* note : notesOutQueue)
+	{
+		if (note != nullptr)
+		{
+			int noteStartTime = note->getStartTime();
+			int difference = noteStartTime - musicCurrentTime;
+			int yPos = 625 - note->height() - difference * velocity;
+			note->move(note->x(), yPos);
 		}
 	}
 }

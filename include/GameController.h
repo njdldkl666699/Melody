@@ -76,6 +76,7 @@ private:
 private slots:
 	void judgeNoHitMiss();
 	void updateNote();
+	void amendNotePos(qint64 position);
 
 private:
 	uint perfectCount, goodCount, missCount;
