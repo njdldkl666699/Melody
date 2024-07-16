@@ -620,7 +620,7 @@ void GameController::judgeNoHitMiss()
 void GameController::updateNote()
 {
 	/*next task is to rewrite this function in a different way: 
-	make notes move at where they should be, calculate their pos 
+	make notes move at where they should be, calculating their pos 
 	by the different of musicTime and noteTime*/
 	
 	//move notes in queue
