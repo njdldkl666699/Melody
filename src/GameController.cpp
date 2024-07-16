@@ -134,7 +134,7 @@ void GameController::isMusicEnd(QMediaPlayer::MediaStatus status)
 	{
 		//if chart isn't end before music end,
 		//set a countdown timer to wait for the last note
-		
+
 		//#### One Way to Fix It ####
 		for (int i = 0; i < 4; i++)
 		{
@@ -484,11 +484,18 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 					calculateAcc();
 					emit judgeResult("Miss");
 					// hold->setState(Hold::Miss);	//had set in Hold()
+
 					// set Hold picture miss version
+					QString missPicPath;
 					if (i == 0 || i == 3)
-						hold->setPixmap(QPixmap("./res/note/hold_blue_miss.png"));
+						missPicPath = "./res/note/hold_blue_miss.png";
 					else if (i == 1 || i == 2)
-						hold->setPixmap(QPixmap("./res/note/hold_pink_miss.png"));
+						missPicPath = "./res/note/hold_pink_miss.png";
+					QPixmap missPic(missPicPath);
+					missPic = missPic.scaled(hold->size(),
+						Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+					hold->setPixmap(missPic);
+
 					//dequeue the Hold and push into notesOutQueue,
 					//to draw the left part. 
 					notesOutQueue.push_back(noteTracks[i].dequeue());
@@ -588,21 +595,23 @@ void GameController::judgeNoHitMiss()
 					calculateAcc();
 					emit judgeResult("Miss");
 					// hold->setState(Hold::Miss);	//had set in Hold()
+
 					// set Hold picture miss version
+					QString missPicPath;
 					if (i == 0 || i == 3)
-						hold->setPixmap(QPixmap("./res/note/hold_blue_miss.png"));
+						missPicPath = "./res/note/hold_blue_miss.png";
 					else if (i == 1 || i == 2)
-						hold->setPixmap(QPixmap("./res/note/hold_pink_miss.png"));
+						missPicPath = "./res/note/hold_pink_miss.png";
+					QPixmap missPic(missPicPath);
+					missPic = missPic.scaled(hold->size(),
+						Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+					hold->setPixmap(missPic);
 
 					//dequeue the Hold and push into notesOutQueue,
 					//to draw the left part. 
 					notesOutQueue.push_back(noteTracks[i].dequeue());
 				}
-				//Miss from release too early
-				else if (state == Hold::Miss)
-				{
-
-				}
+				//Miss from release too early is in Function judgeKeyRelease()
 			}
 		}
 	}
@@ -610,6 +619,10 @@ void GameController::judgeNoHitMiss()
 
 void GameController::updateNote()
 {
+	/*next task is to rewrite this function in a different way: 
+	make notes move at where they should be, calculate their pos 
+	by the different of musicTime and noteTime*/
+	
 	//move notes in queue
 	for (int i = 0; i < 4; i++)
 	{

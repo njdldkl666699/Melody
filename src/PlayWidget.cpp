@@ -27,7 +27,7 @@ PlayWidget::PlayWidget(const QString& songFilePth, const QString& chartFilePth,
 
 	//connect UI related
 	connect(gameController, &GameController::signalUpdate, this, &PlayWidget::updateUI);
-	connect(gameController, &GameController::judgeResult,this,&PlayWidget::updateComment);
+	connect(gameController, &GameController::judgeResult, this, &PlayWidget::updateComment);
 	connect(&commentTimer, &QTimer::timeout, ui.label_comment, &QLabel::clear);
 	ButtonClickSound::buttonClickSound(ui.pushButton_pause);
 
@@ -54,19 +54,36 @@ void PlayWidget::initPlayWidget()
 	judgeLinePNG = judgeLinePNG.scaled(ui.judgeline->size(),
 		Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 	ui.judgeline->setPixmap(judgeLinePNG);
+
 	//set labels
-	ui.label_acc->setText("0%");
+	ui.label_acc->setText("0.00%");
 	ui.label_combo->setText("0");
 	ui.label_score->setText("0");
-	ui.label_comment->setText("");
+	ui.label_comment->setText(" ");
+	/*this used to be ui.label_comment->setText("");
+	but it caused a lag when the first note falls down near the judge line,
+	and I suspect that it is because this label is not well-initialized (font, size, etc.),
+	so I add a space to force it to init early so the lag disappeared.*/
+
+	//set labels' level
+	ui.label_acc->raise();
+	ui.label_combo->raise();
+	ui.label_score->raise();
+	ui.label_comment->raise();
 }
 
 void PlayWidget::updateUI()
 {
-	QString accuracy = QString::number(gameController->getAccuracy(), 'g', 4) + '%';
+	//set labels
+	QString accuracy = QString::number(gameController->getAccuracy(), 'f', 2) + '%';
 	ui.label_acc->setText(accuracy);
 	ui.label_score->setText(QString::number(gameController->getScore()));
 	ui.label_combo->setText(QString::number(gameController->getCombo()));
+	//set labels' level
+	ui.label_acc->raise();
+	ui.label_combo->raise();
+	ui.label_score->raise();
+	ui.label_comment->raise();
 }
 
 void PlayWidget::updateComment(const QString& comment)
@@ -82,8 +99,18 @@ void PlayWidget::keyPressEvent(QKeyEvent* event)
 		this->gamePause();
 		return;
 	}
-	else
+	else if (event->key() == Qt::Key_Space)
+	{
+		return;
+	}
+	else if (event->isAutoRepeat() == false)
+	{
 		emit signalKeyPressed(event);
+	}
+	else
+	{
+		return QWidget::keyPressEvent(event);
+	}
 }
 
 void PlayWidget::keyReleaseEvent(QKeyEvent* event)
@@ -91,7 +118,16 @@ void PlayWidget::keyReleaseEvent(QKeyEvent* event)
 	//received some event that should't be received,
 	//but I can't fix it
 	//qDebug() << "keyReleaseEvent";
-	emit signalKeyReleased(event);
+
+	//now fix it
+	if (event->isAutoRepeat() == false)
+	{
+		emit signalKeyReleased(event);
+	}
+	else
+	{
+		return QWidget::keyReleaseEvent(event);
+	}
 }
 
 void PlayWidget::gamePause()
@@ -113,6 +149,7 @@ void PlayWidget::gameContinue()
 void PlayWidget::gameRestart()
 {
 	gameController->reset();
+	this->updateUI();
 	this->show();
 }
 

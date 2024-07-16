@@ -10,7 +10,7 @@ Hold::~Hold()
 
 void Hold::paintEvent(QPaintEvent* event)
 {
-	if (state != None && state != Miss)
+	if (state == Perfect || state == Good)
 	{
 		int bottom = this->y() + this->height();
 		if (bottom > 625)
