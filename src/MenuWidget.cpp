@@ -3,8 +3,8 @@
 #include "ButtonClickSound.h"
 
 MenuWidget::MenuWidget(QWidget* parent)
-	: QWidget(parent), settingsWidget(new SettingsWidget(parent)), 
-	playWidget(nullptr),confirmDialog(new ConfirmDialog(parent))
+	: QWidget(parent), settingsWidget(new SettingsWidget(parent)),
+	playWidget(nullptr), confirmDialog(new ConfirmDialog(parent))
 {
 	ui.setupUi(this);
 	setWindowTitle(QString::fromLocal8Bit("“Ù¡Èª√’¬Meolide"));
@@ -35,7 +35,7 @@ MenuWidget::MenuWidget(QWidget* parent)
 	//connect buttonClickSound
 	ButtonClickSound::buttonClickSound(ui.pushButton_settings);
 	ButtonClickSound::buttonClickSound(ui.pushButton_play);
-	ButtonClickSound::buttonClickSound(ui.comboBox_chart); 
+	ButtonClickSound::buttonClickSound(ui.comboBox_chart);
 	ButtonClickSound::buttonClickSound(ui.comboBox_song);
 }
 
@@ -53,7 +53,7 @@ void MenuWidget::initSongComboBox()
 	beatmapFilters << "*";
 	QDir::Filters beatFilter = QDir::Dirs | QDir::NoDotAndDotDot;
 	QStringList beatmapSubDirs = beatmapDir.entryList(beatmapFilters, beatFilter);
-	for(auto &beatmap: beatmapSubDirs)
+	for (auto& beatmap : beatmapSubDirs)
 	{
 		qDebug() << beatmap;
 	}
@@ -72,7 +72,7 @@ void MenuWidget::initBackgroundGIF()
 
 void MenuWidget::initLogoGIF()
 {
-	logoGIF=new QMovie("./res/icon/logo.gif");
+	logoGIF = new QMovie("./res/icon/logo.gif");
 	logoGIF->setScaledSize(ui.logo->size());
 	ui.logo->setMovie(logoGIF);
 	logoGIF->start();
@@ -85,7 +85,7 @@ void MenuWidget::keyPressEvent(QKeyEvent* event)
 		qDebug() << "Escape key pressed!";
 		// confirm to close the window by escape key
 		//ConfirmDialog confirmDialog(this);
-		
+
 		if (confirmDialog->exec() == QDialog::Accepted)
 		{
 			event->accept();
@@ -112,7 +112,7 @@ void MenuWidget::comboBoxSongSelected(const QString& songName)
 	chartFilters << "*.txt";
 	songDir = beatmapDir.path() + "/" + songName;
 	QStringList chartFiles = songDir.entryList(chartFilters, QDir::Files);
-	for(auto &chart: chartFiles)
+	for (auto& chart : chartFiles)
 	{
 		int suffixPos = chart.lastIndexOf(".txt");
 		chart = chart.left(suffixPos);
@@ -120,7 +120,6 @@ void MenuWidget::comboBoxSongSelected(const QString& songName)
 	}
 	ui.comboBox_chart->addItems(chartFiles);
 
-	//next task: rewrite this part, cut the original picture and then scale
 	// Update song picture
 	if (ui.comboBox_song->currentText() == "[Select Song]")
 	{
@@ -132,7 +131,16 @@ void MenuWidget::comboBoxSongSelected(const QString& songName)
 	QString songPicName = songDir.entryList(songPicFilters, QDir::Files).at(0);
 	QString songPicPath = songDir.path() + "/" + songPicName;
 	QPixmap songPic(songPicPath);
-	songPic = songPic.scaled(ui.songPicture->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+	//process the picture & display
+	int width = songPic.width();
+	int height = songPic.height();
+	int sideLength = qMin(width, height);
+	int x = (width - sideLength) / 2;
+	int y = (height - sideLength) / 2;
+	songPic = songPic.copy(x, y, sideLength, sideLength);
+	songPic = songPic.scaled(ui.songPicture->size(), 
+		Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
 	ui.songPicture->setPixmap(songPic);
 }
 

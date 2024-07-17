@@ -81,13 +81,23 @@ QString GameController::getChartName()const
 
 QPixmap GameController::getSongPicture()const
 {
+	//get song picture
 	QDir songDir(songFilePath);
 	songDir.cdUp();
 	QStringList songPicFilters;
 	songPicFilters << "*.jpg" << "*.png";
 	QString songPicName = songDir.entryList(songPicFilters, QDir::Files).at(0);
 	QString songPicPath = songDir.path() + "/" + songPicName;
-	return QPixmap(songPicPath);
+	QPixmap songPic(songPicPath);
+
+	//process the picture & return
+	int width = songPic.width();
+	int height = songPic.height();
+	int sideLength = qMin(width, height);
+	int x = (width - sideLength) / 2;
+	int y = (height - sideLength) / 2;
+	songPic = songPic.copy(x, y, sideLength, sideLength);
+	return songPic;
 }
 
 void GameController::initVals()
