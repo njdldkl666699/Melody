@@ -15,11 +15,11 @@ StartWidget::StartWidget(QWidget* parent)
 {
 	ui->setupUi(this);
 	w = new MenuWidget(nullptr);
-	setWindowTitle("Meolide");
+	setWindowTitle(QString::fromLocal8Bit("“Ù¡Èª√’¬Meolide"));
+	setWindowIcon(QIcon("./res/icon/icon.ico"));
 
 	mediaSet();
 	mediaPlay();
-
 }
 
 StartWidget::~StartWidget()

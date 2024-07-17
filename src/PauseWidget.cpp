@@ -5,8 +5,9 @@ PauseWidget::PauseWidget(QWidget* parent)
 	:QWidget(parent)
 {
 	ui.setupUi(this);
+	setWindowTitle(QString::fromLocal8Bit("“Ù¡Èª√’¬Meolide"));
+	setWindowIcon(QIcon("./res/icon/icon.ico"));
 	initBackgroundGIF();
-	setWindowTitle("Meolide");
 	connect(ui.pushButton_backMenu, &QPushButton::clicked, this, [this]()
 		{
 			emit signalBackMenu();

@@ -10,7 +10,6 @@ PlayWidget::PlayWidget(const QString& songFilePth, const QString& chartFilePth,
 {
 	ui.setupUi(this);
 	initPlayWidget();
-	setWindowTitle("Meolide");
 	commentTimer.setSingleShot(true);
 	gameController->setNoteParent(this);
 
@@ -44,6 +43,10 @@ PlayWidget::~PlayWidget()
 
 void PlayWidget::initPlayWidget()
 {
+	//set window
+	setWindowTitle(QString::fromLocal8Bit("ÒôÁé»ÃÕÂMeolide"));
+	setWindowIcon(QIcon("./res/icon/icon.ico"));
+
 	//set background
 	QPixmap backgroundPNG("./res/background/play.png");
 	backgroundPNG = backgroundPNG.scaled(ui.background->size(),

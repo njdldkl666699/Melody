@@ -10,10 +10,11 @@ SettingsWidget::SettingsWidget(QWidget* parent)
 	key_1(Qt::Key_S), key_2(Qt::Key_F), key_3(Qt::Key_J), key_4(Qt::Key_L)
 {
 	ui.setupUi(this);
+	setWindowTitle(QString::fromLocal8Bit("“Ù¡Èª√’¬Meolide"));
+	setWindowIcon(QIcon("./res/icon/icon.ico"));
 	initBackground();
 	initSettings();
 	initUIValues();
-	setWindowTitle("Meolide");
 
 	ButtonClickSound::buttonClickSound(ui.pushButton_backMenu);
 	ButtonClickSound::buttonClickSound(ui.slider_bias);

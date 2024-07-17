@@ -7,10 +7,10 @@ MenuWidget::MenuWidget(QWidget* parent)
 	playWidget(nullptr),confirmDialog(new ConfirmDialog(parent))
 {
 	ui.setupUi(this);
+	setWindowTitle(QString::fromLocal8Bit("ÒôÁé»ÃÕÂMeolide"));
+	setWindowIcon(QIcon("./res/icon/icon.ico"));
 	initBackgroundGIF();
 	initLogoGIF();
-
-	setWindowTitle("Meolide");
 
 	// SongComboBox related
 	initSongComboBox();
@@ -120,6 +120,7 @@ void MenuWidget::comboBoxSongSelected(const QString& songName)
 	}
 	ui.comboBox_chart->addItems(chartFiles);
 
+	//next task: rewrite this part, cut the original picture and then scale
 	// Update song picture
 	if (ui.comboBox_song->currentText() == "[Select Song]")
 	{

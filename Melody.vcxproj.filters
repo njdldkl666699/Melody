@@ -113,4 +113,13 @@
       <UniqueIdentifier>{221d4bc8-2255-4231-af4f-6b6ff06cbbdc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Melody.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\icon\icon.ico" />
+  </ItemGroup>
 </Project>

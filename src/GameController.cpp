@@ -226,7 +226,7 @@ void GameController::initnoteTracks()
 		//construct note
 		Note* note = nullptr;
 		QString picturePath;
-		QSize noteSize(150, 50);
+		QSize noteSize(145, 50);
 		if (!isHold)
 		{
 			//Tap note
@@ -255,7 +255,7 @@ void GameController::initnoteTracks()
 				keySequence, picturePath, noteSize);
 		}
 		//set note x, y
-		int xPos = 300 + key * 150;
+		int xPos = 305 + key * 150;
 		int yPos = 625 - noteSize.height() - velocity * startTime;
 		note->move(xPos, yPos);
 
@@ -620,35 +620,12 @@ void GameController::judgeNoHitMiss()
 
 void GameController::updateNote()
 {
+	// [DELETED] no use
 	// //##new move function##
 	// /*it seems that call getMusicCurrentTime() 
 	// frequently is not a good solution. :( 
 	// it seeeeeems that getMusicCurrentTime() 
 	// only return the last state it updated*/
-	////move notes in queue
-	//for (int i = 0; i < 4; i++)
-	//{
-	//	for (Note* note : noteTracks[i])
-	//	{
-	//		int noteStartTime = note->getStartTime();
-	//		int musicCurrentTime = getMusicCurrentTime();
-	//		int difference = noteStartTime - musicCurrentTime;
-	//		int yPos = 625 - difference * velocity;
-	//		note->move(note->x(), yPos);
-	//	}
-	//}
-	////move notes in vector
-	//for (Note* note : notesOutQueue)
-	//{
-	//	if (note != nullptr)
-	//	{
-	//		int noteStartTime = note->getStartTime();
-	//		int musicCurrentTime = getMusicCurrentTime();
-	//		int difference = noteStartTime - musicCurrentTime;
-	//		int yPos = 625 - difference * velocity;
-	//		note->move(note->x(), yPos);
-	//	}
-	//}
 
 	//##legacy move function##
 	//move notes in queue

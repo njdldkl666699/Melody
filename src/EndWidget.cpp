@@ -15,10 +15,11 @@ EndWidget::EndWidget(const GameController* game, QWidget* parent)
 	: gameController(game), QWidget(parent)
 {
 	ui.setupUi(this);
+	setWindowTitle(QString::fromLocal8Bit("“Ù¡Èª√’¬Meolide"));
+	setWindowIcon(QIcon("./res/icon/icon.ico"));
 	initBackgroundGIF();
 	initScoreList();
 	initChartIntro(game);
-	setWindowTitle("Meolide");
 
 	dir.setPath(QString("./history"));
 	if (dir.exists())
