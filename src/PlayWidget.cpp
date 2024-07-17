@@ -28,10 +28,15 @@ PlayWidget::PlayWidget(const QString& songFilePth, const QString& chartFilePth,
 	connect(gameController, &GameController::signalUpdate, this, &PlayWidget::updateUI);
 	connect(gameController, &GameController::judgeResult, this, &PlayWidget::updateComment);
 	connect(&commentTimer, &QTimer::timeout, ui.label_comment, &QLabel::clear);
-	ButtonClickSound::buttonClickSound(ui.pushButton_pause);
 
-	//Debug
-	connect(ui.pushButton_debug, &QPushButton::clicked, this, &PlayWidget::gameEnd);
+	//connect button related
+	ButtonClickSound::buttonClickSound(ui.pushButton_pause);
+	ButtonClickSound::buttonClickSound(ui.pushButton_end);
+#ifdef NDEBUG
+	ui.pushButton_end->hide();
+#endif // NDEBUG
+	connect(ui.pushButton_end, &QPushButton::clicked, this, &PlayWidget::gameEnd);
+	connect(gameController, &GameController::signalShowEndButton, ui.pushButton_end, &QPushButton::show);
 }
 
 PlayWidget::~PlayWidget()

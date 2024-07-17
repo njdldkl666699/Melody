@@ -144,20 +144,15 @@ void GameController::isMusicEnd(QMediaPlayer::MediaStatus status)
 	if (status == QMediaPlayer::EndOfMedia)
 	{
 		//if chart isn't end before music end,
-		//set a countdown timer to wait for the last note
-
-		//#### One Way to Fix It ####
+		//show the end button
 		for (int i = 0; i < 4; i++)
 		{
 			if (!noteTracks[i].isEmpty())
 			{
-				endTimer.setSingleShot(true);
-				endTimer.setInterval(3000);
-				connect(&endTimer, &QTimer::timeout, this, &GameController::gameEnded);
+				emit signalShowEndButton();
 				return;
 			}
 		}
-		//############################
 
 		timer.stop();
 		musicPlayer.stop();

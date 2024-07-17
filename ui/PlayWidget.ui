@@ -78,17 +78,45 @@ QPushButton:pressed
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_debug">
+  <widget class="QPushButton" name="pushButton_end">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>50</y>
-     <width>121</width>
-     <height>24</height>
+     <x>120</x>
+     <y>20</y>
+     <width>64</width>
+     <height>64</height>
     </rect>
    </property>
+   <property name="minimumSize">
+    <size>
+     <width>64</width>
+     <height>64</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>64</width>
+     <height>64</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton
+{
+	background-image:url(./res/icon/fastForward_black_64x.png);
+	border:0px;
+}
+
+QPushButton:pressed
+{
+	background-image:url(./res/icon/fastForward_white_64x.png);
+	border:0px;
+}</string>
+   </property>
    <property name="text">
-    <string>Game End [Debug]</string>
+    <string/>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QLabel" name="background">
@@ -516,7 +544,7 @@ QPushButton:pressed
   <zorder>background</zorder>
   <zorder>label_trackPanelBackground</zorder>
   <zorder>pushButton_pause</zorder>
-  <zorder>pushButton_debug</zorder>
+  <zorder>pushButton_end</zorder>
   <zorder>judgeline</zorder>
   <zorder>verticalLine_0</zorder>
   <zorder>verticalLine_1</zorder>
