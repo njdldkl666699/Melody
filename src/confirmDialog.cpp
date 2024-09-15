@@ -6,6 +6,7 @@ ConfirmDialog::ConfirmDialog(QWidget *parent)
 	ui.setupUi(this);
 	
 	setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
+	setWindowModality(Qt::WindowModal);
 	this->setModal(true);
 	QPixmap backgroundPNG("./res/background/exitDialog.png");
 	backgroundPNG = backgroundPNG.scaled(this->size(),
@@ -26,12 +27,12 @@ ConfirmDialog::~ConfirmDialog()
 void ConfirmDialog::on_pushButton_backMenu_clicked()
 {
 	//emit backToMenu();
-	this->close();
+	reject();
 }
 
 void ConfirmDialog::on_pushButton_exit_clicked()
 {
 	//accept();
 	emit exitGame();
-	this->close();
+	accept();
 }

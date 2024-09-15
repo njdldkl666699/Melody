@@ -9,6 +9,8 @@ MenuWidget::MenuWidget(QWidget* parent)
 	ui.setupUi(this);
 	setWindowTitle(QString::fromLocal8Bit("ÒôÁé»ÃÕÂMeolide"));
 	setWindowIcon(QIcon("./res/icon/icon.ico"));
+	setWindowState(Qt::WindowFullScreen);
+
 	initBackgroundGIF();
 	initLogoGIF();
 
@@ -94,6 +96,7 @@ void MenuWidget::keyPressEvent(QKeyEvent* event)
 		{
 			event->ignore();
 		}
+		confirmDialog->close();
 	}
 	else
 	{

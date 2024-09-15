@@ -12,6 +12,8 @@ SettingsWidget::SettingsWidget(QWidget* parent)
 	ui.setupUi(this);
 	setWindowTitle(QString::fromLocal8Bit("ÒôÁé»ÃÕÂMeolide"));
 	setWindowIcon(QIcon("./res/icon/icon.ico"));
+	setWindowState(Qt::WindowFullScreen);
+
 	initBackground();
 	initSettings();
 	initUIValues();
@@ -33,7 +35,6 @@ SettingsWidget::SettingsWidget(QWidget* parent)
 			this->saveSettings();
 			this->close();
 		});
-
 }
 
 SettingsWidget::~SettingsWidget()

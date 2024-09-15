@@ -17,6 +17,8 @@ EndWidget::EndWidget(const GameController* game, QWidget* parent)
 	ui.setupUi(this);
 	setWindowTitle(QString::fromLocal8Bit("ÒôÁé»ÃÕÂMeolide"));
 	setWindowIcon(QIcon("./res/icon/icon.ico"));
+	setWindowState(Qt::WindowFullScreen);
+
 	initBackgroundGIF();
 	initScoreList();
 	initChartIntro(game);
@@ -76,7 +78,7 @@ EndWidget::~EndWidget()
 
 void EndWidget::initBackgroundGIF()
 {
-	ui.background->setGeometry(0, 0, 1200, 675);
+	//ui.background->setGeometry(0, 0, 1200, 675);
 	backgroundGIF = new QMovie("./res/background/end.gif");
 	ui.background->setMovie(backgroundGIF);
 	backgroundGIF->start();

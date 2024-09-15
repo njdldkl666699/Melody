@@ -8,7 +8,7 @@ class ConfirmDialog : public QDialog
 	Q_OBJECT
 
 public:
-	ConfirmDialog(QWidget *parent = nullptr);
+	ConfirmDialog(QWidget* parent = nullptr);
 	~ConfirmDialog();
 
 signals:
@@ -18,7 +18,7 @@ signals:
 private slots:
 	void on_pushButton_backMenu_clicked();
 	void on_pushButton_exit_clicked();
-	
+
 private:
 	Ui::confirmDialogClass ui;
 };

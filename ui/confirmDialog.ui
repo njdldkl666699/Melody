@@ -6,20 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>533</height>
+    <width>640</width>
+    <height>360</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>800</width>
-    <height>533</height>
+    <width>640</width>
+    <height>360</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>800</width>
-    <height>533</height>
+    <width>640</width>
+    <height>360</height>
    </size>
   </property>
   <property name="font">
@@ -33,16 +33,17 @@
   <widget class="QPushButton" name="pushButton_backMenu">
    <property name="geometry">
     <rect>
-     <x>500</x>
-     <y>290</y>
-     <width>120</width>
+     <x>400</x>
+     <y>230</y>
+     <width>140</width>
      <height>60</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <family>幼圆</family>
+     <family>等线</family>
      <pointsize>20</pointsize>
+     <bold>true</bold>
     </font>
    </property>
    <property name="text">
@@ -52,16 +53,17 @@
   <widget class="QPushButton" name="pushButton_exit">
    <property name="geometry">
     <rect>
-     <x>200</x>
-     <y>290</y>
-     <width>120</width>
+     <x>100</x>
+     <y>230</y>
+     <width>140</width>
      <height>60</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <family>幼圆</family>
+     <family>等线</family>
      <pointsize>20</pointsize>
+     <bold>true</bold>
     </font>
    </property>
    <property name="text">
@@ -74,9 +76,9 @@
   <widget class="QLabel" name="label_message">
    <property name="geometry">
     <rect>
-     <x>230</x>
+     <x>120</x>
      <y>50</y>
-     <width>391</width>
+     <width>400</width>
      <height>100</height>
     </rect>
    </property>
@@ -90,7 +92,7 @@
     <string notr="true">color: rgb(255, 170, 255);</string>
    </property>
    <property name="text">
-    <string>确定要退出Meolide喵？</string>
+    <string>确认退出音灵幻章喵？</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -101,20 +103,20 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
-     <height>533</height>
+     <width>640</width>
+     <height>360</height>
     </rect>
    </property>
    <property name="minimumSize">
     <size>
-     <width>800</width>
-     <height>533</height>
+     <width>640</width>
+     <height>360</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
-     <width>800</width>
-     <height>533</height>
+     <width>640</width>
+     <height>360</height>
     </size>
    </property>
    <property name="text">

@@ -6,26 +6,26 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1200</width>
-    <height>675</height>
+    <width>1280</width>
+    <height>720</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
   <property name="minimumSize">
    <size>
-    <width>1200</width>
-    <height>675</height>
+    <width>1280</width>
+    <height>720</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>1200</width>
-    <height>675</height>
+    <width>1280</width>
+    <height>720</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -34,8 +34,8 @@
   <widget class="QPushButton" name="pushButton_pause">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>20</y>
+     <x>40</x>
+     <y>40</y>
      <width>64</width>
      <height>64</height>
     </rect>
@@ -81,8 +81,8 @@ QPushButton:pressed
   <widget class="QPushButton" name="pushButton_end">
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>20</y>
+     <x>144</x>
+     <y>40</y>
      <width>64</width>
      <height>64</height>
     </rect>
@@ -124,8 +124,8 @@ QPushButton:pressed
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1200</width>
-     <height>675</height>
+     <width>1280</width>
+     <height>720</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -136,14 +136,14 @@ QPushButton:pressed
    </property>
    <property name="minimumSize">
     <size>
-     <width>1200</width>
-     <height>675</height>
+     <width>1280</width>
+     <height>720</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
-     <width>1200</width>
-     <height>675</height>
+     <width>1280</width>
+     <height>720</height>
     </size>
    </property>
    <property name="text">
@@ -153,10 +153,10 @@ QPushButton:pressed
   <widget class="Line" name="verticalLine_0">
    <property name="geometry">
     <rect>
-     <x>300</x>
+     <x>340</x>
      <y>0</y>
      <width>5</width>
-     <height>675</height>
+     <height>720</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -168,13 +168,13 @@ QPushButton:pressed
    <property name="minimumSize">
     <size>
      <width>5</width>
-     <height>675</height>
+     <height>720</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
      <width>5</width>
-     <height>675</height>
+     <height>720</height>
     </size>
    </property>
    <property name="styleSheet">
@@ -196,7 +196,7 @@ QPushButton:pressed
   <widget class="Line" name="verticalLine_1">
    <property name="geometry">
     <rect>
-     <x>450</x>
+     <x>490</x>
      <y>0</y>
      <width>5</width>
      <height>625</height>
@@ -236,7 +236,7 @@ QPushButton:pressed
   <widget class="Line" name="verticalLine_2">
    <property name="geometry">
     <rect>
-     <x>600</x>
+     <x>640</x>
      <y>0</y>
      <width>5</width>
      <height>625</height>
@@ -276,7 +276,7 @@ QPushButton:pressed
   <widget class="Line" name="verticalLine_3">
    <property name="geometry">
     <rect>
-     <x>750</x>
+     <x>790</x>
      <y>0</y>
      <width>5</width>
      <height>625</height>
@@ -316,10 +316,10 @@ QPushButton:pressed
   <widget class="Line" name="verticalLine_4">
    <property name="geometry">
     <rect>
-     <x>900</x>
+     <x>940</x>
      <y>0</y>
      <width>5</width>
-     <height>675</height>
+     <height>720</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -331,13 +331,13 @@ QPushButton:pressed
    <property name="minimumSize">
     <size>
      <width>5</width>
-     <height>675</height>
+     <height>720</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
      <width>5</width>
-     <height>675</height>
+     <height>720</height>
     </size>
    </property>
    <property name="styleSheet">
@@ -359,22 +359,22 @@ QPushButton:pressed
   <widget class="QLabel" name="label_trackPanelBackground">
    <property name="geometry">
     <rect>
-     <x>300</x>
+     <x>340</x>
      <y>0</y>
      <width>605</width>
-     <height>675</height>
+     <height>720</height>
     </rect>
    </property>
    <property name="minimumSize">
     <size>
      <width>605</width>
-     <height>675</height>
+     <height>720</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
      <width>605</width>
-     <height>675</height>
+     <height>720</height>
     </size>
    </property>
    <property name="styleSheet">
@@ -390,7 +390,7 @@ QPushButton:pressed
   <widget class="QLabel" name="judgeline">
    <property name="geometry">
     <rect>
-     <x>305</x>
+     <x>345</x>
      <y>625</y>
      <width>595</width>
      <height>15</height>
@@ -421,8 +421,8 @@ QPushButton:pressed
   <widget class="QLabel" name="label_score">
    <property name="geometry">
     <rect>
-     <x>930</x>
-     <y>0</y>
+     <x>1020</x>
+     <y>20</y>
      <width>240</width>
      <height>80</height>
     </rect>
@@ -460,7 +460,7 @@ QPushButton:pressed
   <widget class="QLabel" name="label_combo">
    <property name="geometry">
     <rect>
-     <x>500</x>
+     <x>540</x>
      <y>150</y>
      <width>200</width>
      <height>80</height>
@@ -494,7 +494,7 @@ QPushButton:pressed
   <widget class="QLabel" name="label_acc">
    <property name="geometry">
     <rect>
-     <x>555</x>
+     <x>595</x>
      <y>220</y>
      <width>100</width>
      <height>30</height>
@@ -519,7 +519,7 @@ QPushButton:pressed
   <widget class="QLabel" name="label_comment">
    <property name="geometry">
     <rect>
-     <x>525</x>
+     <x>565</x>
      <y>550</y>
      <width>150</width>
      <height>60</height>

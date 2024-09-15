@@ -10,6 +10,7 @@ GameController::GameController(const QString& songFilePth, const QString& chartF
 	initMusicPlayer();
 	timer.setTimerType(Qt::PreciseTimer);
 	wait();
+
 	connect(&musicPlayer, &QMediaPlayer::mediaStatusChanged, this, &GameController::isMusicEnd);
 	connect(&countdownTimer, &QTimer::timeout, this, &GameController::gamePlay);
 	connect(&timer, &QTimer::timeout, this, &GameController::judgeNoHitMiss);
@@ -260,7 +261,7 @@ void GameController::initnoteTracks()
 				keySequence, picturePath, noteSize);
 		}
 		//set note x, y
-		int xPos = 305 + key * 150;
+		int xPos = 345 + key * 150;
 		int yPos = 625 - noteSize.height() - velocity * startTime;
 		note->move(xPos, yPos);
 

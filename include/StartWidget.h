@@ -1,5 +1,6 @@
 #pragma once
 
+#include"MenuWidget.h"
 #include <QWidget>
 #include<QMediaPlayer>
 #include<QVideoWidget>
@@ -7,7 +8,6 @@
 #include <QList>
 #include <QUrl>
 #include<QAudioOutput>
-#include "MenuWidget.h"
 
 namespace Ui {
 class StartWidget;
@@ -39,8 +39,8 @@ private:
 
     QAudioOutput* audioLoop;
     int currentMediaIndex;
-    MenuWidget* w;
     bool ifLoopStart;
+	MenuWidget* w;
 };
 
 

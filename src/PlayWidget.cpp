@@ -51,6 +51,7 @@ void PlayWidget::initPlayWidget()
 	//set window
 	setWindowTitle(QString::fromLocal8Bit("ÒôÁé»ÃÕÂMeolide"));
 	setWindowIcon(QIcon("./res/icon/icon.ico"));
+	setWindowState(Qt::WindowFullScreen);
 
 	//set background
 	QPixmap backgroundPNG("./res/background/play.png");
@@ -65,8 +66,10 @@ void PlayWidget::initPlayWidget()
 
 	//set labels
 	ui.label_acc->setText("0.00%");
+	ui.label_acc->setFont(QFont("Saira", 14, QFont::Weight::Normal));
 	ui.label_combo->setText("0");
 	ui.label_score->setText("0");
+	ui.label_score->setFont(QFont("Saira", 25, QFont::Weight::Normal));
 	ui.label_comment->setText(" ");
 	/*this used to be ui.label_comment->setText("");
 	but it caused a lag when the first note falls down near the judge line,

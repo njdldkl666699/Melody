@@ -1,13 +1,8 @@
 #include "StartWidget.h"
 #include "ui_StartWidget.h"
-#include<QMediaPlayer>
-#include<QVideoWidget>
-#include<QAudioOutput>
 #ifdef _DEBUG
 #include<QDebug>
 #endif // _DEBUG
-#include <QList>
-#include <QUrl>
 #include<QTimer>
 
 StartWidget::StartWidget(QWidget* parent)
@@ -17,6 +12,7 @@ StartWidget::StartWidget(QWidget* parent)
 	w = new MenuWidget(nullptr);
 	setWindowTitle(QString::fromLocal8Bit("音灵幻章Meolide"));
 	setWindowIcon(QIcon("./res/icon/icon.ico"));
+	setWindowState(Qt::WindowFullScreen);
 
 	mediaSet();
 	mediaPlay();
@@ -36,7 +32,8 @@ void StartWidget::mediaSet()
 	audio = new QAudioOutput(this);
 	player->setAudioOutput(audio);
 	audio->setVolume(0.5);
-	videoWidget->resize(ui->label->size());
+	videoWidget->resize(this->size());
+	//videoWidget->setFullScreen(true);
 	videoWidget->show();
 	//视频播放列表
 	mediaList = {
