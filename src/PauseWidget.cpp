@@ -1,5 +1,6 @@
 #include "PauseWidget.h"
-#include "ButtonClickSound.h"
+#include "UIController.h"
+#include "SettingsWidget.h"
 
 PauseWidget::PauseWidget(QWidget* parent)
 	:QWidget(parent)
@@ -24,11 +25,15 @@ PauseWidget::PauseWidget(QWidget* parent)
 			this->hide();
 		});
 
-	ButtonClickSound::buttonClickSound(ui.pushButton_backMenu);
-	ButtonClickSound::buttonClickSound(ui.pushButton_restart);
-	ButtonClickSound::buttonClickSound(ui.pushButton_continue);
-
-
+	/*UIController::buttonClickSound(ui.pushButton_backMenu);
+	UIController::buttonClickSound(ui.pushButton_restart);
+	UIController::buttonClickSound(ui.pushButton_continue);*/
+	using namespace UICtrl;
+	auto sw = SettingsWidget::instance();
+    setIfFullscreen(this, sw->getFullscreen());
+	setObjectSound(ui.pushButton_backMenu, &QPushButton::clicked, ber, sw->getSoundVal());
+	setObjectSound(ui.pushButton_restart, &QPushButton::clicked, ber, sw->getSoundVal());
+	setObjectSound(ui.pushButton_continue, &QPushButton::clicked, ber, sw->getSoundVal());
 }
 
 PauseWidget::~PauseWidget()

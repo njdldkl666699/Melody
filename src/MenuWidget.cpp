@@ -1,49 +1,53 @@
 #include "MenuWidget.h"
 #include<QPixmap>
-#include "ButtonClickSound.h"
+#include "UIController.h"
 
 MenuWidget::MenuWidget(QWidget* parent)
-	: QWidget(parent), settingsWidget(new SettingsWidget(parent)),
-	playWidget(nullptr), confirmDialog(new ConfirmDialog(parent))
+	: QWidget(parent), playWidget(nullptr),
+	confirmDialog(new ConfirmDialog(parent))
 {
 	ui.setupUi(this);
 	setWindowTitle(QString::fromLocal8Bit("ÒôÁé»ÃÕÂMeolide"));
 	setWindowIcon(QIcon("./res/icon/icon.ico"));
-	setWindowState(Qt::WindowFullScreen);
+	using namespace UICtrl;
+	setIfFullscreen(this, SettingsWidget::instance()->getFullscreen());
 
 	initBackgroundGIF();
 	initLogoGIF();
 
 	// SongComboBox related
 	initSongComboBox();
-	connect(ui.comboBox_song, &QComboBox::currentTextChanged, this, &MenuWidget::comboBoxSongSelected);
+	connect(ui.comboBox_song, &QComboBox::currentTextChanged, this, &MenuWidget::onComboBoxSongSelected);
 
 	// connect SettingsWidget related
 	connect(ui.pushButton_settings, &QPushButton::clicked, this, [this]()
 		{
-			settingsWidget->show();
+			SettingsWidget::instance()->show();
 			this->hide();
 		});
 
-	connect(settingsWidget, &SettingsWidget::pushButtonBackMenuClicked, this, &MenuWidget::show);
+	connect(SettingsWidget::instance(), &SettingsWidget::pushButtonBackMenuClicked, this, &MenuWidget::show);
 
 	// connect PlayWidget related
-	connect(ui.pushButton_play, &QPushButton::clicked, this, &MenuWidget::pushButtonPlayClicked);
+	connect(ui.pushButton_play, &QPushButton::clicked, this, &MenuWidget::onPushButtonPlayClicked);
 
-	//connect confirmDialog related
-	//connect(confirmDialog, &ConfirmDialog::backToMenu, this,&MenuWidget::show);
+	// connect confirmDialog related
 	connect(confirmDialog, &ConfirmDialog::exitGame, this, &MenuWidget::close);
 
-	//connect buttonClickSound
-	ButtonClickSound::buttonClickSound(ui.pushButton_settings);
-	ButtonClickSound::buttonClickSound(ui.pushButton_play);
-	ButtonClickSound::buttonClickSound(ui.comboBox_chart);
-	ButtonClickSound::buttonClickSound(ui.comboBox_song);
+	// connect buttonClickSound
+	//UIController::buttonClickSound(ui.pushButton_settings);
+	//UIController::buttonClickSound(ui.pushButton_play);
+	//UIController::buttonClickSound(ui.comboBox_chart);
+	//UIController::buttonClickSound(ui.comboBox_song);
+	const int soundVal = SettingsWidget::instance()->getSoundVal();
+	setObjectSound(ui.comboBox_chart, &QComboBox::highlighted, gear, soundVal);
+	setObjectSound(ui.comboBox_song, &QComboBox::highlighted, gear, soundVal);
+	setObjectSound(ui.pushButton_play, &QPushButton::clicked, ber, soundVal);
+	setObjectSound(ui.pushButton_settings, &QPushButton::clicked, ber, soundVal);
 }
 
 MenuWidget::~MenuWidget()
 {
-	delete settingsWidget;
 	delete playWidget;
 	delete backgroundGIF;
 }
@@ -105,7 +109,7 @@ void MenuWidget::keyPressEvent(QKeyEvent* event)
 	}
 }
 
-void MenuWidget::comboBoxSongSelected(const QString& songName)
+void MenuWidget::onComboBoxSongSelected(const QString& songName)
 {
 	// Update chart comboBox
 	ui.comboBox_chart->clear();
@@ -142,12 +146,12 @@ void MenuWidget::comboBoxSongSelected(const QString& songName)
 	int x = (width - sideLength) / 2;
 	int y = (height - sideLength) / 2;
 	songPic = songPic.copy(x, y, sideLength, sideLength);
-	songPic = songPic.scaled(ui.songPicture->size(), 
+	songPic = songPic.scaled(ui.songPicture->size(),
 		Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
 	ui.songPicture->setPixmap(songPic);
 }
 
-void MenuWidget::pushButtonPlayClicked()
+void MenuWidget::onPushButtonPlayClicked()
 {
 	// Check if song and chart are selected
 	if (ui.comboBox_song->currentText() == "[Select Song]" ||
@@ -171,11 +175,10 @@ void MenuWidget::pushButtonPlayClicked()
 			delete playWidget;
 			playWidget = nullptr;
 		}
-		playWidget = new PlayWidget(songFilePath, chartFilePath, settingsWidget);
+		playWidget = new PlayWidget(songFilePath, chartFilePath);
 		connect(playWidget, &PlayWidget::signalBackMenu, this, &MenuWidget::show);
 		playWidget->resize(this->size());
 		playWidget->show();
 		this->hide();
 	}
 }
-

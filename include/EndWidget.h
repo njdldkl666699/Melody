@@ -32,9 +32,8 @@ signals:
 	void signalRestart();
 
 private:
-	void initBackgroundGIF();
-	void initScoreList();
-	void initChartIntro(const GameController*);
+	void initWindow();
+	void initUI();
 	void setScore(int bestNum,  int goodNum, int missNum, int comboNum, int accNum, int score);
 	void showScore();
 	void showRank();
@@ -46,7 +45,6 @@ private:
 	void writeHistory();
 	void setHistoryList();
 
-private slots:
 private:
 	int bestNum;
 	int coolNum;
@@ -62,9 +60,7 @@ private:
 	QDir dir;
 
 	QVector<HistoryList> historyList;
-
 	QList<QUrl> musicList;
-
 
 	QMediaPlayer* player;
 	QMediaPlayer* music;

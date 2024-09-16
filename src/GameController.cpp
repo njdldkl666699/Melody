@@ -1,8 +1,8 @@
 #include "GameController.h"
 
-GameController::GameController(const QString& songFilePth, const QString& chartFilePth,
-	const SettingsWidget* settingsWidget, QObject* parent)
-	: settings(settingsWidget), QObject(parent),
+GameController::GameController(const QString& songFilePth, 
+	const QString& chartFilePth, QObject* parent)
+	: settings(SettingsWidget::instance()), QObject(parent),
 	songFilePath(songFilePth), chartFilePath(chartFilePth)
 {
 	initVals();

@@ -63,6 +63,7 @@
    </property>
    <property name="font">
     <font>
+     <family>思源黑体</family>
      <pointsize>12</pointsize>
     </font>
    </property>
@@ -266,6 +267,7 @@ QPushButton:pressed
    </property>
    <property name="font">
     <font>
+     <family>思源黑体</family>
      <pointsize>12</pointsize>
     </font>
    </property>

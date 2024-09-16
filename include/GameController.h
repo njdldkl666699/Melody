@@ -23,8 +23,8 @@ class GameController : public QObject
 	Q_OBJECT
 
 public:
-	GameController(const QString& songFilePth, const QString& chartFilePth,
-		const SettingsWidget* settingsWidget, QObject* parent = nullptr);
+	GameController(const QString& songFilePth,
+		const QString& chartFilePth, QObject* parent = nullptr);
 	~GameController();
 	//## Only Use in PlayWidget.cpp ##
 	void reset();

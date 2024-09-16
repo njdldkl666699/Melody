@@ -429,7 +429,7 @@ QPushButton:pressed
    </property>
    <property name="font">
     <font>
-     <family>Comic Sans MS</family>
+     <family>Saira</family>
      <pointsize>25</pointsize>
      <bold>false</bold>
      <kerning>true</kerning>
@@ -502,7 +502,7 @@ QPushButton:pressed
    </property>
    <property name="font">
     <font>
-     <family>Comic Sans MS</family>
+     <family>Saira</family>
      <pointsize>14</pointsize>
     </font>
    </property>

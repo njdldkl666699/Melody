@@ -41,7 +41,7 @@
    </property>
    <property name="font">
     <font>
-     <family>等线</family>
+     <family>思源黑体</family>
      <pointsize>20</pointsize>
      <bold>true</bold>
     </font>
@@ -61,7 +61,7 @@
    </property>
    <property name="font">
     <font>
-     <family>等线</family>
+     <family>思源黑体</family>
      <pointsize>20</pointsize>
      <bold>true</bold>
     </font>
@@ -86,6 +86,7 @@
     <font>
      <family>方正舒体</family>
      <pointsize>28</pointsize>
+     <bold>true</bold>
     </font>
    </property>
    <property name="styleSheet">

@@ -11,8 +11,8 @@ class PlayWidget : public QWidget
 	Q_OBJECT
 
 public:
-	PlayWidget(const QString& songFilePth, const QString& chartFilePth,
-		const SettingsWidget* settingsWidget, QWidget* parent = nullptr);
+	PlayWidget(const QString& songFilePth, 
+		const QString& chartFilePth, QWidget* parent = nullptr);
 	~PlayWidget();
 
 signals:

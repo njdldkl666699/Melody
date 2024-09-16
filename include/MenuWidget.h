@@ -5,7 +5,6 @@
 #include <QDir>
 #include<QMovie>
 #include<QFile>
-#include <QGraphicsBlurEffect>	//import blur model to process the confirm widget
 #include"SettingsWidget.h"
 #include"PlayWidget.h"
 #include "confirmDialog.h"
@@ -23,9 +22,8 @@ protected:
 	void keyPressEvent(QKeyEvent* event) override;
 
 private slots:
-	void comboBoxSongSelected(const QString& songName);
-
-	void pushButtonPlayClicked();
+	void onComboBoxSongSelected(const QString& songName);
+	void onPushButtonPlayClicked();
 
 private:
 	void initSongComboBox();
@@ -37,7 +35,6 @@ private:
 	QMovie* backgroundGIF;
 	QMovie* logoGIF;
 
-	SettingsWidget* settingsWidget;
 	PlayWidget* playWidget;
 	ConfirmDialog* confirmDialog;
 

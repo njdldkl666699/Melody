@@ -188,7 +188,6 @@
     </QtMoc>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\ButtonClickSound.cpp" />
     <ClCompile Include="src\confirmDialog.cpp" />
     <ClCompile Include="src\EndWidget.cpp" />
     <ClCompile Include="src\GameController.cpp" />
@@ -254,7 +253,7 @@
     <QtUic Include="ui\StartWidget.ui" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="include\ButtonClickSound.h" />
+    <ClInclude Include="include\UIController.h" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="include\confirmDialog.h" />

@@ -1,10 +1,6 @@
 #include "EndWidget.h"
 #include "MenuWidget.h"
-#include<QPixmap>
-#include<QPainter>
-#include<QPropertyAnimation>
-#include "ButtonClickSound.h"
-#include<QDateTime>
+#include "UIController.h"
 #include<QFile>
 #include<QTreeWidget>
 #include<QJsonArray>
@@ -15,13 +11,8 @@ EndWidget::EndWidget(const GameController* game, QWidget* parent)
 	: gameController(game), QWidget(parent)
 {
 	ui.setupUi(this);
-	setWindowTitle(QString::fromLocal8Bit("音灵幻章Meolide"));
-	setWindowIcon(QIcon("./res/icon/icon.ico"));
-	setWindowState(Qt::WindowFullScreen);
-
-	initBackgroundGIF();
-	initScoreList();
-	initChartIntro(game);
+	initWindow();
+	initUI();
 
 	dir.setPath(QString("./history"));
 	if (dir.exists())
@@ -44,7 +35,6 @@ EndWidget::EndWidget(const GameController* game, QWidget* parent)
 	musicPlay();
 	toolTips();
 
-
 	connect(ui.pushButton_backMenu, &QPushButton::clicked, this, [this]()
 		{
 			player->stop();
@@ -57,10 +47,6 @@ EndWidget::EndWidget(const GameController* game, QWidget* parent)
 			emit signalRestart();
 			this->close();
 		});
-
-	ButtonClickSound::buttonClickSound(ui.pushButton_backMenu);
-	ButtonClickSound::buttonClickSound(ui.pushButton_restart);
-
 
 	filename = "./history/" + game->getSongName() + "_" + game->getChartName() + ".dat";
 
@@ -76,117 +62,32 @@ EndWidget::~EndWidget()
 	delete backgroundGIF;
 }
 
-void EndWidget::initBackgroundGIF()
+void EndWidget::initWindow()
 {
-	//ui.background->setGeometry(0, 0, 1200, 675);
+	using namespace UICtrl;
+	setWindowTitle(QString::fromLocal8Bit("音灵幻章Meolide"));
+	setWindowIcon(QIcon("./res/icon/icon.ico"));
+	auto sw = SettingsWidget::instance();
+	setIfFullscreen(this, sw->getFullscreen());
+	setObjectSound(ui.pushButton_backMenu, &QPushButton::clicked, ber, sw->getSoundVal());
+	setObjectSound(ui.pushButton_history, &QPushButton::clicked, ber, sw->getSoundVal());
+	setObjectSound(ui.pushButton_restart, &QPushButton::clicked, ber, sw->getSoundVal());
+}
+
+void EndWidget::initUI()
+{
+	// init Background GIF
 	backgroundGIF = new QMovie("./res/background/end.gif");
 	ui.background->setMovie(backgroundGIF);
 	backgroundGIF->start();
 
-	ui.pushButton_restart->setIcon(QIcon("./res/icon/restart_black_64x.png"));
-	ui.pushButton_backMenu->setIcon(QIcon("./res/icon/home_black_64x.png"));
-	ui.pushButton_history->setIcon(QIcon("./res/icon/history.png"));
-}
+	// init song Picture
+	ui.label_songPic->setPixmap(gameController->getSongPicture());
 
-void EndWidget::initScoreList()
-{
-	ui.bar_accNum->setStyleSheet("QProgressBar {"
-							   "border: 1px solid grey;"
-							   "background-color: white;" // 背景色
-							   "color: qlineargradient(x1:0, y1:0, x2:1, y2:1,"
-							   "stop:0 #ff0000, stop:1 #0000ff);" // 渐变色从红色到蓝色
-							   "text-align: center;"
-							   "border-radius: 5px;"
-							   "min-height: 0px;"
-							   "}");
-	ui.label_bestNum->setStyleSheet("QLabel{"
-	"color:rgba(98,34,28,1);"
-	"text-align:center;"
-	"font-family:Arial;font-size:20px;font-weight:bold;"
-	"min-width:100px;"
-	"max-width:100px;"
-	"min-height:40px;"
-	"max-height:40px;"
-	"}");
-	ui.label_goodNum->setStyleSheet("QLabel{"
-		"color:rgba(98,34,28,1);"
-		"text-align:center;"
-		"font-family:Arial;font-size:20px;font-weight:bold;"
-		"min-width:60px;"
-		"max-width:60px;"
-		"min-height:40px;"
-		"max-height:40px;"
-		"}");
-
-	ui.label_missNum->setStyleSheet("QLabel{"
-	"color:rgba(103,55,52,1);"
-	"text-align:center;"
-	"font-family:Arial;font-size:20px;font-weight:bold;"
-	"min-width:60px;"
-	"max-width:60px;"
-	"min-height:40px;"
-	"max-height:40px;"
-	"}");
-
-	ui.label_comboNum->setStyleSheet("QLabel{"
-	"color:rgba(98,22,22,1);"
-	"text-align:center;"
-	"font-family:Arial;font-size:20px;font-weight:bold;"
-	"min-width:60px;"
-	"max-width:60px;"
-	"min-height:40px;"
-	"max-height:40px;"
-	"}");
-
-	ui.label_scoreNum->setStyleSheet("QLabel{"
-		"color:rgba(0,0,0,1);"
-		"text-align:center;"
-		"font-family:cursive;font-size:48px;font-weight:bold;"
-		"min-width:300px;"
-		"max-width:300px;"
-		"min-height:200px;"
-		"max-height:200px;"
-		"}");
-}
-
-void EndWidget::initChartIntro(const GameController* game) //初始化歌曲的图片和铺面的介绍（如果需要的话）
-{
-	QLabel* label_songPicture = new QLabel(this);
-	label_songPicture->setStyleSheet("QLabel{"
-		"border:2px solid white;"
-		"border-radius:10px;"
-		"min-width:300px;"
-		"max-width:300px;"
-		"min-height:300px;"
-		"max-height:300px;"
-		"}");
-	label_songPicture->move(450, 60);
-
-	//此处需要获取 MenuWidget中铺面图片 用 路径 暂时替代
-	//QString songPicPath = "./beatmap/Mujinku-Vacuum Track#ADD8E6-/bg.jpg";
-
-	label_songPicture->setScaledContents(true);
-    //songPic = songPic.scaled(label_songPicture->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
-	label_songPicture->setPixmap(game->getSongPicture());
-
-
-	//铺面信息 
-	ui.label_chartIntro->setStyleSheet("QLabel{"
-		"color:rgba(0,85,255,1);"
-		"}");
-	QString chartIntro;
-	chartIntro = game->getSongName() + "/Chart:" + game->getChartName();
+	// init chart Intro
+	QString chartIntro = gameController->getSongName() +
+		" / Chart:" + gameController->getChartName();
 	ui.label_chartIntro->setText(chartIntro);
-
-	//日期
-	now = QDateTime::currentDateTime();
-	today = now.date();
-    datetime = now.toString("yyyy-MM-dd HH:mm:ss");
-	ui.label_date->setText(datetime);
-	ui.label_date->setStyleSheet("QLabel{"
-	"color:rgba(0,85,255,1);"
-	"}");
 }
 
 void EndWidget::setScore(int b, int g, int m, int combo, int a, int s)

@@ -1,12 +1,11 @@
 #include "PlayWidget.h"
-#include "ButtonClickSound.h"
+#include "UIController.h"
 
-PlayWidget::PlayWidget(const QString& songFilePth, const QString& chartFilePth,
-	const SettingsWidget* settingsWidget, QWidget* parent)
-	: endWidget(nullptr), QWidget(parent),
-	pauseWidget(new PauseWidget()), settings(settingsWidget),
+PlayWidget::PlayWidget(const QString& songFilePth,
+	const QString& chartFilePth, QWidget* parent)
+	: endWidget(nullptr), QWidget(parent), pauseWidget(new PauseWidget()),
 	songFilePath(songFilePth), chartFilePath(chartFilePth),
-	gameController(new GameController(songFilePth, chartFilePth, settingsWidget))
+	gameController(new GameController(songFilePth, chartFilePth))
 {
 	ui.setupUi(this);
 	initPlayWidget();
@@ -30,13 +29,11 @@ PlayWidget::PlayWidget(const QString& songFilePth, const QString& chartFilePth,
 	connect(&commentTimer, &QTimer::timeout, ui.label_comment, &QLabel::clear);
 
 	//connect button related
-	ButtonClickSound::buttonClickSound(ui.pushButton_pause);
-	ButtonClickSound::buttonClickSound(ui.pushButton_end);
+	connect(ui.pushButton_end, &QPushButton::clicked, this, &PlayWidget::gameEnd);
+	connect(gameController, &GameController::signalShowEndButton, ui.pushButton_end, &QPushButton::show);
 #ifdef NDEBUG
 	ui.pushButton_end->hide();
 #endif // NDEBUG
-	connect(ui.pushButton_end, &QPushButton::clicked, this, &PlayWidget::gameEnd);
-	connect(gameController, &GameController::signalShowEndButton, ui.pushButton_end, &QPushButton::show);
 }
 
 PlayWidget::~PlayWidget()
@@ -48,16 +45,21 @@ PlayWidget::~PlayWidget()
 
 void PlayWidget::initPlayWidget()
 {
-	//set window
+	//set window & sound
 	setWindowTitle(QString::fromLocal8Bit("ÒôÁé»ÃÕÂMeolide"));
 	setWindowIcon(QIcon("./res/icon/icon.ico"));
-	setWindowState(Qt::WindowFullScreen);
+	using namespace UICtrl;
+	auto sw = SettingsWidget::instance();
+	setIfFullscreen(this,sw->getFullscreen());
+	setObjectSound(ui.pushButton_pause, &QPushButton::clicked, ber, sw->getSoundVal());
+	setObjectSound(ui.pushButton_end, &QPushButton::clicked, ber, sw->getSoundVal());
 
 	//set background
-	QPixmap backgroundPNG("./res/background/play.png");
+		QPixmap backgroundPNG("./res/background/play.png");
 	backgroundPNG = backgroundPNG.scaled(ui.background->size(),
 		Qt::KeepAspectRatio, Qt::SmoothTransformation);
 	ui.background->setPixmap(backgroundPNG);
+
 	//set judgeline
 	QPixmap judgeLinePNG("./res/note/judgeLine.png");
 	judgeLinePNG = judgeLinePNG.scaled(ui.judgeline->size(),
@@ -66,10 +68,8 @@ void PlayWidget::initPlayWidget()
 
 	//set labels
 	ui.label_acc->setText("0.00%");
-	ui.label_acc->setFont(QFont("Saira", 14, QFont::Weight::Normal));
 	ui.label_combo->setText("0");
 	ui.label_score->setText("0");
-	ui.label_score->setFont(QFont("Saira", 25, QFont::Weight::Normal));
 	ui.label_comment->setText(" ");
 	/*this used to be ui.label_comment->setText("");
 	but it caused a lag when the first note falls down near the judge line,
