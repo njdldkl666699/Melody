@@ -1,5 +1,6 @@
 #include "MenuWidget.h"
 #include "UIController.h"
+#include"EndWidget.h"
 #include<QPixmap>
 #include<QGraphicsBlurEffect>
 
@@ -25,17 +26,12 @@ MenuWidget::MenuWidget(QWidget* parent)
 			SettingsWidget::instance()->show();
 			this->hide();
 		});
-
 	connect(SettingsWidget::instance(), &SettingsWidget::pushButtonBackMenuClicked, this, &MenuWidget::show);
 
 	// connect PlayWidget related
 	connect(ui.pushButton_play, &QPushButton::clicked, this, &MenuWidget::onPushButtonPlayClicked);
 
 	// connect buttonClickSound
-	//UIController::buttonClickSound(ui.pushButton_settings);
-	//UIController::buttonClickSound(ui.pushButton_play);
-	//UIController::buttonClickSound(ui.comboBox_chart);
-	//UIController::buttonClickSound(ui.comboBox_song);
 	const int soundVal = SettingsWidget::instance()->getSoundVal();
 	setObjectSound(ui.comboBox_chart, &QComboBox::highlighted, gear, soundVal);
 	setObjectSound(ui.comboBox_song, &QComboBox::highlighted, gear, soundVal);

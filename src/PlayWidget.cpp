@@ -16,6 +16,16 @@ PlayWidget::PlayWidget(const QString& songFilePth,
 	countDownNum = 3;
 	gameController->setNoteParent(this);
 
+	//create PauseWidget
+	pauseWidget = new PauseWidget(this);
+	pauseWidget->move((this->width() - pauseWidget->width()) / 2,
+		(this->height() - pauseWidget->height()) / 2);
+
+	//connect PauseWidget related
+	connect(pauseWidget, &PauseWidget::signalBackMenu, this, &PlayWidget::gameClose);
+	connect(pauseWidget, &PauseWidget::signalRestart, this, &PlayWidget::gameRestart);
+	connect(pauseWidget, &PauseWidget::signalContinue, this, &PlayWidget::gameContinue);
+
 	//connect GameController related
 	connect(this, &PlayWidget::signalKeyPressed, gameController, &GameController::judgeKeyPress);
 	connect(this, &PlayWidget::signalKeyReleased, gameController, &GameController::judgeKeyRelease);
@@ -203,19 +213,6 @@ void PlayWidget::gamePause()
 	QGraphicsBlurEffect* blurEffect = new QGraphicsBlurEffect(this);
 	blurEffect->setBlurRadius(20);
 	this->setGraphicsEffect(blurEffect);
-
-	// create PauseWidget
-	if (pauseWidget == nullptr)
-	{
-		pauseWidget = new PauseWidget(this);
-		pauseWidget->move((this->width() - pauseWidget->width()) / 2,
-			(this->height() - pauseWidget->height()) / 2);
-
-		//connect PauseWidget related
-		connect(pauseWidget, &PauseWidget::signalBackMenu, this, &PlayWidget::gameClose);
-		connect(pauseWidget, &PauseWidget::signalRestart, this, &PlayWidget::gameRestart);
-		connect(pauseWidget, &PauseWidget::signalContinue, this, &PlayWidget::gameContinue);
-	}
 	// Show pause menu
 	pauseWidget->show();
 }
