@@ -39,9 +39,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="include\confirmDialog.h">
-      <Filter>头文件</Filter>
-    </QtMoc>
     <QtMoc Include="include\EndWidget.h">
       <Filter>头文件</Filter>
     </QtMoc>
@@ -70,6 +67,9 @@
       <Filter>头文件</Filter>
     </QtMoc>
     <QtMoc Include="include\Tap.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+    <QtMoc Include="include\confirmDialog.h">
       <Filter>头文件</Filter>
     </QtMoc>
   </ItemGroup>

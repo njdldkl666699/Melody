@@ -35,8 +35,12 @@ public:
 	//get functions
 	uint getPerfectCount() const { return perfectCount; }
 	uint getGoodCount() const { return goodCount; }
+
+	// ####implement later###
+	uint getBadCount()const { return 0; }
+
 	uint getMissCount() const { return missCount; }
-	float getAccuracy() const { return accuracy; }
+	float getAccuracy() const { return accuracy; } //0~100, without the '%'
 	uint getScore() const { return score; }
 	uint getCombo() const { return combo; }
 	uint getMaxCombo() const { return maxCombo; }

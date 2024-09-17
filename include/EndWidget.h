@@ -5,11 +5,8 @@
 #include "ui_EndWidget.h"
 #include<QMovie>
 #include<QMediaPlayer>
-#include<QVideoWidget>
 #include<QAudioOutput>
 #include<QDateTime>
-#include <QJsonObject>
-#include <QJsonDocument>
 
 class EndWidget : public QWidget
 {
@@ -18,14 +15,6 @@ class EndWidget : public QWidget
 public:
 	EndWidget(const GameController* game, QWidget* parent = nullptr);
 	~EndWidget();
-	struct HistoryList
-	{
-		QString time;
-		QString score;
-		QString acc;
-		QString miss;
-		QString rank;
-	};
 
 signals:
 	void signalBackMenu();
@@ -34,41 +23,58 @@ signals:
 private:
 	void initWindow();
 	void initUI();
-	void setScore(int bestNum,  int goodNum, int missNum, int comboNum, int accNum, int score);
-	void showScore();
-	void showRank();
-	void musicSet();
-	void musicPlay();
-	void toolTips();
+	void initScore();
+	void initRank();
+
+	// ###implement later###
+	void playAnimation();
+
+	void playMusic();
+
+private:
+	struct HistoryList
+	{
+		QString dateTime;
+		QString score;
+		QString acc;
+		QString rank;
+		QString maxCombo;
+	};
+
 	void historyOn();
 	void getHistory();
 	void writeHistory();
 	void setHistoryList();
 
 private:
-	int bestNum;
-	int coolNum;
-	int goodNum;
-	int missNum;
-	int comboNum;
-	int accNum;
-	int score;
-	int rank; //1:Fai 2:BV£¨À¶V 3:WV(°×V 4:A 5: B 6:C 7£ºF
-	QString rankk;
-	QString filename;
-	bool ifHistoryOn = 0;
-	QDir dir;
+	const GameController* gameController;
+	uint perfectNum, goodNum, badNum, missNum;
+	uint score, maxCombo;
+	float acc;
 
-	QVector<HistoryList> historyList;
-	QList<QUrl> musicList;
+	enum Rank
+	{
+		phi, //All Perfect
+		BlueV, //Full Combo, regardless of accuracy
+		V, //acc >= 99.00% , delta = 1.0%
+		S, //97.50% <= acc < 99.00% , delta = 2.5%
+		A, //95.00% <= acc < 97.50% , delta = 2.5%
+		B, //90.00% <= acc < 95.00% , delta = 5.0%
+		C, //85.00% <= acc < 90.00% , delta = 5.0%
+		F  //acc < 85.00%
+	};
+	Rank rank;
+	QString rankStr;
+
+private:
+	Ui::EndWidgetClass ui;
+	QMovie* backgroundGIF;
 
 	QMediaPlayer* player;
-	QMediaPlayer* music;
 	QAudioOutput* audio;
-	QDateTime now;
-	QDate today;
-	QString datetime;
-	Ui::EndWidgetClass ui;
-	const GameController* gameController;
-	QMovie* backgroundGIF;
+
+	QString filename;
+	bool ifHistoryOn;
+	QDir dir;
+	QVector<HistoryList> historyList;
 };

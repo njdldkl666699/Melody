@@ -8,6 +8,7 @@
 .vs
 *.qtvscr
 [b,B]uild
+history
 
 *~
 *.autosave

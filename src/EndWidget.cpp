@@ -1,40 +1,26 @@
 #include "EndWidget.h"
 #include "MenuWidget.h"
 #include "UIController.h"
+
 #include<QFile>
-#include<QTreeWidget>
-#include<QJsonArray>
-#include<QTextStream>
 #include<QDir>
+#include<QTreeWidget>
+#include<QTextStream>
+#include<QPropertyAnimation>
 
 EndWidget::EndWidget(const GameController* game, QWidget* parent)
-	: gameController(game), QWidget(parent)
+	: gameController(game), player(nullptr), audio(nullptr),
+	ifHistoryOn(false), QWidget(parent)
 {
 	ui.setupUi(this);
 	initWindow();
 	initUI();
+	initScore();
+	initRank();
+	playAnimation();
+	playMusic();
 
-	dir.setPath(QString("./history"));
-	if (dir.exists())
-	{
-		qDebug() << "have folder";
-	}
-	else
-	{
-		bool success = dir.mkpath(QString("./history"));
-		if (success == 0) qDebug() << "fail to create";
-		qDebug() << "folder create";
-	}
-
-	//void setScore(int bestNum, int goodNum, int missNum, int comboNum, int accNum, int score);
-	setScore(game->getPerfectCount(), game->getGoodCount(), game->getMissCount(), game->getMaxCombo(), game->getAccuracy(), game->getScore());
-	//setScore(1123, 123, 0, 1333, 100, 114514);
-	showScore();
-	showRank();
-	musicSet();
-	musicPlay();
-	toolTips();
-
+	//connect button
 	connect(ui.pushButton_backMenu, &QPushButton::clicked, this, [this]()
 		{
 			player->stop();
@@ -47,11 +33,8 @@ EndWidget::EndWidget(const GameController* game, QWidget* parent)
 			emit signalRestart();
 			this->close();
 		});
-
-	filename = "./history/" + game->getSongName() + "_" + game->getChartName() + ".dat";
-
-	ui.treeWidget_history->hide();
 	connect(ui.pushButton_history, &QPushButton::clicked, this, &EndWidget::historyOn);
+
 	writeHistory();
 	getHistory();
 	setHistoryList();
@@ -59,7 +42,21 @@ EndWidget::EndWidget(const GameController* game, QWidget* parent)
 
 EndWidget::~EndWidget()
 {
-	delete backgroundGIF;
+	if (backgroundGIF != nullptr)
+	{
+		delete backgroundGIF;
+		backgroundGIF = nullptr;
+	}
+	if (player != nullptr)
+	{
+		delete player;
+		player = nullptr;
+	}
+	if (audio != nullptr)
+	{
+		delete audio;
+		audio = nullptr;
+	}
 }
 
 void EndWidget::initWindow()
@@ -82,220 +79,230 @@ void EndWidget::initUI()
 	backgroundGIF->start();
 
 	// init song Picture
-	ui.label_songPic->setPixmap(gameController->getSongPicture());
+	QPixmap songPic = gameController->getSongPicture();
+	songPic = songPic.scaled(ui.label_songPic->size(),
+		Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+	ui.label_songPic->setPixmap(songPic);
 
 	// init chart Intro
 	QString chartIntro = gameController->getSongName() +
-		" / Chart:" + gameController->getChartName();
+		" / " + gameController->getChartName();
 	ui.label_chartIntro->setText(chartIntro);
-}
 
-void EndWidget::setScore(int b, int g, int m, int combo, int a, int s)
-{
-	bestNum = b; 
-	goodNum = g; missNum = m;
-	comboNum = combo; accNum = a;
-	score = s;
-}
-
-void EndWidget::showScore()
-{
-	ui.label_scoreFrame->setScaledContents(true);
+	//init score Frame
 	ui.label_scoreFrame->setPixmap(QString("./res/icon/scoreFrame.png"));
+	ui.label_scoreListFrame->setPixmap(QString("./res/icon/scoreListFrame.png"));
 
-	ui.label_scoreListFrame->setScaledContents(true);
-	QPixmap listFrame(QString("./res/icon/scoreListFrame.png"));
-	ui.label_scoreListFrame->setPixmap(listFrame);
-
-
-
-
-	ui.label_bestNum->setText(QString::number(bestNum));
-	ui.label_goodNum->setText(QString::number(goodNum));
-	ui.label_missNum->setText(QString::number(missNum));
-	ui.label_comboNum->setText(QString::number(comboNum));
-	ui.bar_accNum->setValue(accNum);
-	ui.label_scoreNum->setText(QString::number(score));
-
-
-	QPropertyAnimation* animation = new QPropertyAnimation(ui.widget_scoreList, "pos", this);
-	animation->setDuration(1000); 
-	animation->setStartValue(QPoint(400, -1000));
-	animation->setEndValue(QPoint(400,420));
-	animation->setEasingCurve(QEasingCurve::OutBack);
-	// 启动动画
-	animation->start();
-
-	QPropertyAnimation* animation1 = new QPropertyAnimation(ui.widget_acc, "pos", this);
-	animation1->setDuration(2000);
-	animation1->setStartValue(QPoint(-1000,500));
-	animation1->setEndValue(QPoint(480, 500));
-	animation1->setEasingCurve(QEasingCurve::OutBack);
-	// 启动动画
-	animation1->start();
-
-	QPropertyAnimation* animation2 = new QPropertyAnimation(ui.label_scoreNum, "pos", this);
-	animation2->setDuration(3000);
-	animation2->setStartValue(QPoint(-1000, 410));
-	animation2->setEndValue(QPoint(140, 410));
-	animation2->setEasingCurve(QEasingCurve::OutQuad);
-	// 启动动画
-	animation2->start();
+	//init history Frame
+	ui.treeWidget_history->hide();
 }
 
-void EndWidget::showRank()
+void EndWidget::initScore()
 {
-	
+	//get scores from gameController
+	perfectNum = gameController->getPerfectCount();
+	goodNum = gameController->getGoodCount();
+	badNum = gameController->getBadCount();
+	missNum = gameController->getMissCount();
+	score = gameController->getScore();
+	maxCombo = gameController->getMaxCombo();
+	acc = gameController->getAccuracy();
 
+	//set scores to UI
+	ui.label_perfectNum->setText(QString::number(perfectNum));
+	ui.label_goodNum->setText(QString::number(goodNum));
+	ui.label_badNum->setText(QString::number(badNum));
+	ui.label_missNum->setText(QString::number(missNum));
+	ui.label_scoreNum->setText(QString::number(score));
+	ui.label_comboNum->setText(QString::number(maxCombo));
+	ui.label_accNum->setText(QString::number(acc, 'f', 2) + "%");
+}
 
-	//此处应计算rank 在此先随便设计一个测试
-	if (accNum == 100) rank = 1;
-	else if (missNum == 0) rank = 2;
-	else if (accNum >= 98.5 && accNum < 100)  rank = 3;
-	else if (accNum >= 97.5 && accNum < 98.5) rank = 4;
-	else if (accNum >= 95 && accNum < 97.5) rank = 5;
-	else if (accNum >= 90 && accNum < 95) rank = 6;
-	else if (accNum >= 85 && accNum < 90) rank = 7;
-	else if (accNum >= 0 && accNum < 85) rank = 8;
-
-
-	QLabel* label_rank = new QLabel(this);
-	label_rank->setStyleSheet("QLabel{"
-		"min-width:400px;"
-		"max-width:400px;"
-		"min-height:400px;"
-		"max-height:400px;"
-		"}");
-	label_rank->move(25, 20);
-
-	ui.pushButton_restart->setStyleSheet("QToolTip { color: black; background-color: white; border: 1px solid black; }");
-
-
-	QString rankPath;
-	switch (rank)
+void EndWidget::initRank()
+{
+	QString rankPath = "./res/icon/rank";
+	const QString rankPathEnd[] = { "Phi", "BV", "V", "S", "A", "B", "C", "F" };
+	const QString rankRecord[] = { "φ AP", "V FC", "V", "S", "A", "B", "C", "F" };
+	const QString rankComment[] =
 	{
-	case 1:
-		rankPath = "./res/icon/rankFai"; label_rank->setToolTip("Genius!Perfect!"); rankk = "φ "; break;
-	case 2:
-		rankPath = "./res/icon/rankBV"; label_rank->setToolTip("No Miss!? unbelievable"); rankk = "Blue V"; break;
-	case 3:
-		rankPath = "./res/icon/ranWV";  label_rank->setToolTip("nothing can stop you "); rankk = "White V"; break;
-	case 4:
-		rankPath = "./res/icon/rankS";  label_rank->setToolTip("so good at it"); rankk = "S"; break;
-	case 5:
-		rankPath = "./res/icon/rankA";  label_rank->setToolTip("so easy");  rankk = "A"; break;
-	case 6:
-		rankPath = "./res/icon/rankB";  label_rank->setToolTip("just a little miss");  rankk = "B"; break;
-	case 7:
-		rankPath = "./res/icon/rankC"; label_rank->setToolTip("need practice");  rankk = "C"; break;
-	case 8:
-		rankPath = "./res/icon/rankF";  label_rank->setToolTip("quite bad");  rankk = "F"; break;
+		"Genius!Perfect!",
+		"No Miss!? unbelievable",
+		"Nothing can stop you",
+		"So good at it",
+		"So easy",
+		"Just a little miss",
+		"Need practice",
+		"Quite bad"
+	};
+
+	if (acc == 100)
+		rank = phi;
+	else if (badNum + missNum == 0 && score != 0)
+	{
+		//in debug, if you click skip 
+		//at the beginning, you will wrongly get a BV,
+		//so I add (score != 0) to prevent this
+		rank = BlueV;
 	}
+	else if (acc >= 99)
+		rank = V;
+	else if (acc >= 97.5)
+		rank = S;
+	else if (acc >= 95)
+		rank = A;
+	else if (acc >= 90)
+		rank = B;
+	else if (acc >= 85)
+		rank = C;
+	else
+		rank = F;
 
-	QPixmap rankPic(rankPath);
-	label_rank->setScaledContents(true);
-	label_rank->setPixmap(rankPic);
+	rankStr = rankRecord[rank];
+	ui.label_rank->setToolTip(rankComment[rank]);
 
+	rankPath += rankPathEnd[rank];
+	//ui.label_rank->setScaledContents(true);
+	ui.label_rank->setPixmap(rankPath);
+}
 
-	QPropertyAnimation* animation1 = new QPropertyAnimation(label_rank, "pos", this);
-	animation1->setDuration(1000);  // 动画持续500毫秒
-	animation1->setStartValue(QPoint(25, -900));
-	animation1->setEndValue(QPoint(25,20)); 
-	animation1->setEasingCurve(QEasingCurve::OutQuad);  // 使用OutQuad曲线
-	// 启动动画
-	animation1->start();
+void EndWidget::playAnimation()
+{
+	//label_rank animation
+	QPropertyAnimation* rankAnimation = 
+		new QPropertyAnimation(ui.label_rank, "pos", this);
+	rankAnimation->setDuration(1000);
+	rankAnimation->setStartValue(QPoint(-600, 70));
+	rankAnimation->setEndValue(QPoint(40, 70));
+	rankAnimation->setEasingCurve(QEasingCurve::OutQuad);
+	rankAnimation->start();
 
+	//label_scoreFrame animation
+	QPropertyAnimation* scoreFrameAnimation = 
+		new QPropertyAnimation(ui.label_scoreFrame, "pos", this);
+	scoreFrameAnimation->setDuration(1000);
+	scoreFrameAnimation->setStartValue(QPoint(-600, 510));
+	scoreFrameAnimation->setEndValue(QPoint(40, 510));
+	scoreFrameAnimation->setEasingCurve(QEasingCurve::OutQuad);
+	scoreFrameAnimation->start();
+
+	//label_scoreNum animation
+	QPropertyAnimation* scoreNumAnimation = 
+		new QPropertyAnimation(ui.label_scoreNum, "pos", this);
+	scoreNumAnimation->setDuration(1000);
+	scoreNumAnimation->setStartValue(QPoint(-600, 590));
+	scoreNumAnimation->setEndValue(QPoint(90, 590));
+	scoreNumAnimation->setEasingCurve(QEasingCurve::OutQuad);
+	scoreNumAnimation->start();
+
+	//label_scoreListFrame animation
+	QPropertyAnimation* scoreListFrameAnimation =
+		new QPropertyAnimation(ui.label_scoreListFrame, "pos", this);
+	scoreListFrameAnimation->setDuration(1000);
+	scoreListFrameAnimation->setStartValue(QPoint(1720, 490));
+	scoreListFrameAnimation->setEndValue(QPoint(400, 490));
+	scoreListFrameAnimation->setEasingCurve(QEasingCurve::OutQuad);
+	scoreListFrameAnimation->start();
+
+	//widget_scoreList animation
+	QPropertyAnimation* scoreListAnimation =
+		new QPropertyAnimation(ui.widget_scoreList, "pos", this);
+	scoreListAnimation->setDuration(1000);
+	scoreListAnimation->setStartValue(QPoint(1680, 520));
+	scoreListAnimation->setEndValue(QPoint(440, 520));
+	scoreListAnimation->setEasingCurve(QEasingCurve::OutQuad);
+	scoreListAnimation->start();
+}
+
+void EndWidget::playMusic()
+{
+	// Music List
+	QString musicName[] = { "Phi", "BV", "V", "S", "A", "B", "C", "F" };
+	QString musicPath = "./res/music/" + musicName[rank] + ".mp3";
+
+	// Set Music Player
+	player = new QMediaPlayer(this);
+	audio = new QAudioOutput(this);
+	player->setAudioOutput(audio);
+	player->setSource(QUrl::fromLocalFile(musicPath));
+	audio->setVolume(SettingsWidget::instance()->getMusicVal() / 100.f);
+	player->play();
 }
 
 void EndWidget::historyOn()
 {
-	if (ifHistoryOn == 0)
+	if (!ifHistoryOn)
 	{
 		ui.treeWidget_history->show();
-		ifHistoryOn = 1;
+		ifHistoryOn = true;
 	}
 	else
 	{
 		ui.treeWidget_history->hide();
-		ifHistoryOn = 0;
+		ifHistoryOn = false;
 	}
-}
-
-void EndWidget::musicSet()
-{
-
-	player = new QMediaPlayer(this);
-	audio = new QAudioOutput(this);
-	player->setAudioOutput(audio);
-	audio->setVolume(0.5);
-	//播放列表
-	musicList = {
-		QUrl::fromLocalFile("./res/video/endMusic/Fai.mp3"),
-		QUrl::fromLocalFile("./res/video/endMusic/BV.mp3"),
-		QUrl::fromLocalFile("./res/video/endMusic/WV.mp3"),
-		QUrl::fromLocalFile("./res/video/endMusic/S.mp3"),
-		QUrl::fromLocalFile("./res/video/endMusic/A.mp3"),
-		QUrl::fromLocalFile("./res/video/endMusic/B.mp3"),
-		QUrl::fromLocalFile("./res/video/endMusic/C.mp3"),
-		QUrl::fromLocalFile("./res/video/endMusic/F.mp3")
-	};
-	player->play();
-}
-
-void EndWidget::musicPlay()
-{
-	QUrl musicc(musicList.at(rank-1));
-	player->setSource(musicc);
-	//player->setVolume(100);
-	player->play();
-}
-
-void EndWidget::toolTips()
-{
-	ui.pushButton_restart->setToolTip("Restart");
-	ui.pushButton_restart->setStyleSheet("QToolTip { color: black; background-color: white; border: 1px solid black; }");
-
-	ui.pushButton_backMenu->setToolTip("Back To Menu");
-	ui.pushButton_backMenu->setStyleSheet("QToolTip { color: black; background-color: white; border: 1px solid black; }");
-
-	
-
 }
 
 void EndWidget::writeHistory()
 {
-	QFile file(filename);
-	if (!file.open(QIODevice::Append))
+	//create history folder
+	dir.setPath(QString("./history"));
+	if (dir.exists())
 	{
-		qDebug() << "cannotwrite";
+		qDebug() << "have folder";
+	}
+	else
+	{
+		bool success = dir.mkpath(QString("./history"));
+		if (!success)
+		{
+			qDebug() << "fail to create";
+		}
+		else
+		{
+			qDebug() << "folder create";
+		}
+	}
+
+	//set filename
+	filename = "./history/" + gameController->getSongName() +
+		"_" + gameController->getChartName() + ".txt";
+
+	//write history to file
+	QFile file(filename);
+	if (!file.open(QIODevice::Append | QIODevice::Text))
+	{
+		qDebug() << "cannot write";
 		return;
 	}
-	else qDebug() << "write";
+	else
+	{
+		qDebug() << "write";
+	}
 	QDataStream fout(&file);
 	//fout.setAutoDetectUnicode(true);
-	fout << datetime;
-	fout<< QString::number(score);
-	fout << QString::number(accNum);
-	fout << QString::number(missNum);
-	fout << rankk;
+	fout << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+	fout << QString::number(score);
+	fout << QString::number(acc, 'f', 2);
+	fout << rankStr;
+	fout << QString::number(maxCombo);
 	file.close();
 }
 
 void EndWidget::getHistory()
 {
 	QFile file(filename);
-	if (!file.open(QIODevice::ReadOnly))
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 		return;
 	QDataStream fin(&file);
 	HistoryList historyTmp;
 	//fin.setAutoDetectUnicode(true);
 	while (!fin.atEnd())
 	{
-		fin >> historyTmp.time;
+		fin >> historyTmp.dateTime;
 		fin >> historyTmp.score;
 		fin >> historyTmp.acc;
-		fin >> historyTmp.miss;
-		fin>> historyTmp.rank;
+		fin >> historyTmp.rank;
+		fin >> historyTmp.maxCombo;
 		historyList.push_back(historyTmp);
 	}
 	file.close();
@@ -303,18 +310,13 @@ void EndWidget::getHistory()
 
 void EndWidget::setHistoryList()
 {
-	int num = historyList.size();
-	for (int i = 0; i < num; i++)
+	for (const auto& history : historyList)
 	{
 		QTreeWidgetItem* childItem = new QTreeWidgetItem(ui.treeWidget_history);
-		childItem->setText(0, historyList[i].time);
-		childItem->setText(1, historyList[i].rank);
-		childItem->setText(2, historyList[i].score);
-		childItem->setText(3, historyList[i].acc+"%");
-		childItem->setText(4, historyList[i].miss);
-
+		childItem->setText(0, history.dateTime);
+		childItem->setText(1, history.score);
+		childItem->setText(2, history.acc + "%");
+		childItem->setText(3, history.rank);
+		childItem->setText(4, history.maxCombo);
 	}
-
 }
-
-
