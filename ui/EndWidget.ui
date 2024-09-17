@@ -340,7 +340,7 @@ QPushButton:pressed
      <family>Saira</family>
      <pointsize>10</pointsize>
      <italic>false</italic>
-     <bold>true</bold>
+     <bold>false</bold>
      <strikeout>false</strikeout>
      <kerning>false</kerning>
     </font>
@@ -378,6 +378,9 @@ QPushButton:pressed
    <property name="alternatingRowColors">
     <bool>false</bool>
    </property>
+   <property name="selectionMode">
+    <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
+   </property>
    <property name="iconSize">
     <size>
      <width>0</width>
@@ -388,7 +391,7 @@ QPushButton:pressed
     <enum>Qt::TextElideMode::ElideRight</enum>
    </property>
    <property name="rootIsDecorated">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="uniformRowHeights">
     <bool>false</bool>
@@ -404,6 +407,9 @@ QPushButton:pressed
    </property>
    <property name="headerHidden">
     <bool>false</bool>
+   </property>
+   <property name="expandsOnDoubleClick">
+    <bool>true</bool>
    </property>
    <attribute name="headerCascadingSectionResizes">
     <bool>false</bool>
