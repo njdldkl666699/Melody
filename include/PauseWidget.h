@@ -1,10 +1,10 @@
 #pragma once
 
 #include "ui_PauseWidget.h"
-#include <QWidget>
+#include <QDialog>
 #include <QMovie>
 
-class PauseWidget : public QWidget
+class PauseWidget : public QDialog
 {
 	Q_OBJECT
 		     

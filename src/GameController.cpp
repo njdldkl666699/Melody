@@ -542,8 +542,8 @@ void GameController::judgeNoHitMiss()
 					<< "\tmusicCurrentTime: " << musicCurrentTime
 					<< "\tdifference: " << difference;*/
 
-				/*qDebug() << "Miss!\tx:" << headNote->x() << "\ty: " << headNote->y()
-					<< "\tdeltaY: " << deltaY << "\tdifference: " << difference;*/
+				qDebug() << "Miss!\tx:" << headNote->x() << "\ty: " << headNote->y()
+					<< "\tdeltaY: " << deltaY << "\tdifference: " << difference;
 
 				missCount++;
 				combo = 0;

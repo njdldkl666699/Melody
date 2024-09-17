@@ -35,6 +35,7 @@ private slots:
 	void gameEnd();
 	void updateUI();
 	void updateComment(const QString& comment);
+	void updateCountDown();
 
 private:
 	Ui::PlayWidgetClass ui;
@@ -47,4 +48,6 @@ private:
 	const QString& chartFilePath;
 
 	QTimer commentTimer;
+	QTimer countDownTimer;
+	int countDownNum;
 };

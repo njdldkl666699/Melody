@@ -1,15 +1,19 @@
 #include "PlayWidget.h"
 #include "UIController.h"
+#include<QGraphicsBlurEffect>
+#include<QPropertyAnimation>
 
 PlayWidget::PlayWidget(const QString& songFilePth,
 	const QString& chartFilePth, QWidget* parent)
-	: endWidget(nullptr), QWidget(parent), pauseWidget(new PauseWidget()),
+	: endWidget(nullptr), pauseWidget(nullptr), QWidget(parent),
 	songFilePath(songFilePth), chartFilePath(chartFilePth),
 	gameController(new GameController(songFilePth, chartFilePth))
 {
 	ui.setupUi(this);
 	initPlayWidget();
 	commentTimer.setSingleShot(true);
+	countDownTimer.setTimerType(Qt::PreciseTimer);
+	countDownNum = 3;
 	gameController->setNoteParent(this);
 
 	//connect GameController related
@@ -17,18 +21,14 @@ PlayWidget::PlayWidget(const QString& songFilePth,
 	connect(this, &PlayWidget::signalKeyReleased, gameController, &GameController::judgeKeyRelease);
 	connect(gameController, &GameController::gameEnded, this, &PlayWidget::gameEnd);
 
-	//connect PauseWidget related
-	connect(ui.pushButton_pause, &QPushButton::clicked, this, &PlayWidget::gamePause);
-	connect(pauseWidget, &PauseWidget::signalBackMenu, this, &PlayWidget::gameClose);
-	connect(pauseWidget, &PauseWidget::signalRestart, this, &PlayWidget::gameRestart);
-	connect(pauseWidget, &PauseWidget::signalContinue, this, &PlayWidget::gameContinue);
-
 	//connect UI related
 	connect(gameController, &GameController::signalUpdate, this, &PlayWidget::updateUI);
 	connect(gameController, &GameController::judgeResult, this, &PlayWidget::updateComment);
 	connect(&commentTimer, &QTimer::timeout, ui.label_comment, &QLabel::clear);
+	connect(&countDownTimer, &QTimer::timeout, this, &PlayWidget::updateCountDown);
 
 	//connect button related
+	connect(ui.pushButton_pause, &QPushButton::clicked, this, &PlayWidget::gamePause);
 	connect(ui.pushButton_end, &QPushButton::clicked, this, &PlayWidget::gameEnd);
 	connect(gameController, &GameController::signalShowEndButton, ui.pushButton_end, &QPushButton::show);
 #ifdef NDEBUG
@@ -38,9 +38,21 @@ PlayWidget::PlayWidget(const QString& songFilePth,
 
 PlayWidget::~PlayWidget()
 {
-	delete pauseWidget;
-	delete endWidget;
-	delete gameController;
+	if (gameController != nullptr)
+	{
+		delete gameController;
+		gameController = nullptr;
+	}
+	if (pauseWidget != nullptr)
+	{
+		delete pauseWidget;
+		pauseWidget = nullptr;
+	}
+	if (endWidget != nullptr)
+	{
+		delete endWidget;
+		endWidget = nullptr;
+	}
 }
 
 void PlayWidget::initPlayWidget()
@@ -50,12 +62,12 @@ void PlayWidget::initPlayWidget()
 	setWindowIcon(QIcon("./res/icon/icon.ico"));
 	using namespace UICtrl;
 	auto sw = SettingsWidget::instance();
-	setIfFullscreen(this,sw->getFullscreen());
+	setIfFullscreen(this, sw->getFullscreen());
 	setObjectSound(ui.pushButton_pause, &QPushButton::clicked, ber, sw->getSoundVal());
 	setObjectSound(ui.pushButton_end, &QPushButton::clicked, ber, sw->getSoundVal());
 
 	//set background
-		QPixmap backgroundPNG("./res/background/play.png");
+	QPixmap backgroundPNG("./res/background/play.png");
 	backgroundPNG = backgroundPNG.scaled(ui.background->size(),
 		Qt::KeepAspectRatio, Qt::SmoothTransformation);
 	ui.background->setPixmap(backgroundPNG);
@@ -103,6 +115,46 @@ void PlayWidget::updateComment(const QString& comment)
 	commentTimer.start(1000);
 }
 
+void PlayWidget::updateCountDown()
+{
+	//initialized to 3, then count down to 0
+	if (countDownNum > 0)
+	{
+		ui.label_countDown->setText(QString::number(countDownNum));
+		countDownNum--;
+
+		// label_countDown animation
+		//If you don't interpret this part,
+		//just run the pregram and see it.  ;)
+
+		QPropertyAnimation* inAnimation =
+			new QPropertyAnimation(ui.label_countDown, "geometry", this);
+		inAnimation->setDuration(250);
+		inAnimation->setStartValue(QRect(710, 360, 0, 0));
+		inAnimation->setEndValue(QRect(610, 320, 60, 80));
+		inAnimation->setEasingCurve(QEasingCurve::OutQuad);
+
+		QPropertyAnimation* outAnimation =
+			new QPropertyAnimation(ui.label_countDown, "geometry", this);
+		outAnimation->setDuration(250);
+		outAnimation->setStartValue(QRect(610, 320, 60, 80));
+		outAnimation->setEndValue(QRect(510, 360, 0, 0));
+		outAnimation->setEasingCurve(QEasingCurve::OutQuad);
+
+		inAnimation->start();
+		connect(inAnimation, &QPropertyAnimation::finished, [=]()
+			{
+				QTimer::singleShot(500, [=]() { outAnimation->start(); });
+			});
+	}
+	else
+	{
+		countDownTimer.stop();
+		ui.label_countDown->clear();
+		countDownNum = 3;
+	}
+}
+
 void PlayWidget::keyPressEvent(QKeyEvent* event)
 {
 	if (event->key() == Qt::Key_Escape)
@@ -126,11 +178,13 @@ void PlayWidget::keyPressEvent(QKeyEvent* event)
 
 void PlayWidget::keyReleaseEvent(QKeyEvent* event)
 {
-	//received some event that should't be received,
-	//but I can't fix it
-	//qDebug() << "keyReleaseEvent";
-
-	//now fix it
+	/*
+	the long press is interpreted as a series of
+	press and release events, but we can distinguish
+	them by the isAutoRepeat() function.
+	The first press event is not an auto repeat event,
+	and the last release event is not an auto repeat event.
+	*/
 	if (event->isAutoRepeat() == false)
 	{
 		emit signalKeyReleased(event);
@@ -145,29 +199,53 @@ void PlayWidget::gamePause()
 {
 	// game Pause
 	gameController->gamePause();
+	// blur the background
+	QGraphicsBlurEffect* blurEffect = new QGraphicsBlurEffect(this);
+	blurEffect->setBlurRadius(20);
+	this->setGraphicsEffect(blurEffect);
+
+	// create PauseWidget
+	if (pauseWidget == nullptr)
+	{
+		pauseWidget = new PauseWidget(this);
+		pauseWidget->move((this->width() - pauseWidget->width()) / 2,
+			(this->height() - pauseWidget->height()) / 2);
+
+		//connect PauseWidget related
+		connect(pauseWidget, &PauseWidget::signalBackMenu, this, &PlayWidget::gameClose);
+		connect(pauseWidget, &PauseWidget::signalRestart, this, &PlayWidget::gameRestart);
+		connect(pauseWidget, &PauseWidget::signalContinue, this, &PlayWidget::gameContinue);
+	}
 	// Show pause menu
 	pauseWidget->show();
-	this->hide();
 }
 
 void PlayWidget::gameContinue()
 {
-	//3 seconds wait, auto continue
+	pauseWidget->close();
+	// remove blur effect
+	this->setGraphicsEffect(nullptr);
 	gameController->wait();
-	this->show();
+	//3 seconds wait, start a 3 time 1 second timer
+	//in updateCountDown() function
+	countDownTimer.start(1000);
+	this->updateCountDown();
 }
 
 void PlayWidget::gameRestart()
 {
+	pauseWidget->close();
+	// remove blur effect
+	this->setGraphicsEffect(nullptr);
 	gameController->reset();
 	this->updateUI();
-	this->show();
 }
 
 void PlayWidget::gameClose()
 {
 	gameController->gamePause();
 	emit signalBackMenu();
+	pauseWidget->close();
 	this->close();
 }
 

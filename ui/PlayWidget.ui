@@ -541,6 +541,31 @@ QPushButton:pressed
     <set>Qt::AlignmentFlag::AlignCenter</set>
    </property>
   </widget>
+  <widget class="QLabel" name="label_countDown">
+   <property name="geometry">
+    <rect>
+     <x>610</x>
+     <y>320</y>
+     <width>60</width>
+     <height>80</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Algerian</family>
+     <pointsize>72</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 170, 255);</string>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignCenter</set>
+   </property>
+  </widget>
   <zorder>background</zorder>
   <zorder>label_trackPanelBackground</zorder>
   <zorder>pushButton_pause</zorder>
@@ -555,6 +580,7 @@ QPushButton:pressed
   <zorder>label_combo</zorder>
   <zorder>label_acc</zorder>
   <zorder>label_comment</zorder>
+  <zorder>label_countDown</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
