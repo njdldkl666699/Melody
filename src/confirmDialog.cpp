@@ -33,6 +33,5 @@ void ConfirmDialog::on_pushButton_backMenu_clicked()
 void ConfirmDialog::on_pushButton_exit_clicked()
 {
 	//accept();
-	emit exitGame();
 	accept();
 }

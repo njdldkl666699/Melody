@@ -34,17 +34,34 @@
    <property name="geometry">
     <rect>
      <x>400</x>
-     <y>230</y>
-     <width>140</width>
-     <height>60</height>
+     <y>240</y>
+     <width>120</width>
+     <height>50</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>思源黑体</family>
-     <pointsize>20</pointsize>
+     <pointsize>16</pointsize>
      <bold>true</bold>
     </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton
+{
+	color: rgb(0, 0, 0);
+	background-color: rgba(255, 255, 255, 230);
+	border: 2px solid #555555;
+	border-radius: 10px;
+}
+
+QPushButton:pressed
+{
+	color: rgb(0, 0, 0);
+	background-color: rgba(255, 255, 255, 210);
+	border: 0px;
+	border-radius: 10px;
+}</string>
    </property>
    <property name="text">
     <string>否</string>
@@ -53,24 +70,38 @@
   <widget class="QPushButton" name="pushButton_exit">
    <property name="geometry">
     <rect>
-     <x>100</x>
-     <y>230</y>
-     <width>140</width>
-     <height>60</height>
+     <x>120</x>
+     <y>240</y>
+     <width>120</width>
+     <height>50</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>思源黑体</family>
-     <pointsize>20</pointsize>
+     <pointsize>16</pointsize>
      <bold>true</bold>
     </font>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton
+{
+	color: rgb(0, 0, 0);
+	background-color: rgba(255, 255, 255, 210);
+	border: 2px solid #555555;
+	border-radius: 10px;
+}
+
+QPushButton:pressed
+{
+	color: rgb(0, 0, 0);
+	background-color: rgba(255, 255, 255, 190);
+	border: 0px;
+	border-radius: 10px;
+}</string>
+   </property>
    <property name="text">
     <string>是</string>
-   </property>
-   <property name="flat">
-    <bool>false</bool>
    </property>
   </widget>
   <widget class="QLabel" name="label_message">
@@ -90,7 +121,7 @@
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">color: rgb(255, 170, 255);</string>
+    <string notr="true">color: rgb(255, 189, 23);</string>
    </property>
    <property name="text">
     <string>确认退出音灵幻章喵？</string>
@@ -122,6 +153,12 @@
    </property>
    <property name="text">
     <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>../res/background/exitDialog.png</pixmap>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
    </property>
   </widget>
   <zorder>background</zorder>

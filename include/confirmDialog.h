@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QDialog>
-#include "ui_confirmDialog.h"
+#include "ui_ConfirmDialog.h"
 
 class ConfirmDialog : public QDialog
 {

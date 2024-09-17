@@ -1,10 +1,10 @@
 #include "MenuWidget.h"
-#include<QPixmap>
 #include "UIController.h"
+#include<QPixmap>
+#include<QGraphicsBlurEffect>
 
 MenuWidget::MenuWidget(QWidget* parent)
-	: QWidget(parent), playWidget(nullptr),
-	confirmDialog(new ConfirmDialog(parent))
+	: QWidget(parent), playWidget(nullptr), confirmDialog(nullptr)
 {
 	ui.setupUi(this);
 	setWindowTitle(QString::fromLocal8Bit("“Ù¡Èª√’¬Meolide"));
@@ -31,9 +31,6 @@ MenuWidget::MenuWidget(QWidget* parent)
 	// connect PlayWidget related
 	connect(ui.pushButton_play, &QPushButton::clicked, this, &MenuWidget::onPushButtonPlayClicked);
 
-	// connect confirmDialog related
-	connect(confirmDialog, &ConfirmDialog::exitGame, this, &MenuWidget::close);
-
 	// connect buttonClickSound
 	//UIController::buttonClickSound(ui.pushButton_settings);
 	//UIController::buttonClickSound(ui.pushButton_play);
@@ -48,8 +45,26 @@ MenuWidget::MenuWidget(QWidget* parent)
 
 MenuWidget::~MenuWidget()
 {
-	delete playWidget;
-	delete backgroundGIF;
+	if (playWidget != nullptr)
+	{
+		delete playWidget;
+		playWidget = nullptr;
+	}
+	if (backgroundGIF != nullptr)
+	{
+		delete backgroundGIF;
+		backgroundGIF = nullptr;
+	}
+	if (logoGIF != nullptr)
+	{
+		delete logoGIF;
+		logoGIF = nullptr;
+	}
+	if (confirmDialog != nullptr)
+	{
+		delete confirmDialog;
+		confirmDialog = nullptr;
+	}
 }
 
 void MenuWidget::initSongComboBox()
@@ -90,17 +105,27 @@ void MenuWidget::keyPressEvent(QKeyEvent* event)
 	{
 		qDebug() << "Escape key pressed!";
 		// confirm to close the window by escape key
-		//ConfirmDialog confirmDialog(this);
 
+		// blur the background
+		QGraphicsBlurEffect* blurEffect = new QGraphicsBlurEffect(this);
+		blurEffect->setBlurRadius(20);
+		this->setGraphicsEffect(blurEffect);
+
+		// show confirmDialog
+		if (confirmDialog == nullptr)
+		{
+			confirmDialog = new ConfirmDialog(this);
+		}
 		if (confirmDialog->exec() == QDialog::Accepted)
 		{
 			event->accept();
+			this->close();
 		}
 		else
 		{
 			event->ignore();
 		}
-		confirmDialog->close();
+		this->setGraphicsEffect(nullptr);
 	}
 	else
 	{

@@ -1,8 +1,8 @@
 #pragma once
 
+#include "ui_PauseWidget.h"
 #include <QWidget>
 #include <QMovie>
-#include "ui_PauseWidget.h"
 
 class PauseWidget : public QWidget
 {
