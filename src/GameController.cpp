@@ -1,6 +1,6 @@
 #include "GameController.h"
 
-GameController::GameController(const QString& songFilePth, 
+GameController::GameController(const QString& songFilePth,
 	const QString& chartFilePth, QObject* parent)
 	: settings(SettingsWidget::instance()), QObject(parent),
 	songFilePath(songFilePth), chartFilePath(chartFilePth)
@@ -287,12 +287,13 @@ int GameController::getNoteTime(const QString& rawTimeData)const
 	return miliseconds;
 }
 
-void GameController::calculateAcc()
+void GameController::calculateAccAndScore()
 {
-	uint total = perfectCount + goodCount + missCount;
+	uint total = perfectCount + goodCount + badCount + missCount;
 	if (total == 0)
 		accuracy = 0;
-	accuracy = (perfectCount * 100.0f + goodCount * 50) / total;
+	accuracy = (perfectCount * 100.0f + goodCount * 65) / total;
+	score = perfectCount * 100 + goodCount * 65;
 }
 
 void GameController::judgeKeyPress(QKeyEvent* event)
@@ -339,8 +340,7 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 					combo++;
 					if (combo > maxCombo)
 						maxCombo = combo;
-					score += 100;
-					calculateAcc();
+					calculateAccAndScore();
 					tapSound.play();
 					emit judgeResult("Perfect");
 					//pop note and delete
@@ -353,21 +353,19 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 					combo++;
 					if (combo > maxCombo)
 						maxCombo = combo;
-					score += 50;
-					calculateAcc();
+					calculateAccAndScore();
 					tapSound.play();
 					emit judgeResult("Good");
 					//pop note and delete
 					delete noteTracks[i].dequeue();
 				}
-				//part of case Miss,it means press too early.
-				//another part is in Function judgeNoHitMiss()
+				//case Bad
 				else if (difference > 100 && difference < 120)
 				{
-					missCount++;
+					badCount++;
 					combo = 0;
-					calculateAcc();
-					emit judgeResult("Miss");
+					calculateAccAndScore();
+					emit judgeResult("Bad");
 					//pop note and delete
 					delete noteTracks[i].dequeue();
 				}
@@ -394,12 +392,14 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 				{
 					//mark as to be Perfect
 					hold->setState(Hold::Perfect);
+					emit judgeResult("Perfect");
 				}
 				//case Good
 				else if (difference >= -100 && difference <= 100)
 				{
 					//mark as to be Good
 					hold->setState(Hold::Good);
+					emit judgeResult("Good");
 				}
 				//case Miss is in Function judgeKeyRelease() and judgeNoHitMiss(),
 				//because Hold don't have "Bad"(too early) state.
@@ -452,7 +452,7 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 				//case None, not press, don't judge
 				if (state == Hold::None)
 					continue;
-				if (difference <= 50)
+				if (difference <= 100)
 				{
 					//if difference < 0, means release too late, but no problem
 					//case Perfect
@@ -462,8 +462,7 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 						combo++;
 						if (combo > maxCombo)
 							maxCombo = combo;
-						score += 100;
-						calculateAcc();
+						calculateAccAndScore();
 						emit judgeResult("Perfect");
 						//pop note and delete
 						delete noteTracks[i].dequeue();
@@ -475,8 +474,7 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 						combo++;
 						if (combo > maxCombo)
 							maxCombo = combo;
-						score += 50;
-						calculateAcc();
+						calculateAccAndScore();
 						emit judgeResult("Good");
 						//pop note and delete
 						delete noteTracks[i].dequeue();
@@ -488,7 +486,7 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 					hold->setState(Hold::Miss);
 					missCount++;
 					combo = 0;
-					calculateAcc();
+					calculateAccAndScore();
 					emit judgeResult("Miss");
 					// hold->setState(Hold::Miss);	//had set in Hold()
 
@@ -547,7 +545,7 @@ void GameController::judgeNoHitMiss()
 
 				missCount++;
 				combo = 0;
-				calculateAcc();
+				calculateAccAndScore();
 				emit judgeResult("Miss");
 				//pop note and delete
 				delete noteTracks[i].dequeue();
@@ -573,8 +571,7 @@ void GameController::judgeNoHitMiss()
 					combo++;
 					if (combo > maxCombo)
 						maxCombo = combo;
-					score += 100;
-					calculateAcc();
+					calculateAccAndScore();
 					emit judgeResult("Perfect");
 					//pop note and delete
 					delete noteTracks[i].dequeue();
@@ -586,8 +583,7 @@ void GameController::judgeNoHitMiss()
 					combo++;
 					if (combo > maxCombo)
 						maxCombo = combo;
-					score += 50;
-					calculateAcc();
+					calculateAccAndScore();
 					emit judgeResult("Good");
 					//pop note and delete
 					delete noteTracks[i].dequeue();
@@ -599,7 +595,7 @@ void GameController::judgeNoHitMiss()
 					hold->setState(Hold::Miss);
 					missCount++;
 					combo = 0;
-					calculateAcc();
+					calculateAccAndScore();
 					emit judgeResult("Miss");
 					// hold->setState(Hold::Miss);	//had set in Hold()
 

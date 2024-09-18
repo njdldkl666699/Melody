@@ -72,7 +72,7 @@ private:
 	int getNoteTime(const QString& rawTimeData)const;
 	//get Music Current Time (ms)
 	int getMusicCurrentTime()const { return musicPlayer.position(); }
-	void calculateAcc();
+	void calculateAccAndScore();
 	//music related
 	void isMusicEnd(QMediaPlayer::MediaStatus status);
 	//clear note memory
@@ -84,7 +84,7 @@ private slots:
 	void amendNotePos(qint64 position);
 
 private:
-	uint perfectCount, goodCount, missCount;
+	uint perfectCount, goodCount, badCount,missCount;
 	float accuracy;
 	uint score;
 	uint combo, maxCombo;
