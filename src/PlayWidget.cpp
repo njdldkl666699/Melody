@@ -11,7 +11,7 @@ PlayWidget::PlayWidget(const QString& songFilePth,
 {
 	ui.setupUi(this);
 	initPlayWidget();
-	commentTimer.setSingleShot(true);
+	//commentTimer.setSingleShot(true);
 	countDownTimer.setTimerType(Qt::PreciseTimer);
 	countDownNum = 3;
 	gameController->setNoteParent(this);
@@ -34,7 +34,7 @@ PlayWidget::PlayWidget(const QString& songFilePth,
 	//connect UI related
 	connect(gameController, &GameController::signalUpdate, this, &PlayWidget::updateUI);
 	connect(gameController, &GameController::judgeResult, this, &PlayWidget::updateComment);
-	connect(&commentTimer, &QTimer::timeout, ui.label_comment, &QLabel::clear);
+	//connect(&commentTimer, &QTimer::timeout, ui.label_comment, &QLabel::clear);
 	connect(&countDownTimer, &QTimer::timeout, this, &PlayWidget::updateCountDown);
 
 	//connect button related
@@ -122,7 +122,7 @@ void PlayWidget::updateUI()
 void PlayWidget::updateComment(const QString& comment)
 {
 	ui.label_comment->setText(comment);
-	commentTimer.start(1000);
+	QTimer::singleShot(1000, ui.label_comment, &QLabel::clear);
 }
 
 void PlayWidget::updateCountDown()

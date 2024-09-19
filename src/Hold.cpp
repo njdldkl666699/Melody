@@ -1,8 +1,8 @@
 #include "Hold.h"
 
-Hold::Hold(int strtTime, int edTime, const QKeySequence& ky,
-	const QString& picturePath, const QSize& size, QLabel* parent)
-	:Note(strtTime, ky, picturePath, size, parent), endTime(edTime), state(None)
+Hold::Hold(int strtTime, int edTime, const QString& picturePath, 
+	const QSize& size, QWidget* parent)
+	:Note(strtTime, picturePath, size, parent), endTime(edTime), state(None)
 {}
 
 Hold::~Hold()

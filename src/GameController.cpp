@@ -1,22 +1,31 @@
 #include "GameController.h"
 
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QTextStream>
+
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+
 GameController::GameController(const QString& songFilePth,
 	const QString& chartFilePth, QObject* parent)
 	: settings(SettingsWidget::instance()), QObject(parent),
 	songFilePath(songFilePth), chartFilePath(chartFilePth)
 {
 	initVals();
-	initnoteTracks();
+	initNoteTracks();
 	initMusicPlayer();
-	timer.setTimerType(Qt::PreciseTimer);
+	countdownTimer.setTimerType(Qt::PreciseTimer);
 	wait();
 
 	connect(&musicPlayer, &QMediaPlayer::mediaStatusChanged, this, &GameController::isMusicEnd);
 	connect(&countdownTimer, &QTimer::timeout, this, &GameController::gamePlay);
 	connect(&timer, &QTimer::timeout, this, &GameController::judgeNoHitMiss);
-	connect(&timer, &QTimer::timeout, this, &GameController::updateNote);
 	connect(&timer, &QTimer::timeout, this, &GameController::signalUpdate);
-	connect(&musicPlayer, &QMediaPlayer::positionChanged, this, &GameController::amendNotePos);
+	//connect(&timer, &QTimer::timeout, this, &GameController::updateNote);
+	//connect(&musicPlayer, &QMediaPlayer::positionChanged, this, &GameController::amendNotePos);
 }
 
 GameController::~GameController()
@@ -28,8 +37,7 @@ void GameController::reset()
 {
 	clear();
 	initVals();
-	initnoteTracks();
-	setNoteParent(noteParent);
+	initNoteTracks();
 	musicPlayer.setPosition(0);
 	wait();
 }
@@ -51,16 +59,6 @@ void GameController::clear()
 		}
 	}
 	notesOutQueue.clear();
-}
-
-void GameController::setNoteParent(QWidget* parent)
-{
-	noteParent = parent;
-	for (int i = 0; i < 4; i++)
-		for (auto& note : noteTracks[i])
-			note->setParent(parent);
-	for (auto& note : notesOutQueue)
-		note->setParent(parent);
 }
 
 QString GameController::getSongName()const
@@ -118,9 +116,9 @@ void GameController::initVals()
 	key[1] = settings->getKey_2().toString();
 	key[2] = settings->getKey_3().toString();
 	key[3] = settings->getKey_4().toString();
-	//Will be set in initnoteTracks()
-	bpm = 0.0;
-	offset = 0;
+
+	noteInTracksAnimationGroup = new QParallelAnimationGroup(playWidget);
+	noteOutQueueAnimationGroup = new QParallelAnimationGroup(playWidget);
 }
 
 void GameController::initMusicPlayer()
@@ -164,127 +162,107 @@ void GameController::isMusicEnd(QMediaPlayer::MediaStatus status)
 void GameController::gamePause()
 {
 	countdownTimer.stop();
-	velocity = 0;
+	noteInTracksAnimationGroup->pause();
+	noteOutQueueAnimationGroup->pause();
 	musicPlayer.pause();
 	timer.stop();
 }
 
 void GameController::gamePlay()
 {
-	velocity = 1.1 + settings->getSpeedVal() / 20.0;
 	timer.start(deltaTime);
-	musicPlayer.play();
+	// if this function is called first time in one game,
+	// we should wait a BIAS time then start musicPlayer.
+	if (musicPlayer.duration() == 0)
+	{
+		QTimer::singleShot(settings->getBiasVal(), Qt::PreciseTimer,
+			&musicPlayer, &QMediaPlayer::play);
+	}
+	else
+	{
+		musicPlayer.play();
+	}
+	noteInTracksAnimationGroup->start();
 }
 
-void GameController::initnoteTracks()
+void GameController::initNoteTracks()
 {
-	//read chart file
+	//read chart file and write it to JsonObject
 	QFile chartFile(chartFilePath);
 	if (!chartFile.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
 		qDebug() << "Open chart file failed!";
 		return;
 	}
-	QTextStream in(&chartFile);
-
-	//read bpm and offset
-	QStringList bpmLine = in.readLine().split(",");
-	if (bpmLine.first() == "bpm")
-		bpm = bpmLine.last().toFloat();
-	else //error
-		return;
-	QStringList offsetLine = in.readLine().split(",");
-	if (offsetLine.first() == "offset")
-		offset = offsetLine.last().toInt();
-	else //error
-		return;
-
-	//read notes
-	while (!in.atEnd())
+	const auto& chartDoc = QJsonDocument::fromJson(chartFile.readAll());
+	if (!chartDoc.isObject())
 	{
-		QString noteLine = in.readLine();
-		QStringList noteData = noteLine.split(";");
-		bool isHold = noteData.first().toInt();
-		QString startTimeRaw = noteData.at(1);
-		int startTime = getNoteTime(startTimeRaw);
+		qDebug() << "Chart is not a JsonObject!";
+		return;
+	}
+	const auto& chartObj = chartDoc.object();
+	const auto& chartArray = chartObj["chart"].toArray();
 
-		//get KeySequence
-		int key = noteData.last().toInt();
-		QKeySequence keySequence;
-		switch (key)
-		{
-		case 0:
-			keySequence = settings->getKey_1();
-			break;
-		case 1:
-			keySequence = settings->getKey_2();
-			break;
-		case 2:
-			keySequence = settings->getKey_3();
-			break;
-		case 3:
-			keySequence = settings->getKey_4();
-			break;
-		default:
-			break;
-		}
+	//parse chartArray
+	//for (const auto& noteVal : chartArray)
+	for (qsizetype i = 0; i < chartArray.size(); ++i)
+	{
+		const auto& noteVal = chartArray[i];
+		const auto& noteObj = noteVal.toObject();
+		bool isHold = noteObj.contains("endTime");
 
-		//construct note
+		//init note
 		Note* note = nullptr;
 		QString picturePath;
-		QSize noteSize(145, 50);
-		if (!isHold)
+		int startTime = noteObj["time"].toInt();
+		int column = noteObj["column"].toInt();
+		if (!isHold) //case Tap
 		{
-			//Tap note
-			if (key == 0 || key == 3)		//Outer Track
+			const QSize noteSize(145, 50);
+			if (column == 0 || column == 3)
 				picturePath = "./res/note/tap_blue.png";
-			else if (key == 1 || key == 2)	//Inner Track
+			else if (column == 1 || column == 2)
 				picturePath = "./res/note/tap_pink.png";
-			else							//not happen	
-				return;
-			note = new Tap(startTime, keySequence, picturePath, noteSize);
+			else	//not happen, but if happened, just send a warning
+				qDebug() << "Warning: note column is invalid!";
+			note = new Tap(startTime, picturePath, noteSize, playWidget);
 		}
-		else
+		else //case Hold
 		{
-			//Hold note
-			QString endTimeRaw = noteData.at(2);
-			int endTime = getNoteTime(endTimeRaw);
+			int endTime = noteObj["endTime"].toInt();
 			int height = (endTime - startTime) * velocity;
-			noteSize.setHeight(height);
-			if (key == 0 || key == 3)		//Outer Track
+			const QSize noteSize(145, height);
+			if (column == 0 || column == 3)
 				picturePath = "./res/note/hold_blue.png";
-			else if (key == 1 || key == 2)	//Inner Track
+			else if (column == 1 || column == 2)
 				picturePath = "./res/note/hold_pink.png";
-			else							//not happen	
-				return;
-			note = new Hold(startTime, endTime,
-				keySequence, picturePath, noteSize);
+			else	//not happen, but if happened, just skip
+				qDebug() << "Warning: note column is invalid!";
+			note = new Hold(startTime, endTime, picturePath, noteSize, playWidget);
 		}
-		//set note x, y
-		int xPos = 345 + key * 150;
-		int yPos = 625 - noteSize.height() - velocity * startTime;
+
+		//set note (x, y)
+		int xPos = 345 + column * 150;
+		int yPos = 625 - note->height() - velocity * startTime;
 		note->move(xPos, yPos);
 
+		//init note animation
+		auto* animation = new QPropertyAnimation(note, "pos", playWidget);
+		animation->setStartValue(QPoint(xPos, yPos));
+		int endY = 625 + velocity * 100;
+		animation->setEndValue(QPoint(xPos, endY));
+		int duration = (endY - yPos) / velocity;
+		animation->setDuration(startTime);
+		animation->setEasingCurve(QEasingCurve::Linear);
+		noteInTracksAnimationGroup->addAnimation(animation);
+		note->setAnimationIndex(i);
+
 		//push note to noteTracks
-		/*
-		we use queue, because we just need to
-		check the first note once at a time in each track
-		*/
-		noteTracks[key].enqueue(note);
+		noteTracks[column].enqueue(note);
 	}
 
 	//close file
 	chartFile.close();
-}
-
-int GameController::getNoteTime(const QString& rawTimeData)const
-{
-	QStringList timeData = rawTimeData.split(",");
-	int beat = timeData.at(0).toInt();
-	int pos = timeData.at(1).toInt();
-	double totalPos = timeData.at(2).toInt();
-	int miliseconds = settings->getBiasVal() - offset + (beat + pos / totalPos) * 60000 / bpm;
-	return miliseconds;
 }
 
 void GameController::calculateAccAndScore()
@@ -308,27 +286,29 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 		{
 			Note* headNote = noteTracks[i].head();
 
-			////#######Judge By the difference of time#######
-			//int musicCurrentTime = getMusicCurrentTime();
+			//#######Judge By the difference of time#######
+			int musicCurrentTime = getMusicCurrentTime();
 			//int noteStartTime = headNote->getStartTime();
-			///*
-			//notes:	1、musiccurrenttime is current time you press the key
-			//		2、difference < 0 means you press the key late, > 0 means early
-			//*/
-			//int difference = noteStartTime - musicCurrentTime;
-			//qDebug() << "hit!\tx: " << headNote->x() << "\ty: " << headNote->y()
-			//<< "\tnoteStartTime: " << noteStartTime
-			//	<< "\tmusicCurrentTime: " << musicCurrentTime
-			//	<< "\tdifference: " << difference; 
-			////###############################################
+			int testVal = noteInTracksAnimationGroup->animationAt(headNote->getAnimationIndex())->currentTime();\
+			//######Here need a formula to calulate, implement it later########
+			/*
+			notes:	1、musiccurrenttime is current time you press the key
+					2、difference < 0 means you press the key late, > 0 means early
+			*/
+			int difference = noteStartTime - musicCurrentTime;
+			qDebug() << "hit!\tx: " << headNote->x() << "\ty: " << headNote->y()
+			<< "\tnoteStartTime: " << noteStartTime
+				<< "\tmusicCurrentTime: " << musicCurrentTime
+				<< "\tdifference: " << difference; 
+			//###############################################
 
-			//######Judge By the distance of note and judgeline######
-			int currentY = headNote->y() + headNote->height();
-			int deltaY = 625 - currentY;
-			float difference = deltaY / velocity;
-			/*qDebug() << "hit!\tx:" << headNote->x() << "\ty: " << headNote->y()
-				<< "\tdeltaY: " << deltaY << "\tdifference: " << difference;*/
-			//#######################################################
+			////######Judge By the distance of note and judgeline######
+			//int currentY = headNote->y() + headNote->height();
+			//int deltaY = 625 - currentY;
+			//float difference = deltaY / velocity;
+			///*qDebug() << "hit!\tx:" << headNote->x() << "\ty: " << headNote->y()
+			//	<< "\tdeltaY: " << deltaY << "\tdifference: " << difference;*/
+			////#######################################################
 
 			//case Tap note
 			if (headNote->getType() == "Tap")

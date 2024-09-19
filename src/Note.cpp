@@ -1,8 +1,8 @@
 #include "Note.h"
 
-Note::Note(int strtTime, const QKeySequence& ky, const QString& picturePath, 
-	const QSize& size, QLabel* parent)
-	: QLabel(parent), startTime(strtTime), key(ky)
+Note::Note(int strtTime, const QString& picturePath, 
+	const QSize& size, QWidget* parent)
+	: QLabel(parent), startTime(strtTime)
 {
 	this->setFixedSize(size);
 	QPixmap picture(picturePath);

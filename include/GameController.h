@@ -3,20 +3,19 @@
 #include "SettingsWidget.h"
 #include "Hold.h"
 #include "Tap.h"
-#include <QKeyEvent>
-
-#include <QDir>
-#include <QFile>
-#include <QFileInfo>
-#include <QTextStream>
 
 #include <QMediaPlayer>
 #include <QAudioOutput>
 #include <QSoundEffect>
-#include <QTimer>
 
-#include <QQueue>
 #include <QVector>
+#include <QQueue>
+
+#include <QTimer>
+#include <QKeyEvent>
+
+#include <QParallelAnimationGroup>
+#include <QPropertyAnimation>
 
 class GameController : public QObject
 {
@@ -29,7 +28,7 @@ public:
 	//## Only Use in PlayWidget.cpp ##
 	void reset();
 	void wait();
-	void setNoteParent(QWidget* parent);
+	void setNoteParent(QWidget* parent) { playWidget = parent; }
 
 public:
 	//get functions
@@ -55,6 +54,14 @@ signals:
 	void judgeResult(const QString& comment);
 
 public slots:
+
+	/* Judge time(ms) table:
+	Perfect: -50 ~ 50
+	Good: -100 ~ -51, 51 ~ 100
+	Bad: 100 ~ 120 (only Tap)
+	Miss: < -100
+	*/
+
 	//judge related
 	void judgeKeyPress(QKeyEvent* event);
 	void judgeKeyRelease(QKeyEvent* event);
@@ -65,11 +72,15 @@ public slots:
 private:
 	//init functions
 	void initVals();
-	void initnoteTracks();
+
+	/* func initNoteTracks
+	1. Read chart file
+	2. Create Note objects
+	3. Set Animation
+	*/
+	void initNoteTracks();
 	void initMusicPlayer();
 
-	//get Unbiased Note Time (ms)
-	int getNoteTime(const QString& rawTimeData)const;
 	//get Music Current Time (ms)
 	int getMusicCurrentTime()const { return musicPlayer.position(); }
 	void calculateAccAndScore();
@@ -84,25 +95,26 @@ private slots:
 	void amendNotePos(qint64 position);
 
 private:
-	uint perfectCount, goodCount, badCount,missCount;
+	uint perfectCount, goodCount, badCount, missCount;
 	float accuracy;
 	uint score;
 	uint combo, maxCombo;
 
-	float bpm;
-	int offset;
 	float velocity;	//pixel per ms
 	int deltaTime;
 	int waitTime;
+	QString key[4];
 
 	const SettingsWidget* settings;
 	const QString songFilePath;
 	const QString chartFilePath;
-	QString key[4];
 
+	QWidget* playWidget;
 	QQueue<Note*>noteTracks[4];
 	QVector<Note*>notesOutQueue;
-	QWidget* noteParent;
+
+	QParallelAnimationGroup* noteInTracksAnimationGroup,
+		* noteOutQueueAnimationGroup;
 
 	QMediaPlayer musicPlayer;
 	QAudioOutput audioOutput;
