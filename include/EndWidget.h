@@ -1,12 +1,13 @@
 #pragma once
 
-#include <QWidget>
 #include"GameController.h"
 #include "ui_EndWidget.h"
+#include <QWidget>
 #include<QMovie>
 #include<QMediaPlayer>
 #include<QAudioOutput>
 #include<QDateTime>
+#include<QDir>
 
 class EndWidget : public QWidget
 {

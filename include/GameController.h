@@ -8,36 +8,27 @@
 #include <QAudioOutput>
 #include <QSoundEffect>
 
-#include <QVector>
 #include <QQueue>
-
 #include <QTimer>
-#include <QKeyEvent>
-
 #include <QParallelAnimationGroup>
-#include <QPropertyAnimation>
 
 class GameController : public QObject
 {
 	Q_OBJECT
 
 public:
-	GameController(const QString& songFilePth,
-		const QString& chartFilePth, QObject* parent = nullptr);
+	GameController(const QString& songFilePth, const QString& chartFilePth,
+		QWidget* noteParent, QObject* parent = nullptr);
 	~GameController();
 	//## Only Use in PlayWidget.cpp ##
 	void reset();
 	void wait();
-	void setNoteParent(QWidget* parent) { playWidget = parent; }
 
 public:
 	//get functions
 	uint getPerfectCount() const { return perfectCount; }
 	uint getGoodCount() const { return goodCount; }
-
-	// ####implement later###
-	uint getBadCount()const { return 0; }
-
+	uint getBadCount()const { return badCount; }
 	uint getMissCount() const { return missCount; }
 	float getAccuracy() const { return accuracy; } //0~100, without the '%'
 	uint getScore() const { return score; }
@@ -54,25 +45,27 @@ signals:
 	void judgeResult(const QString& comment);
 
 public slots:
-
+	// Judge related
 	/* Judge time(ms) table:
 	Perfect: -50 ~ 50
 	Good: -100 ~ -51, 51 ~ 100
 	Bad: 100 ~ 120 (only Tap)
-	Miss: < -100
+	Miss: < -100, not hit
 	*/
-
-	//judge related
 	void judgeKeyPress(QKeyEvent* event);
 	void judgeKeyRelease(QKeyEvent* event);
 	//game related
 	void gamePause();
+
+private slots:
+	void judgeNoHitMiss();
 	void gamePlay();
+	//music related
+	void musicEnd(QMediaPlayer::MediaStatus status);
 
 private:
 	//init functions
 	void initVals();
-
 	/* func initNoteTracks
 	1. Read chart file
 	2. Create Note objects
@@ -81,18 +74,8 @@ private:
 	void initNoteTracks();
 	void initMusicPlayer();
 
-	//get Music Current Time (ms)
-	int getMusicCurrentTime()const { return musicPlayer.position(); }
+	void resetNoteTracks();
 	void calculateAccAndScore();
-	//music related
-	void isMusicEnd(QMediaPlayer::MediaStatus status);
-	//clear note memory
-	void clear();
-
-private slots:
-	void judgeNoHitMiss();
-	void updateNote();
-	void amendNotePos(qint64 position);
 
 private:
 	uint perfectCount, goodCount, badCount, missCount;
@@ -110,11 +93,16 @@ private:
 	const QString chartFilePath;
 
 	QWidget* playWidget;
+	/* Explain noteTracks:
+		In one game, notes are initialized and stored in noteTracks.
+		When a note is judged, it will be moved out
+		AND moved in noteOutTracks, in that case we don't need
+		to construct every note again.
+	*/
 	QQueue<Note*>noteTracks[4];
-	QVector<Note*>notesOutQueue;
+	QQueue<Note*>noteOutTracks[4];
 
-	QParallelAnimationGroup* noteInTracksAnimationGroup,
-		* noteOutQueueAnimationGroup;
+	QParallelAnimationGroup* noteInTracksAnimationGroup;
 
 	QMediaPlayer musicPlayer;
 	QAudioOutput audioOutput;

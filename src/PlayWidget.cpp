@@ -2,19 +2,21 @@
 #include "UIController.h"
 #include<QGraphicsBlurEffect>
 #include<QPropertyAnimation>
+#include<QKeyEvent>
 
 PlayWidget::PlayWidget(const QString& songFilePth,
 	const QString& chartFilePth, QWidget* parent)
 	: endWidget(nullptr), pauseWidget(nullptr), QWidget(parent),
 	songFilePath(songFilePth), chartFilePath(chartFilePth),
-	gameController(new GameController(songFilePth, chartFilePth))
+	gameController(nullptr), countDownNum(3)
 {
 	ui.setupUi(this);
 	initPlayWidget();
 	//commentTimer.setSingleShot(true);
 	countDownTimer.setTimerType(Qt::PreciseTimer);
-	countDownNum = 3;
-	gameController->setNoteParent(this);
+
+	//create GameController
+	gameController = new GameController(songFilePath, chartFilePath, this);
 
 	//create PauseWidget
 	pauseWidget = new PauseWidget(this);
@@ -249,6 +251,7 @@ void PlayWidget::gameClose()
 void PlayWidget::gameEnd()
 {
 	gameController->gamePause();
+	//create EndWidget
 	endWidget = new EndWidget(gameController);
 	//connect EndWidget related
 	connect(endWidget, &EndWidget::signalBackMenu, this, &PlayWidget::gameClose);

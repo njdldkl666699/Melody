@@ -10,6 +10,7 @@ Hold::~Hold()
 
 void Hold::paintEvent(QPaintEvent* event)
 {
+	//####need to be implemented####
 	if (state == Perfect || state == Good)
 	{
 		int bottom = this->y() + this->height();
