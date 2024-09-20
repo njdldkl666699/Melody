@@ -24,7 +24,7 @@ GameController::GameController(const QString& songFilePth,
 	wait();
 
 	connect(&countdownTimer, &QTimer::timeout, this, &GameController::gamePlay);
-	connect(noteInTracksAnimationGroup, &QParallelAnimationGroup::finished,
+	connect(noteAnimationGroup, &QParallelAnimationGroup::finished,
 		this, &GameController::signalShowEndButton);
 	connect(&musicPlayer, &QMediaPlayer::mediaStatusChanged, this, &GameController::musicEnd);
 	connect(&timer, &QTimer::timeout, this, &GameController::judgeNoHitMiss);
@@ -33,10 +33,10 @@ GameController::GameController(const QString& songFilePth,
 
 GameController::~GameController()
 {
-	if (noteInTracksAnimationGroup != nullptr)
+	if (noteAnimationGroup != nullptr)
 	{
-		delete noteInTracksAnimationGroup;
-		noteInTracksAnimationGroup = nullptr;
+		delete noteAnimationGroup;
+		noteAnimationGroup = nullptr;
 	}
 }
 
@@ -60,7 +60,7 @@ void GameController::initVals()
 	key[2] = settings->getKey_3().toString();
 	key[3] = settings->getKey_4().toString();
 
-	noteInTracksAnimationGroup
+	noteAnimationGroup
 		= new QParallelAnimationGroup(playWidget);
 }
 
@@ -89,7 +89,7 @@ void GameController::initNoteTracks()
 		return;
 	}
 	const auto& chartObj = chartDoc.object();
-	const auto& chartArray = chartObj["chart"].toArray();
+	const auto& chartArray = chartObj["note"].toArray();
 
 	//parse chartArray
 	for (qsizetype i = 0; i < chartArray.size(); ++i)
@@ -145,7 +145,7 @@ void GameController::initNoteTracks()
 		int duration = 100 + endTime;
 		animation->setDuration(duration);
 		animation->setEasingCurve(QEasingCurve::Linear);
-		noteInTracksAnimationGroup->addAnimation(animation);
+		noteAnimationGroup->addAnimation(animation);
 		note->setAnimationIndex(i);
 
 		//push note to noteTracks
@@ -178,7 +178,7 @@ void GameController::gamePlay()
 	{
 		musicPlayer.play();
 	}
-	auto& g = noteInTracksAnimationGroup;
+	auto& g = noteAnimationGroup;
 	if (g->state() == QParallelAnimationGroup::Paused)
 		g->resume();
 	else
@@ -188,7 +188,7 @@ void GameController::gamePlay()
 void GameController::gamePause()
 {
 	timer.stop();
-	auto& g = noteInTracksAnimationGroup;
+	auto& g = noteAnimationGroup;
 	if (g->state() == QParallelAnimationGroup::Running)
 		g->pause();
 	musicPlayer.pause();
@@ -206,7 +206,7 @@ void GameController::musicEnd(QMediaPlayer::MediaStatus status)
 
 void GameController::reset()
 {
-	noteInTracksAnimationGroup->stop();
+	noteAnimationGroup->stop();
 	musicPlayer.setPosition(0);
 	initVals();
 	resetNoteTracks();
@@ -258,13 +258,13 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 			*/
 			int noteStartTime = headNote->getStartTime();
 			int index = headNote->getAnimationIndex();
-			auto animation = noteInTracksAnimationGroup->animationAt(index);
+			auto animation = noteAnimationGroup->animationAt(index);
 			int noteCurTime = animation->currentTime();
 			int difference = noteStartTime - noteCurTime;
-			qDebug() << "hit!\tx: " << headNote->x()
+			qDebug() << "Hit!\tx: " << headNote->x()
 				<< "\ty: " << headNote->y()
 				<< "\tnoteStartTime: " << noteStartTime
-				<< "\noteCurTime: " << noteCurTime
+				<< "\tnoteCurTime: " << noteCurTime
 				<< "\tdifference: " << difference;
 			//###############################################
 
@@ -276,14 +276,13 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 				{
 					perfectCount++;
 					combo++;
-					if (combo > maxCombo)
-						maxCombo = combo;
+					maxCombo = qMax(combo, maxCombo);
 					calculateAccAndScore();
 					tapSound.play();
 					emit judgeResult("Perfect");
-					//animation->stop();
-					//don't need to stop, just wait it finish.
-					//Hide note, move note
+					//?? don't need to stop, just wait it finish.
+					//Stop animation, hide note, move note
+					animation->stop();
 					headNote->hide();
 					//see Explain in GameController.h
 					noteOutTracks[i].enqueue(noteTracks[i].dequeue());
@@ -293,11 +292,11 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 				{
 					goodCount++;
 					combo++;
-					if (combo > maxCombo)
-						maxCombo = combo;
+					maxCombo = qMax(maxCombo, combo);
 					calculateAccAndScore();
 					tapSound.play();
 					emit judgeResult("Good");
+					animation->stop();
 					headNote->hide();
 					noteOutTracks[i].enqueue(noteTracks[i].dequeue());
 				}
@@ -308,6 +307,7 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 					combo = 0;
 					calculateAccAndScore();
 					emit judgeResult("Bad");
+					animation->stop();
 					headNote->hide();
 					noteOutTracks[i].enqueue(noteTracks[i].dequeue());
 				}
@@ -376,20 +376,21 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 
 				////#######Judge By the difference of time#######
 				int noteStartTime = headNote->getStartTime();
-				int noteCurTime = noteInTracksAnimationGroup
+				int noteCurTime = noteAnimationGroup
 					->animationAt(headNote->getAnimationIndex())
 					->currentTime();
 				int difference = noteStartTime - noteCurTime;
 				qDebug() << "Released!\tx: " << headNote->x()
 					<< "\ty: " << headNote->y()
 					<< "\tnoteStartTime: " << noteStartTime
-					<< "\noteCurTime: " << noteCurTime
+					<< "\tnoteCurTime: " << noteCurTime
 					<< "\tdifference: " << difference;
 				////#############################################
 
 				//judgement of ending, > 100ms means release too early
 				Hold::ToBeState state = hold->getState();
 				qDebug() << "state: " << state;
+				auto animation = noteAnimationGroup->animationAt(headNote->getAnimationIndex());
 				//case None, not press, don't judge
 				if (state == Hold::None)
 					continue;
@@ -401,10 +402,10 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 					{
 						perfectCount++;
 						combo++;
-						if (combo > maxCombo)
-							maxCombo = combo;
+						maxCombo = qMax(combo, maxCombo);
 						calculateAccAndScore();
 						emit judgeResult("Perfect");
+						animation->stop();
 						hold->hide();
 						noteOutTracks[i].enqueue(noteTracks[i].dequeue());
 					}
@@ -413,10 +414,10 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 					{
 						goodCount++;
 						combo++;
-						if (combo > maxCombo)
-							maxCombo = combo;
+						maxCombo = qMax(combo, maxCombo);
 						calculateAccAndScore();
 						emit judgeResult("Good");
+						animation->stop();
 						hold->hide();
 						noteOutTracks[i].enqueue(noteTracks[i].dequeue());
 					}
@@ -460,15 +461,15 @@ void GameController::judgeNoHitMiss()
 
 		////#######Judge By the difference of time#######
 		int noteStartTime = headNote->getStartTime();
-		int noteCurTime = noteInTracksAnimationGroup
+		int noteCurTime = noteAnimationGroup
 			->animationAt(headNote->getAnimationIndex())
 			->currentTime();
 		int difference = noteStartTime - noteCurTime;
-		qDebug() << "No Hit!\tx: " << headNote->x()
-			<< "\ty: " << headNote->y()
-			<< "\tnoteStartTime: " << noteStartTime
-			<< "\noteCurTime: " << noteCurTime
-			<< "\tdifference: " << difference;
+		//qDebug() << "No Hit!\tx: " << headNote->x()
+		//	<< "\ty: " << headNote->y()
+		//	<< "\tnoteStartTime: " << noteStartTime
+		//	<< "\tnoteCurTime: " << noteCurTime
+		//	<< "\tdifference: " << difference;
 		////#############################################
 
 		if (headNote->getType() == "Tap")
@@ -476,11 +477,11 @@ void GameController::judgeNoHitMiss()
 			//case Miss, too late
 			if (difference < -100)
 			{
-				qDebug() << "Tap Miss!";
-
-				//qDebug() << "Miss!\tx:" << headNote->x() << "\ty: " << headNote->y()
-				//	<< "\tdeltaY: " << deltaY << "\tdifference: " << difference;
-
+				qDebug() << "Tap Miss!\tx: " << headNote->x()
+					<< "\ty: " << headNote->y()
+					<< "\tnoteStartTime: " << noteStartTime
+					<< "\tnoteCurTime: " << noteCurTime
+					<< "\tdifference: " << difference;
 				missCount++;
 				combo = 0;
 				calculateAccAndScore();
@@ -499,7 +500,11 @@ void GameController::judgeNoHitMiss()
 			//too late or don't press the whole time
 			if (difference < -100 || hold->y() > 625)
 			{
-				qDebug() << "Hold Miss!";
+				qDebug() << "Hold Miss!\tx: " << headNote->x()
+					<< "\ty: " << headNote->y()
+					<< "\tnoteStartTime: " << noteStartTime
+					<< "\tnoteCurTime: " << noteCurTime
+					<< "\tdifference: " << difference;
 
 				Hold::ToBeState state = hold->getState();
 				//case Perfect
@@ -507,8 +512,7 @@ void GameController::judgeNoHitMiss()
 				{
 					perfectCount++;
 					combo++;
-					if (combo > maxCombo)
-						maxCombo = combo;
+					maxCombo = qMax(combo, maxCombo);
 					calculateAccAndScore();
 					emit judgeResult("Perfect");
 					noteOutTracks[i].enqueue(noteTracks[i].dequeue());
@@ -518,8 +522,7 @@ void GameController::judgeNoHitMiss()
 				{
 					goodCount++;
 					combo++;
-					if (combo > maxCombo)
-						maxCombo = combo;
+					maxCombo = qMax(combo, maxCombo);
 					calculateAccAndScore();
 					emit judgeResult("Good");
 					noteOutTracks[i].enqueue(noteTracks[i].dequeue());
@@ -559,7 +562,8 @@ void GameController::calculateAccAndScore()
 	uint total = perfectCount + goodCount + badCount + missCount;
 	if (total == 0)
 		accuracy = 0;
-	accuracy = (perfectCount * 100.0f + goodCount * 65) / total;
+	else
+		accuracy = (perfectCount * 100.0f + goodCount * 65) / total;
 	score = perfectCount * 100 + goodCount * 65;
 }
 
@@ -575,7 +579,7 @@ QString GameController::getChartName()const
 {
 	QFileInfo fileInfo(chartFilePath);
 	QString chartName = fileInfo.fileName();
-	int suffixPos = chartName.lastIndexOf(".txt");
+	int suffixPos = chartName.lastIndexOf(".meo");
 	chartName = chartName.left(suffixPos);
 	return chartName;
 }

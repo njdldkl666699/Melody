@@ -102,7 +102,7 @@ private:
 	QQueue<Note*>noteTracks[4];
 	QQueue<Note*>noteOutTracks[4];
 
-	QParallelAnimationGroup* noteInTracksAnimationGroup;
+	QParallelAnimationGroup* noteAnimationGroup;
 
 	QMediaPlayer musicPlayer;
 	QAudioOutput audioOutput;
