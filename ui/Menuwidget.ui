@@ -110,14 +110,12 @@
     <string notr="true">QPushButton
 {
 	background-image: url(./res/icon/settings_white_64x.png);
-	background-size: cover;
 	border: 0px;
 }
 
 QPushButton:pressed
 {
 	background-image: url(./res/icon/settings_black_64x.png);
-	background-size: cover;
 	border: 0px;
 }</string>
    </property>
@@ -217,14 +215,12 @@ QPushButton:pressed
     <string notr="true">QPushButton
 {
 	background-image: url(./res/icon/play_white_64x.png);
-	background-size: cover;
 	border: 0px;
 }
 
 QPushButton:pressed
 {
 	background-image: url(./res/icon/play_black_64x.png);
-	background-size: cover;
 	border: 0px;
 }</string>
    </property>

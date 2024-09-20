@@ -65,14 +65,12 @@
     <string notr="true">QPushButton
 {
 	background-image: url(./res/icon/back_white_64x.png);
-	background-size: cover;
 	border: 0px;
 }
 
 QPushButton:pressed
 {
 	background-image: url(./res/icon/back_black_64x.png);
-	background-size: cover;
 	border: 0px;
 }</string>
    </property>
@@ -463,13 +461,8 @@ QPushButton:pressed
        <string>60</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
-      <item>
-       <property name="text">
-        <string>30</string>
-       </property>
-      </item>
       <item>
        <property name="text">
         <string>60</string>
@@ -477,22 +470,7 @@ QPushButton:pressed
       </item>
       <item>
        <property name="text">
-        <string>90</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
         <string>120</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>144</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>165</string>
        </property>
       </item>
      </widget>

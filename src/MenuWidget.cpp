@@ -137,12 +137,12 @@ void MenuWidget::onComboBoxSongSelected(const QString& songName)
 	ui.comboBox_chart->addItem("[Select Chart]");
 	ui.comboBox_chart->setCurrentText("[Select Chart]");
 	QStringList chartFilters;
-	chartFilters << "*.txt";
+	chartFilters << "*.meo";
 	songDir = beatmapDir.path() + "/" + songName;
 	QStringList chartFiles = songDir.entryList(chartFilters, QDir::Files);
 	for (auto& chart : chartFiles)
 	{
-		int suffixPos = chart.lastIndexOf(".txt");
+		int suffixPos = chart.lastIndexOf(".meo");
 		chart = chart.left(suffixPos);
 		qDebug() << chart;
 	}
@@ -187,7 +187,7 @@ void MenuWidget::onPushButtonPlayClicked()
 		songFileFilters << "*.mp3" << "*.ogg" << "*.wav" << "*.flac" << "*.m4a";
 		QString songFileName = songDir.entryList(songFileFilters, QDir::Files).at(0);
 		songFilePath = songDir.path() + "/" + songFileName;
-		chartFilePath = songDir.path() + "/" + ui.comboBox_chart->currentText() + ".txt";
+		chartFilePath = songDir.path() + "/" + ui.comboBox_chart->currentText() + ".meo";
 		qDebug() << songFilePath << "\n" << chartFilePath;
 
 		// Initialize PlayWidget
