@@ -18,6 +18,16 @@ PlayWidget::PlayWidget(const QString& songFilePth,
 	//create GameController
 	gameController = new GameController(songFilePath, chartFilePath, this);
 
+	/* set labels' level
+	Explain: the z-order is determined by thier construction order 
+		and raise() function, so call raise() here can make those labels
+		above notes, and don't need to call it in updateUI() function.
+	*/
+	ui.label_acc->raise();
+	ui.label_combo->raise();
+	ui.label_score->raise();
+	ui.label_comment->raise();
+
 	//create PauseWidget
 	pauseWidget = new PauseWidget(this);
 	pauseWidget->move((this->width() - pauseWidget->width()) / 2,
@@ -101,10 +111,7 @@ void PlayWidget::initPlayWidget()
 	so I add a space to force it to init early so the lag disappeared.*/
 
 	//set labels' level
-	ui.label_acc->raise();
-	ui.label_combo->raise();
-	ui.label_score->raise();
-	ui.label_comment->raise();
+	//in PlayWidget() constructor
 }
 
 void PlayWidget::updateUI()
@@ -114,11 +121,6 @@ void PlayWidget::updateUI()
 	ui.label_acc->setText(accuracy);
 	ui.label_score->setText(QString::number(gameController->getScore()));
 	ui.label_combo->setText(QString::number(gameController->getCombo()));
-	//set labels' level
-	ui.label_acc->raise();
-	ui.label_combo->raise();
-	ui.label_score->raise();
-	ui.label_comment->raise();
 }
 
 void PlayWidget::updateComment(const QString& comment)
@@ -169,6 +171,7 @@ void PlayWidget::updateCountDown()
 
 void PlayWidget::keyPressEvent(QKeyEvent* event)
 {
+	qDebug() << "keyPressEvent: " << event->key();
 	if (event->key() == Qt::Key_Escape)
 	{
 		this->gamePause();
@@ -236,8 +239,9 @@ void PlayWidget::gameRestart()
 	pauseWidget->close();
 	// remove blur effect
 	this->setGraphicsEffect(nullptr);
-	gameController->reset();
 	this->updateUI();
+	this->show();
+	gameController->reset();
 }
 
 void PlayWidget::gameClose()
@@ -252,6 +256,11 @@ void PlayWidget::gameEnd()
 {
 	gameController->gamePause();
 	//create EndWidget
+	if (endWidget != nullptr)
+	{
+		delete endWidget;
+		endWidget = nullptr;
+	}
 	endWidget = new EndWidget(gameController);
 	//connect EndWidget related
 	connect(endWidget, &EndWidget::signalBackMenu, this, &PlayWidget::gameClose);

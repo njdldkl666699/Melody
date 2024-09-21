@@ -92,9 +92,6 @@
     <QtUic Include="ui\SettingsWidget.ui">
       <Filter>界面文件</Filter>
     </QtUic>
-    <QtUic Include="ui\StartWidget.ui">
-      <Filter>界面文件</Filter>
-    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="源文件">

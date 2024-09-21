@@ -1,129 +1,144 @@
 #include "StartWidget.h"
-#include "ui_StartWidget.h"
-#include"UIController.h"
-#include<QTimer>
+#include "UIController.h"
+#include <QTimer>
 
 #ifdef _DEBUG
 #include<QDebug>
 #endif // _DEBUG
 
 StartWidget::StartWidget(QWidget* parent)
-	: QWidget(parent), ui(new Ui::StartWidget)
+	: QWidget(parent)
 {
-	ui->setupUi(this);
 	w = new MenuWidget(nullptr);
 	setWindowTitle(QString::fromLocal8Bit("音灵幻章Meolide"));
 	setWindowIcon(QIcon("./res/icon/icon.ico"));
 	UICtrl::setIfFullscreen(this, SettingsWidget::instance()->getFullscreen());
 
-	mediaSet();
-	mediaPlay();
+	initMedia();
+	playMedia0();
 }
 
 StartWidget::~StartWidget()
 {
-	delete ui;
 	delete w;
 }
 
-void StartWidget::mediaSet()
+void StartWidget::initMedia()
 {
-	ifLoopStart = 0;
-	player = new QMediaPlayer(this);
+	//Set Video Output
 	videoWidget = new QVideoWidget(this);
-	audio = new QAudioOutput(this);
-	player->setAudioOutput(audio);
-	audio->setVolume(0.5);
 	videoWidget->resize(this->size());
-	//videoWidget->setFullScreen(true);
 	videoWidget->show();
-	//视频播放列表
-	mediaList = {
-		QUrl::fromLocalFile("./res/video/gameStart1.mp4"),
-		QUrl::fromLocalFile("./res/video/gameStart 21.mp4"),
-		QUrl::fromLocalFile("./res/video/gameStart 22.mp4"),
-		QUrl::fromLocalFile("./res/video/gameStart23.mp4")
-	};
-	  // 初始化播放列表索引
-	currentMediaIndex = 0;
-	  // 连接信号以在视频结束时自动播放下一个视频
-	connect(player, &QMediaPlayer::mediaStatusChanged, this, [this](QMediaPlayer::MediaStatus status)
-		{
+
+	//Init Audio Output
+	audio = new QAudioOutput(this);
+	audio->setVolume(SettingsWidget::instance()->getMusicVal() / 100.f);
+
+	//Init Media Player
+	player = new QMediaPlayer(this);
+
+	//Init Loop Audio Player
+	loopAudioPlayer = new QMediaPlayer(this);
+	loopAudioPlayer->setVideoOutput(nullptr);
+	loopAudioPlayer->setLoops(QMediaPlayer::Infinite);
+
+	//Init Loop Video Player
+	loopVideoPlayer = new QMediaPlayer(this);
+	loopVideoPlayer->setAudioOutput(nullptr);
+	loopVideoPlayer->setLoops(QMediaPlayer::Infinite);
+
+	//Init Next Related
+	nextIndex = 0;
+	nextTimer.setInterval(1000);
+	nextTimer.setSingleShot(true);
+}
+
+void StartWidget::playMedia0()
+{
+	// The "Strange" video, with its audio
+	player->setSource(QUrl::fromLocalFile("./res/video/gameStart1.mp4"));
+	player->setVideoOutput(videoWidget);
+	player->setAudioOutput(audio);
+	player->play();
+
+	connect(player, &QMediaPlayer::mediaStatusChanged, this, 
+		[this](QMediaPlayer::MediaStatus status) {
+			if (status == QMediaPlayer::EndOfMedia)
+				playMedia1();
+		});
+
+	nextTimer.start();
+	nextIndex++;
+}
+
+void StartWidget::playMedia1()
+{
+	// The transition video, with looped music
+	player->stop();
+	player = new QMediaPlayer(this);
+	player->setSource(QUrl::fromLocalFile("./res/video/gameStart2.mp4"));
+	player->setVideoOutput(videoWidget);
+	player->setAudioOutput(nullptr);
+	player->play();
+
+	loopAudioPlayer->setSource(QUrl::fromLocalFile("./res/video/startMusic.mp3"));
+	loopAudioPlayer->setAudioOutput(audio);
+	loopAudioPlayer->play();
+
+	// The Meolide video, with looped music already playing
+	connect(player, &QMediaPlayer::mediaStatusChanged, this, 
+		[this](QMediaPlayer::MediaStatus status){
 			if (status == QMediaPlayer::EndOfMedia)
 			{
-				if (currentMediaIndex < 2)
-				{
-					currentMediaIndex++;
-					mediaPlay();
-				}
-				else if (currentMediaIndex < 3)
-				{
-					currentMediaIndex--;
-					mediaPlay();
-				}
+				player->stop();
+				loopVideoPlayer->setSource(QUrl::fromLocalFile("./res/video/gameStart3.mp4"));
+				loopVideoPlayer->setVideoOutput(videoWidget);
+				loopVideoPlayer->play();
 			}
-		 });
+		});
 
-	// 播放视频
-	player->play();
-}
-
-void StartWidget::mediaPlay()
-{
-	QUrl currentMedia(mediaList.at(currentMediaIndex));
-	player->setSource(currentMedia);
-	player->setVideoOutput(videoWidget);
-
-	//player->setVolume(100);
-	player->play();
-	if (currentMediaIndex > 0)
-	{
-		musicLoop();
-	}
-}
-
-void StartWidget::next()
-{
-	qDebug() << "next";
-}
-
-void StartWidget::keyPressEvent(QKeyEvent* event)
-{
-	qDebug() << "next";
-	if (player->position() > 3000)
-	{
-		if (currentMediaIndex == 0)
-		{
-			currentMediaIndex++;
-			mediaPlay();
-		}
-	}
-	else if (currentMediaIndex == 1 || currentMediaIndex == 2)
-	{
-		currentMediaIndex = 3;
-		mediaPlay();
-		QTimer::singleShot(1000, this, &StartWidget::gameStart);
-
-	}
+	nextTimer.start(1000);
+	nextIndex++;
 }
 
 void StartWidget::gameStart()
 {
+	loopAudioPlayer->stop();
+	loopVideoPlayer->stop();
 	this->close();
-	music->stop();
 	w->show();
 }
 
-void StartWidget::musicLoop()
+void StartWidget::nextMedia()
 {
-	if (ifLoopStart == 0)
+	qDebug() << "nextIndex: " << nextIndex;
+	// Always wait for 1s to change audio & video
+	if (nextTimer.isActive())
 	{
-		music = new QMediaPlayer(this);
-		audioLoop = new QAudioOutput(this);
-		music->setAudioOutput(audioLoop);
-		audioLoop->setVolume(0.5);
-		music->setSource(QUrl::fromLocalFile("./res/video/gameStart2music.MP3"));
-		music->play();
-		ifLoopStart = 1;
+		return;
 	}
+	// If press any key, jump to next a&v.
+	switch (nextIndex)
+	{
+	case 1:
+		playMedia1();
+		break;
+	case 2:
+		gameStart();
+		break;
+	default:
+		break;
+	}
+}
+
+void StartWidget::keyPressEvent(QKeyEvent* event)
+{
+	this->nextMedia();
+	return QWidget::keyPressEvent(event);
+}
+
+void StartWidget::mousePressEvent(QMouseEvent* event)
+{
+	this->nextMedia();
+	return QWidget::mousePressEvent(event);
 }

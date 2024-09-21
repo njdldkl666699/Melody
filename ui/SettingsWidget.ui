@@ -674,6 +674,19 @@ QPushButton:pressed
   <zorder>gridWidget</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>slider_music</tabstop>
+  <tabstop>slider_sound</tabstop>
+  <tabstop>slider_speed</tabstop>
+  <tabstop>slider_bias</tabstop>
+  <tabstop>comboBox_fps</tabstop>
+  <tabstop>keySequenceEdit_1</tabstop>
+  <tabstop>keySequenceEdit_2</tabstop>
+  <tabstop>keySequenceEdit_3</tabstop>
+  <tabstop>keySequenceEdit_4</tabstop>
+  <tabstop>checkBox_fullscreen</tabstop>
+  <tabstop>pushButton_backMenu</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

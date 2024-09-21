@@ -23,13 +23,20 @@ GameController::GameController(const QString& songFilePth,
 	initVals();
 	initNoteTracks();
 	initMusicPlayer();
-	countdownTimer.setTimerType(Qt::PreciseTimer);
+	chartCountdownTimer.setTimerType(Qt::PreciseTimer);
+	musicCountdownTimer.setTimerType(Qt::PreciseTimer);
 	wait();
 
-	connect(&countdownTimer, &QTimer::timeout, this, &GameController::gamePlay);
+	//connect chart related
+	connect(&chartCountdownTimer, &QTimer::timeout, this, &GameController::chartPlay);
 	connect(noteAnimationGroup, &QParallelAnimationGroup::finished,
 		this, &GameController::signalShowEndButton);
+
+	//connect music related
+	connect(&musicCountdownTimer, &QTimer::timeout, &musicPlayer, &QMediaPlayer::play);
 	connect(&musicPlayer, &QMediaPlayer::mediaStatusChanged, this, &GameController::musicEnd);
+
+	//connect timer related
 	connect(&timer, &QTimer::timeout, this, &GameController::judgeNoHitMiss);
 	connect(&timer, &QTimer::timeout, this, &GameController::judgeNoReleaseHold);
 	connect(&timer, &QTimer::timeout, this, &GameController::signalUpdate);
@@ -70,8 +77,8 @@ void GameController::initMusicPlayer()
 	musicPlayer.setSource(QUrl::fromLocalFile(songFilePath));
 	musicPlayer.setAudioOutput(&audioOutput);
 	audioOutput.setVolume(settings->getMusicVal() / 100.0f);
-	tapSound.setSource(QUrl::fromLocalFile("./res/note/sound.wav"));
-	tapSound.setVolume(settings->getSoundVal() / 100.0f);
+	noteSound.setSource(QUrl::fromLocalFile("./res/note/sound.wav"));
+	noteSound.setVolume(settings->getSoundVal() / 100.0f);
 }
 
 void GameController::initNoteTracks()
@@ -161,25 +168,28 @@ void GameController::initNoteTracks()
 void GameController::wait()
 {
 	gamePause();
-	countdownTimer.setSingleShot(true);
-	countdownTimer.setInterval(waitTime);
-	countdownTimer.start();
-}
+	chartCountdownTimer.setSingleShot(true);
+	chartCountdownTimer.setInterval(waitTime);
 
-void GameController::gamePlay()
-{
-	timer.start(deltaTime);
-	// if this function is called first time in one game,
-	// we should wait a BIAS time then start musicPlayer.
+	int musicWaitTime = waitTime;
 	if (musicPlayer.duration() == 0)
 	{
-		QTimer::singleShot(settings->getBiasVal(), Qt::PreciseTimer,
-			&musicPlayer, &QMediaPlayer::play);
+		// if this function is called first time in one game,
+		// we should wait a BIAS time more than chartCountDownTimer
+		// then start musicPlayer.
+		musicWaitTime += settings->getBiasVal();
 	}
-	else
-	{
-		musicPlayer.play();
-	}
+	musicCountdownTimer.setSingleShot(true);
+	musicCountdownTimer.setInterval(musicWaitTime);
+
+	//start countdown almost at the same time
+	chartCountdownTimer.start();
+	musicCountdownTimer.start();
+}
+
+void GameController::chartPlay()
+{
+	timer.start(deltaTime);
 	auto& g = noteAnimationGroup;
 	if (g->state() == QParallelAnimationGroup::Paused)
 		g->resume();
@@ -194,7 +204,7 @@ void GameController::gamePause()
 	if (g->state() == QParallelAnimationGroup::Running)
 		g->pause();
 	musicPlayer.pause();
-	countdownTimer.stop();
+	chartCountdownTimer.stop();
 }
 
 void GameController::musicEnd(QMediaPlayer::MediaStatus status)
@@ -209,7 +219,6 @@ void GameController::musicEnd(QMediaPlayer::MediaStatus status)
 void GameController::reset()
 {
 	noteAnimationGroup->stop();
-	noteAnimationGroup->setCurrentTime(0);
 	musicPlayer.setPosition(0);
 	initVals();
 	resetNoteTracks();
@@ -223,7 +232,11 @@ void GameController::resetNoteTracks()
 	{
 		for (auto note : noteOutTracks[i])
 		{
-			if (note->getType() == "Hold")
+			if (note->getType() == "Tap")
+			{
+				note->show();
+			}
+			else if (note->getType() == "Hold")
 			{
 				Q_ASSERT(dynamic_cast<Hold*>(note));
 				Hold* hold = dynamic_cast<Hold*>(note);
@@ -231,7 +244,7 @@ void GameController::resetNoteTracks()
 			}
 		}
 	}
-	//push the rest notes from noteOutTracks to noteTracks
+	//push the rest notes from noteTracks to noteOutTracks
 	for (int i = 0; i < 4; i++)
 	{
 		while (!noteTracks[i].isEmpty())
@@ -295,7 +308,7 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 					perfectCount++;
 					combo++;
 					maxCombo = qMax(combo, maxCombo);
-					tapSound.play();
+					noteSound.play();
 					calculateAccAndScore();
 					emit judgeResult("Perfect");
 					//Stop animation, hide note, move note
@@ -311,7 +324,7 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 					combo++;
 					maxCombo = qMax(maxCombo, combo);
 					calculateAccAndScore();
-					tapSound.play();
+					noteSound.play();
 					emit judgeResult("Good");
 					animation->stop();
 					headNote->hide();
@@ -323,6 +336,7 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 					badCount++;
 					combo = 0;
 					calculateAccAndScore();
+					noteSound.play();
 					emit judgeResult("Bad");
 					animation->stop();
 					headNote->hide();
@@ -351,6 +365,7 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 					//mark as to be Perfect
 					hold->setState(Hold::Perfect);
 					emit judgeResult("Perfect");
+					noteSound.play();
 				}
 				//case Good
 				else if (difference >= -100 && difference <= 100)
@@ -358,6 +373,7 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 					//mark as to be Good
 					hold->setState(Hold::Good);
 					emit judgeResult("Good");
+					noteSound.play();
 				}
 				//case Miss is in Function judgeKeyRelease() and judgeNoHitMiss(),
 				//because Hold don't have "Bad"(too early) state.
@@ -398,11 +414,11 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 
 				//NOTE: use noteEndTime, NOT noteStartTime!!!
 				int difference = noteEndTime - noteCurTime;
-				qDebug() << "Released!\tx: " << hold->x()
-					<< "\ty: " << hold->y()
-					<< "\tnoteEndTime: " << noteEndTime
-					<< "\tnoteCurTime: " << noteCurTime
-					<< "\tdifference: " << difference;
+				//qDebug() << "Released!\tx: " << hold->x()
+				//	<< "\ty: " << hold->y()
+				//	<< "\tnoteEndTime: " << noteEndTime
+				//	<< "\tnoteCurTime: " << noteCurTime
+				//	<< "\tdifference: " << difference;
 				////#############################################
 
 				//judgement of ending, > 100ms means release too early
@@ -490,11 +506,11 @@ void GameController::judgeNoHitMiss()
 			//case Miss, too late
 			if (difference < -100)
 			{
-				//qDebug() << "Tap Miss!\tx: " << headNote->x()
-				//	<< "\ty: " << headNote->y()
-				//	<< "\tnoteStartTime: " << noteStartTime
-				//	<< "\tnoteCurTime: " << noteCurTime
-				//	<< "\tdifference: " << difference;
+				qDebug() << "Tap Miss!\tx: " << headNote->x()
+					<< "\ty: " << headNote->y()
+					<< "\tnoteStartTime: " << noteStartTime
+					<< "\tnoteCurTime: " << noteCurTime
+					<< "\tdifference: " << difference;
 				missCount++;
 				combo = 0;
 				calculateAccAndScore();
@@ -523,11 +539,11 @@ void GameController::judgeNoHitMiss()
 				//case No Hit Miss
 				if (state == Hold::None)
 				{
-					qDebug() << "Hold No Hit Miss!\tx: " << headNote->x()
-						<< "\ty: " << headNote->y()
-						<< "\tnoteStartTime: " << noteStartTime
-						<< "\tnoteCurTime: " << noteCurTime
-						<< "\tdifference: " << difference;
+					//qDebug() << "Hold No Hit Miss!\tx: " << headNote->x()
+					//	<< "\ty: " << headNote->y()
+					//	<< "\tnoteStartTime: " << noteStartTime
+					//	<< "\tnoteCurTime: " << noteCurTime
+					//	<< "\tdifference: " << difference;
 
 					hold->setState(Hold::Miss);
 					missCount++;

@@ -60,7 +60,7 @@ public slots:
 private slots:
 	void judgeNoHitMiss();
 	void judgeNoReleaseHold();
-	void gamePlay();
+	void chartPlay();
 	//music related
 	void musicEnd(QMediaPlayer::MediaStatus status);
 
@@ -107,8 +107,9 @@ private:
 
 	QMediaPlayer musicPlayer;
 	QAudioOutput audioOutput;
-	QSoundEffect tapSound;
+	QSoundEffect noteSound;
 
 	QTimer timer;
-	QTimer countdownTimer;
+	QTimer chartCountdownTimer;
+	QTimer musicCountdownTimer;
 };

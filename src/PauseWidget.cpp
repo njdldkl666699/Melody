@@ -15,9 +15,6 @@ PauseWidget::PauseWidget(QWidget* parent)
 	connect(ui.pushButton_restart, &QPushButton::clicked, this, &PauseWidget::signalRestart);
 	connect(ui.pushButton_continue, &QPushButton::clicked, this, &PauseWidget::signalContinue);
 
-	/*UIController::buttonClickSound(ui.pushButton_backMenu);
-	UIController::buttonClickSound(ui.pushButton_restart);
-	UIController::buttonClickSound(ui.pushButton_continue);*/
 	using namespace UICtrl;
 	auto sw = SettingsWidget::instance();
 	setObjectSound(ui.pushButton_backMenu, &QPushButton::clicked, ber, sw->getSoundVal());

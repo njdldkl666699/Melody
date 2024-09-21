@@ -324,6 +324,12 @@ QPushButton:pressed
   <zorder>logo</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>comboBox_song</tabstop>
+  <tabstop>comboBox_chart</tabstop>
+  <tabstop>pushButton_settings</tabstop>
+  <tabstop>pushButton_play</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

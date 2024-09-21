@@ -250,7 +250,6 @@
     <QtUic Include="ui\PauseWidget.ui" />
     <QtUic Include="ui\PlayWidget.ui" />
     <QtUic Include="ui\SettingsWidget.ui" />
-    <QtUic Include="ui\StartWidget.ui" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\UIController.h" />

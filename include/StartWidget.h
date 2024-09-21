@@ -1,17 +1,9 @@
 #pragma once
 
-#include"MenuWidget.h"
-#include <QWidget>
-#include<QMediaPlayer>
-#include<QVideoWidget>
-#include<QKeyEvent>
-#include <QList>
-#include <QUrl>
-#include<QAudioOutput>
-
-namespace Ui {
-class StartWidget;
-}
+#include "MenuWidget.h"
+#include <QMediaPlayer>
+#include <QVideoWidget>
+#include <QAudioOutput>
 
 class StartWidget : public QWidget
 {
@@ -19,28 +11,31 @@ class StartWidget : public QWidget
 
 public:
     explicit StartWidget(QWidget *parent = nullptr );
-    void mediaSet();
-    void mediaPlay();
     ~StartWidget();
-    void next();
-    virtual void keyPressEvent(QKeyEvent* event);
-    void musicLoop();
-    void gameStart();
-
-private slots:
 
 private:
-    Ui::StartWidget *ui;
-    QMediaPlayer* player;
-    QMediaPlayer* music;
-    QAudioOutput* audio;
-    QVideoWidget* videoWidget;
-    QList<QUrl> mediaList;
+    void initMedia();
+    void nextMedia();
+	void playMedia0();
+	void playMedia1();
+    void gameStart();
 
-    QAudioOutput* audioLoop;
-    int currentMediaIndex;
-    bool ifLoopStart;
+protected:
+    virtual void keyPressEvent(QKeyEvent* event)override;
+    virtual void mousePressEvent(QMouseEvent* event)override;
+
+private:
 	MenuWidget* w;
+
+    QMediaPlayer* player;
+	QMediaPlayer* loopAudioPlayer;
+	QMediaPlayer* loopVideoPlayer;
+
+    QVideoWidget* videoWidget;
+    QAudioOutput* audio;
+
+    QTimer nextTimer;
+    int nextIndex;
 };
 
 

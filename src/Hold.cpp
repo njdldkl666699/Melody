@@ -11,24 +11,31 @@ Hold::~Hold()
 
 void Hold::paintEvent(QPaintEvent* event)
 {
-	//####need to be implemented####
+	/*
+	If the hold is pressed, only draw the y < 625 part.
+	If Hold is up the judge line, do nothing.
+	Method: judge the bottom, if larger than 625, 
+	resize the height and scale the pixmap.
+	*/
 	if (state == Perfect || state == Good)
 	{
 		int bottom = this->y() + this->height();
 		int distance = bottom - 625;
-		if (distance < 0)
+		if (distance > 0)
 		{
-			this->move(this->x(), this->y() - distance);
-		}
-		else if (distance >= 0)
-		{
-			//int newHeight = 625 - this->y();
+			// It means part of Hold is under the judge line.
 			int newHeight = this->height() - distance;
+			//or newHeight = 625 - this->y();
 			if (newHeight > 0)
 			{
 				this->setFixedHeight(newHeight);
 				this->setPixmap(this->pixmap().scaled(this->size(),
 					Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+			}
+			else
+			{
+				//the Hold is too low to draw, don't draw it.
+				return;
 			}
 		}
 	}
