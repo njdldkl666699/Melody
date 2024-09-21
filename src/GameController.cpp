@@ -422,8 +422,6 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 						maxCombo = qMax(combo, maxCombo);
 						calculateAccAndScore();
 						emit judgeResult("Perfect");
-						animation->stop();
-						hold->hide();
 						noteOutTracks[i].enqueue(noteTracks[i].dequeue());
 					}
 					//case Good
@@ -434,8 +432,6 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 						maxCombo = qMax(combo, maxCombo);
 						calculateAccAndScore();
 						emit judgeResult("Good");
-						animation->stop();
-						hold->hide();
 						noteOutTracks[i].enqueue(noteTracks[i].dequeue());
 					}
 				}
@@ -621,8 +617,6 @@ void GameController::judgeNoReleaseHold()
 				combo++;
 				maxCombo = qMax(combo, maxCombo);
 				calculateAccAndScore();
-				animation->stop();
-				hold->hide();
 				noteOutTracks[i].enqueue(noteTracks[i].dequeue());
 			}
 		}
