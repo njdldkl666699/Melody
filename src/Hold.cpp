@@ -1,8 +1,9 @@
 #include "Hold.h"
 
-Hold::Hold(int strtTime, int edTime, const QString& picturePath, 
-	const QSize& size, QWidget* parent)
-	:Note(strtTime, picturePath, size, parent), endTime(edTime), state(None)
+Hold::Hold(int strtTime, int edTime, const QString& picturePth,
+	const QSize& sz, QWidget* parent)
+	:Note(strtTime, picturePth, sz, parent), endTime(edTime),
+	state(None), picturePath(picturePth), startSize(sz)
 {}
 
 Hold::~Hold()
@@ -32,4 +33,14 @@ void Hold::paintEvent(QPaintEvent* event)
 		}
 	}
 	return Note::paintEvent(event);
+}
+
+void Hold::reset()
+{
+	state = None;
+	this->setFixedSize(startSize);
+	QPixmap picture(picturePath);
+	picture = picture.scaled(this->size(),
+		Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+	this->setPixmap(picture);
 }

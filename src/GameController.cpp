@@ -12,10 +12,13 @@
 #include <QKeyEvent>
 #include <QPropertyAnimation>
 
+#include <QtAssert>
+
 GameController::GameController(const QString& songFilePth,
 	const QString& chartFilePth, QWidget* noteParent, QObject* parent)
 	: settings(SettingsWidget::instance()), songFilePath(songFilePth),
-	chartFilePath(chartFilePth), playWidget(noteParent), QObject(parent)
+	chartFilePath(chartFilePth), playWidget(noteParent), QObject(parent),
+	noteAnimationGroup(new QParallelAnimationGroup(noteParent))
 {
 	initVals();
 	initNoteTracks();
@@ -28,6 +31,7 @@ GameController::GameController(const QString& songFilePth,
 		this, &GameController::signalShowEndButton);
 	connect(&musicPlayer, &QMediaPlayer::mediaStatusChanged, this, &GameController::musicEnd);
 	connect(&timer, &QTimer::timeout, this, &GameController::judgeNoHitMiss);
+	connect(&timer, &QTimer::timeout, this, &GameController::judgeNoReleaseHold);
 	connect(&timer, &QTimer::timeout, this, &GameController::signalUpdate);
 }
 
@@ -59,9 +63,6 @@ void GameController::initVals()
 	key[1] = settings->getKey_2().toString();
 	key[2] = settings->getKey_3().toString();
 	key[3] = settings->getKey_4().toString();
-
-	noteAnimationGroup
-		= new QParallelAnimationGroup(playWidget);
 }
 
 void GameController::initMusicPlayer()
@@ -102,11 +103,12 @@ void GameController::initNoteTracks()
 		Note* note = nullptr;
 		QString picturePath;
 		int startTime = noteObj["time"].toInt();
-		int endTime = startTime;
+		int endTime;
 		int column = noteObj["column"].toInt();
 		if (!isHold) //case Tap
 		{
 			const QSize noteSize(145, 50);
+			endTime = startTime + 50 / velocity;
 			if (column == 0 || column == 3)
 				picturePath = "./res/note/tap_blue.png";
 			else if (column == 1 || column == 2)
@@ -137,12 +139,12 @@ void GameController::initNoteTracks()
 		//init note animation
 		auto* animation = new QPropertyAnimation(note, "pos", playWidget);
 		animation->setStartValue(QPoint(xPos, yPos));
-		int endY = 625 + velocity * 100;
+		int endY = 625 + velocity * 150;
 		animation->setEndValue(QPoint(xPos, endY));
 
-		//duration = (endY - yPos) / velocity = 100 + endTime;
+		//duration = (endY - yPos) / velocity = 150 + endTime;
 		//You can calculate it by yourself.
-		int duration = 100 + endTime;
+		int duration = 150 + endTime;
 		animation->setDuration(duration);
 		animation->setEasingCurve(QEasingCurve::Linear);
 		noteAnimationGroup->addAnimation(animation);
@@ -207,6 +209,7 @@ void GameController::musicEnd(QMediaPlayer::MediaStatus status)
 void GameController::reset()
 {
 	noteAnimationGroup->stop();
+	noteAnimationGroup->setCurrentTime(0);
 	musicPlayer.setPosition(0);
 	initVals();
 	resetNoteTracks();
@@ -215,6 +218,20 @@ void GameController::reset()
 
 void GameController::resetNoteTracks()
 {
+	//reset Hold in noteOutTracks
+	for (int i = 0; i < 4; i++)
+	{
+		for (auto note : noteOutTracks[i])
+		{
+			if (note->getType() == "Hold")
+			{
+				Q_ASSERT(dynamic_cast<Hold*>(note));
+				Hold* hold = dynamic_cast<Hold*>(note);
+				hold->reset();
+			}
+		}
+	}
+	//push the rest notes from noteOutTracks to noteTracks
 	for (int i = 0; i < 4; i++)
 	{
 		while (!noteTracks[i].isEmpty())
@@ -223,6 +240,7 @@ void GameController::resetNoteTracks()
 			noteOutTracks[i].enqueue(note);
 		}
 	}
+	//swap noteTracks and noteOutTracks
 	for (int i = 0; i < 4; i++)
 	{
 		// The following "note" is from QQueue header file.   :)
@@ -261,11 +279,11 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 			auto animation = noteAnimationGroup->animationAt(index);
 			int noteCurTime = animation->currentTime();
 			int difference = noteStartTime - noteCurTime;
-			qDebug() << "Hit!\tx: " << headNote->x()
-				<< "\ty: " << headNote->y()
-				<< "\tnoteStartTime: " << noteStartTime
-				<< "\tnoteCurTime: " << noteCurTime
-				<< "\tdifference: " << difference;
+			//qDebug() << "Hit!\tx: " << headNote->x()
+			//	<< "\ty: " << headNote->y()
+			//	<< "\tnoteStartTime: " << noteStartTime
+			//	<< "\tnoteCurTime: " << noteCurTime
+			//	<< "\tdifference: " << difference;
 			//###############################################
 
 			//case Tap note
@@ -277,10 +295,9 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 					perfectCount++;
 					combo++;
 					maxCombo = qMax(combo, maxCombo);
-					calculateAccAndScore();
 					tapSound.play();
+					calculateAccAndScore();
 					emit judgeResult("Perfect");
-					//?? don't need to stop, just wait it finish.
 					//Stop animation, hide note, move note
 					animation->stop();
 					headNote->hide();
@@ -316,7 +333,7 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 			else if (headNote->getType() == "Hold")
 			{
 				//always to be Hold, because getType() tells us.
-				assert(dynamic_cast<Hold*>(headNote));
+				Q_ASSERT(dynamic_cast<Hold*>(headNote));
 				Hold* hold = dynamic_cast<Hold*>(headNote);
 
 				//if have been Miss, don't judge again
@@ -325,7 +342,7 @@ void GameController::judgeKeyPress(QKeyEvent* event)
 				if (hold->getState() == Hold::Miss)
 					continue;
 
-				qDebug() << "Hold: Pressed!";
+				//qDebug() << "Hold: Pressed!";
 
 				//judge
 				//case Perfect
@@ -368,29 +385,29 @@ void GameController::judgeKeyRelease(QKeyEvent* event)
 			//Only Hold note need to judge release
 			if (headNote->getType() == "Hold")
 			{
-				qDebug() << "Release: In Hold: key[" << i << "] "
-					<< key[i] << " eventKey: " << eventKey;
-				//always to be Hold, because getType() tells us.
-				assert(dynamic_cast<Hold*>(headNote));
+				//qDebug() << "Release: In Hold: key[" << i << "] "
+				//	<< key[i] << " eventKey: " << eventKey;
+				Q_ASSERT(dynamic_cast<Hold*>(headNote));
 				Hold* hold = dynamic_cast<Hold*>(headNote);
 
 				////#######Judge By the difference of time#######
-				int noteStartTime = headNote->getStartTime();
-				int noteCurTime = noteAnimationGroup
-					->animationAt(headNote->getAnimationIndex())
-					->currentTime();
-				int difference = noteStartTime - noteCurTime;
-				qDebug() << "Released!\tx: " << headNote->x()
-					<< "\ty: " << headNote->y()
-					<< "\tnoteStartTime: " << noteStartTime
+				int noteEndTime = hold->getEndTime();
+				int index = hold->getAnimationIndex();
+				auto animation = noteAnimationGroup->animationAt(index);
+				int noteCurTime = animation->currentTime();
+
+				//NOTE: use noteEndTime, NOT noteStartTime!!!
+				int difference = noteEndTime - noteCurTime;
+				qDebug() << "Released!\tx: " << hold->x()
+					<< "\ty: " << hold->y()
+					<< "\tnoteEndTime: " << noteEndTime
 					<< "\tnoteCurTime: " << noteCurTime
 					<< "\tdifference: " << difference;
 				////#############################################
 
 				//judgement of ending, > 100ms means release too early
 				Hold::ToBeState state = hold->getState();
-				qDebug() << "state: " << state;
-				auto animation = noteAnimationGroup->animationAt(headNote->getAnimationIndex());
+				//qDebug() << "state: " << state;
 				//case None, not press, don't judge
 				if (state == Hold::None)
 					continue;
@@ -459,34 +476,35 @@ void GameController::judgeNoHitMiss()
 			continue;
 		Note* headNote = noteTracks[i].head();
 
-		////#######Judge By the difference of time#######
-		int noteStartTime = headNote->getStartTime();
-		int noteCurTime = noteAnimationGroup
-			->animationAt(headNote->getAnimationIndex())
-			->currentTime();
-		int difference = noteStartTime - noteCurTime;
+		//#######Judge By the difference of time#######
+		int index = headNote->getAnimationIndex();
+		auto animation = noteAnimationGroup->animationAt(index);
+		int noteCurTime = animation->currentTime();
 		//qDebug() << "No Hit!\tx: " << headNote->x()
 		//	<< "\ty: " << headNote->y()
 		//	<< "\tnoteStartTime: " << noteStartTime
 		//	<< "\tnoteCurTime: " << noteCurTime
 		//	<< "\tdifference: " << difference;
-		////#############################################
+		//#############################################
 
 		if (headNote->getType() == "Tap")
 		{
+			int noteStartTime = headNote->getStartTime();
+			int difference = noteStartTime - noteCurTime;
 			//case Miss, too late
 			if (difference < -100)
 			{
-				qDebug() << "Tap Miss!\tx: " << headNote->x()
-					<< "\ty: " << headNote->y()
-					<< "\tnoteStartTime: " << noteStartTime
-					<< "\tnoteCurTime: " << noteCurTime
-					<< "\tdifference: " << difference;
+				//qDebug() << "Tap Miss!\tx: " << headNote->x()
+				//	<< "\ty: " << headNote->y()
+				//	<< "\tnoteStartTime: " << noteStartTime
+				//	<< "\tnoteCurTime: " << noteCurTime
+				//	<< "\tdifference: " << difference;
 				missCount++;
 				combo = 0;
 				calculateAccAndScore();
 				emit judgeResult("Miss");
 				//Hide note, move note
+				animation->stop();
 				headNote->hide();
 				noteOutTracks[i].enqueue(noteTracks[i].dequeue());
 			}
@@ -494,43 +512,27 @@ void GameController::judgeNoHitMiss()
 		else if (headNote->getType() == "Hold")
 		{
 			//always to be Hold, because getType() tells us.
-			assert(dynamic_cast<Hold*>(headNote));
+			Q_ASSERT(dynamic_cast<Hold*>(headNote));
 			Hold* hold = dynamic_cast<Hold*>(headNote);
 
-			//too late or don't press the whole time
-			if (difference < -100 || hold->y() > 625)
-			{
-				qDebug() << "Hold Miss!\tx: " << headNote->x()
-					<< "\ty: " << headNote->y()
-					<< "\tnoteStartTime: " << noteStartTime
-					<< "\tnoteCurTime: " << noteCurTime
-					<< "\tdifference: " << difference;
+			int noteStartTime = headNote->getStartTime();
+			int difference = noteStartTime - noteCurTime;
 
+			//case Miss, too late to hit
+			if (difference < -100)
+			{
 				Hold::ToBeState state = hold->getState();
-				//case Perfect
-				if (state == Hold::Perfect)
+				if (state == Hold::Miss)
+					continue;
+				//case No Hit Miss
+				if (state == Hold::None)
 				{
-					perfectCount++;
-					combo++;
-					maxCombo = qMax(combo, maxCombo);
-					calculateAccAndScore();
-					emit judgeResult("Perfect");
-					noteOutTracks[i].enqueue(noteTracks[i].dequeue());
-				}
-				//case Good
-				else if (state == Hold::Good)
-				{
-					goodCount++;
-					combo++;
-					maxCombo = qMax(combo, maxCombo);
-					calculateAccAndScore();
-					emit judgeResult("Good");
-					noteOutTracks[i].enqueue(noteTracks[i].dequeue());
-				}
-				//None->Miss
-				else if (state == Hold::None)
-				{
-					qDebug() << "In Miss";
+					qDebug() << "Hold No Hit Miss!\tx: " << headNote->x()
+						<< "\ty: " << headNote->y()
+						<< "\tnoteStartTime: " << noteStartTime
+						<< "\tnoteCurTime: " << noteCurTime
+						<< "\tdifference: " << difference;
+
 					hold->setState(Hold::Miss);
 					missCount++;
 					combo = 0;
@@ -552,6 +554,76 @@ void GameController::judgeNoHitMiss()
 					noteOutTracks[i].enqueue(noteTracks[i].dequeue());
 				}
 				//Miss from release too early is in Function judgeKeyRelease()
+			}
+		}
+	}
+}
+
+/* Explain:
+	Judge a Hold which is pressed all the time
+	but not released, which should be moved to
+	noteOutTracks and be judged as what it should be.
+*/
+void GameController::judgeNoReleaseHold()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		if (noteTracks[i].isEmpty())
+			continue;
+		Note* headNote = noteTracks[i].head();
+		if (headNote->getType() == "Hold")
+		{
+			//always to be Hold, because getType() tells us.
+			Q_ASSERT(dynamic_cast<Hold*>(headNote));
+			Hold* hold = dynamic_cast<Hold*>(headNote);
+			Hold::ToBeState state = hold->getState();
+
+			/* Explain:
+				There are only two cases, Perfect and Good,
+				beacause if the Hold is Miss, it has been judged
+				in judgeNoHitMiss() function and moved to noteOutTracks;
+				if is None, it is not a Pressed Hold, so don't judge too.
+			*/
+			if (state == Hold::Miss || state == Hold::None)
+				continue;
+
+			//#######Judge By the difference of time#######
+			int noteEndTime = hold->getEndTime();
+			int index = hold->getAnimationIndex();
+			auto animation = noteAnimationGroup->animationAt(index);
+			int noteCurTime = animation->currentTime();
+			int difference = noteEndTime - noteCurTime;
+			//qDebug() << "No Release Hold!\tx: " << headNote->x()
+			//	<< "\ty: " << headNote->y()
+			//	<< "\tnoteEndTime: " << noteEndTime
+			//	<< "\tnoteCurTime: " << noteCurTime
+			//	<< "\tdifference: " << difference;
+			////#############################################
+
+			/* difference <= 100
+			Example:
+				noteEndTime		noteCurTime		difference
+				1800			1750			50
+				1800			1850			-50
+			*/
+			if (difference <= 100)
+			{
+				if (state == Hold::Perfect)
+				{
+					perfectCount++;
+					emit judgeResult("Perfect");
+				}
+				else if (state == Hold::Good)
+				{
+					goodCount++;
+					emit judgeResult("Good");
+				}
+				combo++;
+				maxCombo = qMax(combo, maxCombo);
+				calculateAccAndScore();
+				animation->stop();
+				hold->hide();
+				noteOutTracks[i].enqueue(noteTracks[i].dequeue());
 			}
 		}
 	}

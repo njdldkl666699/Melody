@@ -59,6 +59,7 @@ public slots:
 
 private slots:
 	void judgeNoHitMiss();
+	void judgeNoReleaseHold();
 	void gamePlay();
 	//music related
 	void musicEnd(QMediaPlayer::MediaStatus status);

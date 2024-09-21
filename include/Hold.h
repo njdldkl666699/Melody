@@ -17,14 +17,15 @@ public:
 	};
 
 public:
-	Hold(int strtTime, int edTime,const QString& picturePath,
-		const QSize& size, QWidget* parent = nullptr);
+	Hold(int strtTime, int edTime,const QString& picturePth,
+		const QSize& sz, QWidget* parent = nullptr);
 	~Hold();
 
 	QString getType()const override { return "Hold"; }
 	int getEndTime()const { return endTime; }
 	ToBeState getState()const { return state; }
 	void setState(ToBeState stat) { state = stat; }
+	void reset();
 
 protected:
 	void paintEvent(QPaintEvent* event) override;
@@ -32,4 +33,6 @@ protected:
 private:
 	int endTime;
 	ToBeState state;
+	const QString picturePath;
+	const QSize startSize;
 };
