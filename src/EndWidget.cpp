@@ -3,9 +3,12 @@
 #include "UIController.h"
 
 #include<QFile>
-#include<QDir>
+#include<QJsonDocument>
+#include<QJsonObject>
+#include<QJsonArray>
+
+#include<QDate>
 #include<QTreeWidget>
-#include<QTextStream>
 #include<QPropertyAnimation>
 
 EndWidget::EndWidget(const GameController* game, QWidget* parent)
@@ -17,6 +20,7 @@ EndWidget::EndWidget(const GameController* game, QWidget* parent)
 	initUI();
 	initScore();
 	initRank();
+	initHistory();
 	playAnimation();
 	playMusic();
 
@@ -34,10 +38,6 @@ EndWidget::EndWidget(const GameController* game, QWidget* parent)
 			this->close();
 		});
 	connect(ui.pushButton_history, &QPushButton::clicked, this, &EndWidget::historyOn);
-
-	writeHistory();
-	getHistory();
-	setHistoryList();
 }
 
 EndWidget::~EndWidget()
@@ -242,7 +242,7 @@ void EndWidget::historyOn()
 	}
 }
 
-void EndWidget::writeHistory()
+void EndWidget::initHistory()
 {
 	//create history folder
 	dir.setPath(QString("./history"));
@@ -267,56 +267,43 @@ void EndWidget::writeHistory()
 	filename = "./history/" + gameController->getSongName() +
 		"_" + gameController->getChartName() + ".txt";
 
+	//create json obj
+	QJsonObject recordObj;
+	recordObj["Date"] = QDate::currentDate().toString("yyyy-MM-dd");
+	recordObj["Score"] = QString::number(score);
+	recordObj["Accurancy"] = QString::number(acc, 'f', 2);
+	recordObj["Rank"] = rankStr;
+	recordObj["MaxCombo"] = QString::number(maxCombo);
+
+	//read history from file
+	//If file not exist, create new one
+	QFile file(filename);
+	if (!file.open(QIODevice::ReadWrite | QIODevice::Text))
+	{
+		qDebug() << "Error: File cannot read and write";
+		return;
+	}
+	QJsonDocument fileDoc = QJsonDocument::fromJson(file.readAll());
+	QJsonObject fileObj = fileDoc.object();
+	QJsonArray fileArr = fileObj["History"].toArray();
+	fileArr.append(recordObj);
+
 	//write history to file
-	QFile file(filename);
-	if (!file.open(QIODevice::Append | QIODevice::Text))
-	{
-		qDebug() << "cannot write";
-		return;
-	}
-	else
-	{
-		qDebug() << "write";
-	}
-	QDataStream fout(&file);
-	//fout.setAutoDetectUnicode(true);
-	fout << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
-	fout << QString::number(score);
-	fout << QString::number(acc, 'f', 2);
-	fout << rankStr;
-	fout << QString::number(maxCombo);
+	fileObj["History"] = fileArr;
+	fileDoc.setObject(fileObj);
+	file.resize(0); //clear file content
+	file.write(fileDoc.toJson());
 	file.close();
-}
 
-void EndWidget::getHistory()
-{
-	QFile file(filename);
-	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-		return;
-	QDataStream fin(&file);
-	HistoryList historyTmp;
-	//fin.setAutoDetectUnicode(true);
-	while (!fin.atEnd())
+	//init treeWidget_history
+	for (const auto& hisVal : fileArr)
 	{
-		fin >> historyTmp.dateTime;
-		fin >> historyTmp.score;
-		fin >> historyTmp.acc;
-		fin >> historyTmp.rank;
-		fin >> historyTmp.maxCombo;
-		historyList.push_back(historyTmp);
-	}
-	file.close();
-}
-
-void EndWidget::setHistoryList()
-{
-	for (const auto& history : historyList)
-	{
+		QJsonObject hisObj = hisVal.toObject();
 		QTreeWidgetItem* childItem = new QTreeWidgetItem(ui.treeWidget_history);
-		childItem->setText(0, history.dateTime);
-		childItem->setText(1, history.score);
-		childItem->setText(2, history.acc + "%");
-		childItem->setText(3, history.rank);
-		childItem->setText(4, history.maxCombo);
+		childItem->setText(0, hisObj["Date"].toString());
+		childItem->setText(1, hisObj["Score"].toString());
+		childItem->setText(2, hisObj["Accurancy"].toString() + "%");
+		childItem->setText(3, hisObj["Rank"].toString());
+		childItem->setText(4, hisObj["MaxCombo"].toString());
 	}
 }

@@ -171,7 +171,7 @@ void PlayWidget::updateCountDown()
 
 void PlayWidget::keyPressEvent(QKeyEvent* event)
 {
-	qDebug() << "keyPressEvent: " << event->key();
+	//qDebug() << "keyPressEvent: " << event->text();
 	if (event->key() == Qt::Key_Escape)
 	{
 		this->gamePause();
@@ -239,9 +239,9 @@ void PlayWidget::gameRestart()
 	pauseWidget->close();
 	// remove blur effect
 	this->setGraphicsEffect(nullptr);
+	gameController->reset();
 	this->updateUI();
 	this->show();
-	gameController->reset();
 }
 
 void PlayWidget::gameClose()

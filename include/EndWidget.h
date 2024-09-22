@@ -6,7 +6,6 @@
 #include<QMovie>
 #include<QMediaPlayer>
 #include<QAudioOutput>
-#include<QDateTime>
 #include<QDir>
 
 class EndWidget : public QWidget
@@ -26,31 +25,17 @@ private:
 	void initUI();
 	void initScore();
 	void initRank();
+	void initHistory();
 
-	// ###implement later###
 	void playAnimation();
-
 	void playMusic();
 
-private:
-	struct HistoryList
-	{
-		QString dateTime;
-		QString score;
-		QString acc;
-		QString rank;
-		QString maxCombo;
-	};
-
 	void historyOn();
-	void getHistory();
-	void writeHistory();
-	void setHistoryList();
 
 private:
 	const GameController* gameController;
 	uint perfectNum, goodNum, badNum, missNum;
-	uint score, maxCombo;
+	int score, maxCombo;
 	float acc;
 
 	enum Rank
@@ -77,5 +62,4 @@ private:
 	QString filename;
 	bool ifHistoryOn;
 	QDir dir;
-	QVector<HistoryList> historyList;
 };
