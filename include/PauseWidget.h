@@ -3,6 +3,7 @@
 #include "ui_PauseWidget.h"
 #include <QDialog>
 #include <QMovie>
+#include <QKeyEvent>
 
 class PauseWidget : public QDialog
 {
@@ -11,6 +12,9 @@ class PauseWidget : public QDialog
 public:
 	PauseWidget(QWidget* parent = nullptr);
 	~PauseWidget();
+
+protected:
+	void keyPressEvent(QKeyEvent* event) override;
 	
 private:
 	void initBackgroundGIF();

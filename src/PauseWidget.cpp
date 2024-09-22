@@ -31,3 +31,17 @@ void PauseWidget::initBackgroundGIF()
 	ui.background->setMovie(backgroundGIF);
 	backgroundGIF->start();
 }
+
+void PauseWidget::keyPressEvent(QKeyEvent* event)
+{
+	if (event->key() == Qt::Key_Escape)
+	{
+		emit signalContinue();
+	}
+	else if (event->key() == Qt::Key_Space)
+	{
+		//do nothing
+	}
+	else
+		return QDialog::keyPressEvent(event);
+}

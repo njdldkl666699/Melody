@@ -40,6 +40,9 @@
      <height>64</height>
     </rect>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::FocusPolicy::ClickFocus</enum>
+   </property>
    <property name="styleSheet">
     <string notr="true">QPushButton
 {
@@ -71,6 +74,9 @@ QPushButton:pressed
      <height>64</height>
     </rect>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::FocusPolicy::ClickFocus</enum>
+   </property>
    <property name="styleSheet">
     <string notr="true">QPushButton
 {
@@ -101,6 +107,9 @@ QPushButton:pressed
      <width>64</width>
      <height>64</height>
     </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::FocusPolicy::ClickFocus</enum>
    </property>
    <property name="styleSheet">
     <string notr="true">QPushButton
@@ -158,6 +167,11 @@ QPushButton:pressed
   <zorder>pushButton_continue</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>pushButton_continue</tabstop>
+  <tabstop>pushButton_backMenu</tabstop>
+  <tabstop>pushButton_restart</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

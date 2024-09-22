@@ -132,6 +132,17 @@ void MenuWidget::keyPressEvent(QKeyEvent* event)
 
 void MenuWidget::onComboBoxSongSelected(const QString& songName)
 {
+	// Check if song is selected
+	if (songName == "[Select Song]")
+	{
+		ui.comboBox_chart->clear();
+		ui.comboBox_chart->addItem("[Select Chart]");
+		ui.comboBox_chart->setCurrentText("[Select Chart]");
+		ui.songPicture->clear();
+		menuMusicPlayer->stop();
+		return;
+	}
+
 	// Update chart comboBox
 	ui.comboBox_chart->clear();
 	ui.comboBox_chart->addItem("[Select Chart]");
@@ -160,7 +171,7 @@ void MenuWidget::onComboBoxSongSelected(const QString& songName)
 	QString songPicPath = songDir.path() + "/" + songPicName;
 	QPixmap songPic(songPicPath);
 
-	//process the picture & display
+	// Process the picture & display
 	int width = songPic.width();
 	int height = songPic.height();
 	int sideLength = qMin(width, height);
@@ -170,6 +181,20 @@ void MenuWidget::onComboBoxSongSelected(const QString& songName)
 	songPic = songPic.scaled(ui.songPicture->size(),
 		Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
 	ui.songPicture->setPixmap(songPic);
+
+	// Update songFilePath
+	QStringList songFileFilters;
+	songFileFilters << "*.mp3" << "*.ogg" << "*.wav" << "*.flac" << "*.m4a";
+	QString songSuffixName = songDir.entryList(songFileFilters, QDir::Files).at(0);
+	songFilePath = songDir.path() + "/" + songSuffixName;
+
+	//// Play the music
+	menuMusicPlayer = new QMediaPlayer(this);
+	menuMusicPlayer->setSource(QUrl::fromLocalFile(songFilePath));
+	menuAudio = new QAudioOutput(this);
+	menuAudio->setVolume(SettingsWidget::instance()->getMusicVal());
+	menuMusicPlayer->setAudioOutput(menuAudio);
+	menuMusicPlayer->play();
 }
 
 void MenuWidget::onPushButtonPlayClicked()
@@ -182,11 +207,10 @@ void MenuWidget::onPushButtonPlayClicked()
 	}
 	else
 	{
-		// Update songFile and chartFile
-		QStringList songFileFilters;
-		songFileFilters << "*.mp3" << "*.ogg" << "*.wav" << "*.flac" << "*.m4a";
-		QString songFileName = songDir.entryList(songFileFilters, QDir::Files).at(0);
-		songFilePath = songDir.path() + "/" + songFileName;
+		// Stop menuMusicPlayer
+		menuMusicPlayer->stop();
+
+		// Update chartFile
 		chartFilePath = songDir.path() + "/" + ui.comboBox_chart->currentText() + ".meo";
 		qDebug() << songFilePath << "\n" << chartFilePath;
 

@@ -23,8 +23,15 @@ GameController::GameController(const QString& songFilePth,
 	initVals();
 	initNoteTracks();
 	initMusicPlayer();
+
+	//Init timers
 	chartCountdownTimer.setTimerType(Qt::PreciseTimer);
+	chartCountdownTimer.setSingleShot(true);
+	chartCountdownTimer.setInterval(waitTime);
+
 	musicCountdownTimer.setTimerType(Qt::PreciseTimer);
+	musicCountdownTimer.setSingleShot(true);
+
 	wait();
 
 	//connect chart related
@@ -168,9 +175,6 @@ void GameController::initNoteTracks()
 void GameController::wait()
 {
 	gamePause();
-	chartCountdownTimer.setSingleShot(true);
-	chartCountdownTimer.setInterval(waitTime);
-
 	int musicWaitTime = waitTime;
 	if (musicPlayer.duration() == 0)
 	{
@@ -179,9 +183,7 @@ void GameController::wait()
 		// then start musicPlayer.
 		musicWaitTime += settings->getBiasVal();
 	}
-	musicCountdownTimer.setSingleShot(true);
 	musicCountdownTimer.setInterval(musicWaitTime);
-
 	//start countdown almost at the same time
 	chartCountdownTimer.start();
 	musicCountdownTimer.start();
@@ -205,6 +207,7 @@ void GameController::gamePause()
 		g->pause();
 	musicPlayer.pause();
 	chartCountdownTimer.stop();
+	musicCountdownTimer.stop();
 }
 
 void GameController::musicEnd(QMediaPlayer::MediaStatus status)

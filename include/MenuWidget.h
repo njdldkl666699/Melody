@@ -38,8 +38,10 @@ private:
 	PlayWidget* playWidget;
 	ConfirmDialog* confirmDialog;
 
-	QDir beatmapDir, songDir;
+	QMediaPlayer* menuMusicPlayer;
+	QAudioOutput* menuAudio;
 
+	QDir beatmapDir, songDir;
 	// Used to init PlayWidget
 	QString songFilePath, chartFilePath;
 };

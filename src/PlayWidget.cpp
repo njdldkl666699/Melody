@@ -212,6 +212,13 @@ void PlayWidget::keyReleaseEvent(QKeyEvent* event)
 
 void PlayWidget::gamePause()
 {
+	// stop the count down timer
+	if (countDownTimer.isActive())
+	{
+		countDownTimer.stop();
+		ui.label_countDown->clear();
+		countDownNum = 3;
+	}
 	// game Pause
 	gameController->gamePause();
 	// blur the background
