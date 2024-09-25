@@ -9,6 +9,7 @@
 *.qtvscr
 [b,B]uild
 history
+settings.cfg
 
 *~
 *.autosave
@@ -80,7 +81,3 @@ CMakeLists.txt.user*
 # --------
 *.dll
 *.exe
-
-history
-/settings.cfg
-/settings.cfg

@@ -195,6 +195,14 @@ void PlayWidget::keyPressEvent(QKeyEvent* event)
 		this->gamePause();
 		return;
 	}
+	// Game pause: ignore key except ESC
+	// countDownTimer.isActive() means it is counting down
+	// pauseWidget->isVisible() means the pauseWidget is shown
+	else if (countDownTimer.isActive()
+		|| pauseWidget->isVisible())
+	{
+		return;
+	}
 	else if (event->key() == Qt::Key_Space)
 	{
 		return;
