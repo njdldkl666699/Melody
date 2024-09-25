@@ -34,6 +34,12 @@ MenuWidget::MenuWidget(QWidget* parent)
 	initBackgroundGIF();
 	initLogoGIF();
 
+	// MusicPlayer related
+	menuMusicPlayer = new QMediaPlayer(this);
+	menuAudio = new QAudioOutput(this);
+	menuAudio->setVolume(SettingsWidget::instance()->getMusicVal());
+	menuMusicPlayer->setAudioOutput(menuAudio);
+
 	// SongComboBox related
 	initSongComboBox();
 	connect(ui.comboBox_song, &QComboBox::currentTextChanged, this, &MenuWidget::onComboBoxSongSelected);
@@ -206,12 +212,9 @@ void MenuWidget::onComboBoxSongSelected(const QString& songName)
 	QString songSuffixName = songDir.entryList(songFileFilters, QDir::Files).at(0);
 	songFilePath = songDir.path() + "/" + songSuffixName;
 
-	//// Play the music
-	menuMusicPlayer = new QMediaPlayer(this);
+	// Play the music
+	menuMusicPlayer->stop();
 	menuMusicPlayer->setSource(QUrl::fromLocalFile(songFilePath));
-	menuAudio = new QAudioOutput(this);
-	menuAudio->setVolume(SettingsWidget::instance()->getMusicVal());
-	menuMusicPlayer->setAudioOutput(menuAudio);
 	menuMusicPlayer->play();
 }
 

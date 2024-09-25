@@ -16,9 +16,11 @@
 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "confirmDialog.h"
+#include "ConfirmDialog.h"
+#include "UIController.h"
+#include "SettingsWidget.h"
 
-ConfirmDialog::ConfirmDialog(QWidget *parent)
+ConfirmDialog::ConfirmDialog(QWidget* parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
@@ -26,13 +28,20 @@ ConfirmDialog::ConfirmDialog(QWidget *parent)
 	setWindowModality(Qt::WindowModal);
 	this->setModal(true);
 
+	using namespace UICtrl;
+	const int soundVal = SettingsWidget::instance()->getSoundVal();
+	setObjectSound(ui.pushButton_exit, &QPushButton::clicked, ber, soundVal);
+	setObjectSound(ui.pushButton_backMenu, &QPushButton::clicked, gear, soundVal);
+
 	QPixmap backgroundPNG("./res/background/exitDialog.png");
 	backgroundPNG = backgroundPNG.scaled(this->size(),
 		Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 	ui.background->setPixmap(backgroundPNG);
 
-	this->connect(ui.pushButton_exit, &QPushButton::clicked, this, &ConfirmDialog::on_pushButton_exit_clicked);
-	this->connect(ui.pushButton_backMenu, &QPushButton::clicked, this, &ConfirmDialog::on_pushButton_backMenu_clicked);
+	connect(ui.pushButton_exit, &QPushButton::clicked,
+		this, &ConfirmDialog::on_pushButton_exit_clicked);
+	connect(ui.pushButton_backMenu, &QPushButton::clicked,
+		this, &ConfirmDialog::on_pushButton_backMenu_clicked);
 }
 
 ConfirmDialog::~ConfirmDialog()

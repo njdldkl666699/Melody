@@ -77,6 +77,7 @@ void SettingsWidget::initWindow()
 	setObjectSound(ui.slider_speed, &QSlider::sliderMoved, gear, soundVal);
 	setObjectSound(ui.comboBox_fps, &QComboBox::highlighted, gear, soundVal);
 	setObjectSound(ui.pushButton_backMenu, &QPushButton::clicked, ber, soundVal);
+	setObjectSound(ui.pushButton_license, &QPushButton::clicked, ber, soundVal);
 	setObjectSound(ui.checkBox_fullscreen, &QCheckBox::checkStateChanged, ber, soundVal);
 	setObjectSound(ui.keySequenceEdit_1, &QKeySequenceEdit::keySequenceChanged, ber, soundVal);
 	setObjectSound(ui.keySequenceEdit_2, &QKeySequenceEdit::keySequenceChanged, ber, soundVal);
