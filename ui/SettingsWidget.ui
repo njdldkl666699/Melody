@@ -88,8 +88,131 @@ QPushButton:pressed
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="2" column="0">
-     <widget class="QLabel" name="label_soundText">
+    <item row="7" column="5">
+     <widget class="QLabel" name="label_resetKey">
+      <property name="font">
+       <font>
+        <family>思源黑体</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>请重新设置</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="5">
+     <widget class="QKeySequenceEdit" name="keySequenceEdit_4">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>100</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>思源黑体</family>
+        <pointsize>13</pointsize>
+       </font>
+      </property>
+      <property name="keySequence">
+       <string>L</string>
+      </property>
+      <property name="clearButtonEnabled">
+       <bool>true</bool>
+      </property>
+      <property name="maximumSequenceLength">
+       <longLong>1</longLong>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0" colspan="2">
+     <widget class="QLabel" name="label_about">
+      <property name="font">
+       <font>
+        <family>思源黑体</family>
+        <pointsize>24</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>关于</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="2" colspan="4">
+     <widget class="QComboBox" name="comboBox_fps">
+      <property name="font">
+       <font>
+        <family>Saira</family>
+        <pointsize>24</pointsize>
+       </font>
+      </property>
+      <property name="contextMenuPolicy">
+       <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LayoutDirection::LeftToRight</enum>
+      </property>
+      <property name="currentText">
+       <string>60</string>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <item>
+       <property name="text">
+        <string>60</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>120</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="6" column="4">
+     <widget class="QKeySequenceEdit" name="keySequenceEdit_3">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>100</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>思源黑体</family>
+        <pointsize>13</pointsize>
+       </font>
+      </property>
+      <property name="keySequence">
+       <string>J</string>
+      </property>
+      <property name="clearButtonEnabled">
+       <bool>true</bool>
+      </property>
+      <property name="maximumSequenceLength">
+       <longLong>1</longLong>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_musicText">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -103,26 +226,47 @@ QPushButton:pressed
        </font>
       </property>
       <property name="text">
-       <string>音效音量</string>
+       <string>音乐音量</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignmentFlag::AlignCenter</set>
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
-     <widget class="QLabel" name="label_soundValue">
+    <item row="3" column="2" colspan="4">
+     <widget class="QSlider" name="slider_speed">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="font">
        <font>
-        <family>Saira</family>
         <pointsize>24</pointsize>
        </font>
       </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(255, 255, 255);</string>
+      <property name="minimum">
+       <number>-20</number>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0" colspan="2">
+     <widget class="QLabel" name="label_fullscreen">
+      <property name="font">
+       <font>
+        <family>思源黑体</family>
+        <pointsize>24</pointsize>
+       </font>
       </property>
       <property name="text">
-       <string/>
+       <string>全屏</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -166,166 +310,6 @@ QPushButton:pressed
       </property>
      </widget>
     </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="label_biasText">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <family>思源黑体</family>
-        <pointsize>24</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>偏移调整</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="0" colspan="2">
-     <widget class="QLabel" name="label_keyBindText">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <family>思源黑体</family>
-        <pointsize>24</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>按键设置</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0">
-     <widget class="QLabel" name="label_musicText">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <family>思源黑体</family>
-        <pointsize>24</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>音乐音量</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="label_speedText">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <family>思源黑体</family>
-        <pointsize>24</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>流速调整</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QLabel" name="label_musicValue">
-      <property name="font">
-       <font>
-        <family>Saira</family>
-        <pointsize>24</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(255, 255, 255);</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="4">
-     <widget class="QKeySequenceEdit" name="keySequenceEdit_3">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>100</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <family>思源黑体</family>
-        <pointsize>13</pointsize>
-       </font>
-      </property>
-      <property name="keySequence">
-       <string>J</string>
-      </property>
-      <property name="clearButtonEnabled">
-       <bool>true</bool>
-      </property>
-      <property name="maximumSequenceLength">
-       <longLong>1</longLong>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="0" colspan="2">
-     <widget class="QLabel" name="label_fpsText">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <family>思源黑体</family>
-        <pointsize>24</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>帧率设置</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
     <item row="3" column="1">
      <widget class="QLabel" name="label_speedValue">
       <property name="font">
@@ -345,39 +329,29 @@ QPushButton:pressed
       </property>
      </widget>
     </item>
-    <item row="6" column="5">
-     <widget class="QKeySequenceEdit" name="keySequenceEdit_4">
+    <item row="0" column="2" colspan="4">
+     <widget class="QSlider" name="slider_music">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="maximumSize">
-       <size>
-        <width>100</width>
-        <height>16777215</height>
-       </size>
-      </property>
       <property name="font">
        <font>
-        <family>思源黑体</family>
-        <pointsize>13</pointsize>
+        <pointsize>24</pointsize>
        </font>
       </property>
-      <property name="keySequence">
-       <string>L</string>
+      <property name="maximum">
+       <number>100</number>
       </property>
-      <property name="clearButtonEnabled">
-       <bool>true</bool>
-      </property>
-      <property name="maximumSequenceLength">
-       <longLong>1</longLong>
+      <property name="orientation">
+       <enum>Qt::Orientation::Horizontal</enum>
       </property>
      </widget>
     </item>
-    <item row="4" column="1">
-     <widget class="QLabel" name="label_biasValue">
+    <item row="2" column="1">
+     <widget class="QLabel" name="label_soundValue">
       <property name="font">
        <font>
         <family>Saira</family>
@@ -392,30 +366,6 @@ QPushButton:pressed
       </property>
       <property name="alignment">
        <set>Qt::AlignmentFlag::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="2" colspan="4">
-     <widget class="QSlider" name="slider_speed">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>24</pointsize>
-       </font>
-      </property>
-      <property name="minimum">
-       <number>-20</number>
-      </property>
-      <property name="maximum">
-       <number>20</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Orientation::Horizontal</enum>
       </property>
      </widget>
     </item>
@@ -437,80 +387,6 @@ QPushButton:pressed
       </property>
       <property name="maximum">
        <number>500</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Orientation::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="2" colspan="4">
-     <widget class="QComboBox" name="comboBox_fps">
-      <property name="font">
-       <font>
-        <family>Saira</family>
-        <pointsize>24</pointsize>
-       </font>
-      </property>
-      <property name="contextMenuPolicy">
-       <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
-      </property>
-      <property name="layoutDirection">
-       <enum>Qt::LayoutDirection::LeftToRight</enum>
-      </property>
-      <property name="currentText">
-       <string>60</string>
-      </property>
-      <property name="currentIndex">
-       <number>0</number>
-      </property>
-      <item>
-       <property name="text">
-        <string>60</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>120</string>
-       </property>
-      </item>
-     </widget>
-    </item>
-    <item row="2" column="2" colspan="4">
-     <widget class="QSlider" name="slider_sound">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>24</pointsize>
-       </font>
-      </property>
-      <property name="maximum">
-       <number>100</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Orientation::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="2" colspan="4">
-     <widget class="QSlider" name="slider_music">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>24</pointsize>
-       </font>
-      </property>
-      <property name="maximum">
-       <number>100</number>
       </property>
       <property name="orientation">
        <enum>Qt::Orientation::Horizontal</enum>
@@ -548,8 +424,14 @@ QPushButton:pressed
       </property>
      </widget>
     </item>
-    <item row="7" column="0" colspan="2">
-     <widget class="QLabel" name="label_fullscreen">
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_soundText">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="font">
        <font>
         <family>思源黑体</family>
@@ -557,7 +439,29 @@ QPushButton:pressed
        </font>
       </property>
       <property name="text">
-       <string>全屏</string>
+       <string>音效音量</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0" colspan="2">
+     <widget class="QLabel" name="label_fpsText">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>思源黑体</family>
+        <pointsize>24</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>帧率设置</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -629,16 +533,210 @@ QPushButton:pressed
       </property>
      </widget>
     </item>
-    <item row="7" column="5">
-     <widget class="QLabel" name="label_resetKey">
+    <item row="2" column="2" colspan="4">
+     <widget class="QSlider" name="slider_sound">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>24</pointsize>
+       </font>
+      </property>
+      <property name="maximum">
+       <number>100</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_biasText">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="font">
        <font>
         <family>思源黑体</family>
-        <pointsize>15</pointsize>
+        <pointsize>24</pointsize>
        </font>
       </property>
       <property name="text">
-       <string>请重新设置</string>
+       <string>偏移调整</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0" colspan="2">
+     <widget class="QLabel" name="label_keyBindText">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>思源黑体</family>
+        <pointsize>24</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>按键设置</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLabel" name="label_musicValue">
+      <property name="font">
+       <font>
+        <family>Saira</family>
+        <pointsize>24</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QLabel" name="label_biasValue">
+      <property name="font">
+       <font>
+        <family>Saira</family>
+        <pointsize>24</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_speedText">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>思源黑体</family>
+        <pointsize>24</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>流速调整</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="2">
+     <widget class="QLabel" name="label_version">
+      <property name="font">
+       <font>
+        <family>思源黑体</family>
+        <pointsize>16</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>版本号：</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="3">
+     <widget class="QLabel" name="label_versionNumber">
+      <property name="font">
+       <font>
+        <family>思源黑体</family>
+        <pointsize>16</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>2.0</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="4">
+     <widget class="QLabel" name="label_license">
+      <property name="font">
+       <font>
+        <family>思源黑体</family>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>开源许可证：</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="5">
+     <widget class="QPushButton" name="pushButton_license">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>64</width>
+        <height>32</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>64</width>
+        <height>32</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>思源黑体</family>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LayoutDirection::LeftToRight</enum>
+      </property>
+      <property name="text">
+       <string>打开</string>
+      </property>
+      <property name="autoDefault">
+       <bool>false</bool>
+      </property>
+      <property name="default">
+       <bool>false</bool>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
       </property>
      </widget>
     </item>
@@ -685,6 +783,7 @@ QPushButton:pressed
   <tabstop>keySequenceEdit_3</tabstop>
   <tabstop>keySequenceEdit_4</tabstop>
   <tabstop>checkBox_fullscreen</tabstop>
+  <tabstop>pushButton_license</tabstop>
   <tabstop>pushButton_backMenu</tabstop>
  </tabstops>
  <resources/>
