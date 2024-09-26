@@ -264,6 +264,20 @@ void GameController::resetNoteTracks()
 			}
 		}
 	}
+
+	//reset Hold which is judging in noteTracks
+	//only possible at head
+	for (int i = 0; i < 4; i++)
+	{
+		Note* note = noteTracks[i].head();
+		if (note->getType() == "Hold")
+		{
+			Q_ASSERT(dynamic_cast<Hold*>(note));
+			Hold* hold = dynamic_cast<Hold*>(note);
+			hold->reset();
+		}
+	}
+
 	//push the rest notes from noteTracks to noteOutTracks
 	for (int i = 0; i < 4; i++)
 	{
@@ -273,6 +287,7 @@ void GameController::resetNoteTracks()
 			noteOutTracks[i].enqueue(note);
 		}
 	}
+
 	//swap noteTracks and noteOutTracks
 	for (int i = 0; i < 4; i++)
 	{
