@@ -123,6 +123,7 @@ void GameController::initNoteTracks()
 	}
 	const auto& chartObj = chartDoc.object();
 	const auto& chartArray = chartObj["note"].toArray();
+	offset = chartObj["offset"].toDouble();
 
 	//parse chartArray
 	for (qsizetype i = 0; i < chartArray.size(); ++i)
@@ -193,7 +194,7 @@ void GameController::initNoteTracks()
 void GameController::wait()
 {
 	gamePause();
-	int musicWaitTime = waitTime;
+	int musicWaitTime = waitTime + offset;
 	if (musicPlayer.duration() == 0)
 	{
 		// if this function is called first time in one game,

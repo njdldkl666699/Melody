@@ -102,6 +102,7 @@ private:
 	uint score;
 	uint combo, maxCombo;
 
+	double offset;
 	float velocity;	//pixel per ms
 	int deltaTime;
 	int waitTime;
