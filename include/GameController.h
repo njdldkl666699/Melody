@@ -78,7 +78,6 @@ public slots:
 private slots:
 	void judgeNoHitMiss();
 	void judgeNoReleaseHold();
-	void chartPlay();
 	//music related
 	void musicEnd(QMediaPlayer::MediaStatus status);
 
@@ -93,8 +92,10 @@ private:
 	void initNoteTracks();
 	void initMusicPlayer();
 
-	void resetNoteTracks();
+	void chartPlay();
 	void calculateAccAndScore();
+	
+	void resetNoteTracks();
 
 private:
 	uint perfectCount, goodCount, badCount, missCount;
@@ -102,7 +103,6 @@ private:
 	uint score;
 	uint combo, maxCombo;
 
-	double offset;
 	float velocity;	//pixel per ms
 	int deltaTime;
 	int waitTime;
@@ -129,6 +129,5 @@ private:
 	QSoundEffect noteSound;
 
 	QTimer timer;
-	QTimer chartCountdownTimer;
 	QTimer musicCountdownTimer;
 };

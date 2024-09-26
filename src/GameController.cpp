@@ -42,18 +42,14 @@ GameController::GameController(const QString& songFilePth,
 	initNoteTracks();
 	initMusicPlayer();
 
-	//Init timers
-	chartCountdownTimer.setTimerType(Qt::PreciseTimer);
-	chartCountdownTimer.setSingleShot(true);
-	chartCountdownTimer.setInterval(waitTime);
-
+	//Init musicCountDownTimer
 	musicCountdownTimer.setTimerType(Qt::PreciseTimer);
 	musicCountdownTimer.setSingleShot(true);
+	musicCountdownTimer.setInterval(waitTime);
 
 	wait();
 
 	//connect chart related
-	connect(&chartCountdownTimer, &QTimer::timeout, this, &GameController::chartPlay);
 	connect(noteAnimationGroup, &QParallelAnimationGroup::finished,
 		this, &GameController::signalShowEndButton);
 
@@ -123,7 +119,10 @@ void GameController::initNoteTracks()
 	}
 	const auto& chartObj = chartDoc.object();
 	const auto& chartArray = chartObj["note"].toArray();
-	offset = chartObj["offset"].toDouble();
+
+	//get offset and total deviation
+	double offset = chartObj["offset"].toDouble();
+	double deviation = waitTime + settings->getBiasVal() - offset;
 
 	//parse chartArray
 	for (qsizetype i = 0; i < chartArray.size(); ++i)
@@ -135,24 +134,29 @@ void GameController::initNoteTracks()
 		//init note
 		Note* note = nullptr;
 		QString picturePath;
-		int startTime = noteObj["time"].toInt();
+
+		//add bias-offset to note time
+		int startTime = noteObj["time"].toInt() + deviation;
 		int endTime;
 		int column = noteObj["column"].toInt();
+
 		if (!isHold) //case Tap
 		{
-			const QSize noteSize(145, 50);
 			endTime = startTime + 50 / velocity;
+			const QSize noteSize(145, 50);
+
 			if (column == 0 || column == 3)
 				picturePath = "./res/note/tap_blue.png";
 			else if (column == 1 || column == 2)
 				picturePath = "./res/note/tap_pink.png";
 			else	//not happen, but if happened, just send a warning
 				qDebug() << "Warning: note column is invalid!";
+
 			note = new Tap(startTime, picturePath, noteSize, playWidget);
 		}
 		else //case Hold
 		{
-			endTime = noteObj["endTime"].toInt();
+			endTime = noteObj["endTime"].toInt() + deviation;
 			int height = (endTime - startTime) * velocity;
 			const QSize noteSize(145, height);
 			if (column == 0 || column == 3)
@@ -194,18 +198,13 @@ void GameController::initNoteTracks()
 void GameController::wait()
 {
 	gamePause();
-	int musicWaitTime = waitTime + offset;
-	if (musicPlayer.duration() == 0)
-	{
-		// if this function is called first time in one game,
-		// we should wait a BIAS time more than chartCountDownTimer
-		// then start musicPlayer.
-		musicWaitTime += settings->getBiasVal();
-	}
-	musicCountdownTimer.setInterval(musicWaitTime);
-	//start countdown almost at the same time
-	chartCountdownTimer.start();
+	/*
+	We assume music play is accurate, and we put 
+	bias, offset, and waitTime into the chart itself, 
+	which names devaition.
+	*/
 	musicCountdownTimer.start();
+	chartPlay();
 }
 
 void GameController::chartPlay()
@@ -225,7 +224,6 @@ void GameController::gamePause()
 	if (g->state() == QParallelAnimationGroup::Running)
 		g->pause();
 	musicPlayer.pause();
-	chartCountdownTimer.stop();
 	musicCountdownTimer.stop();
 }
 

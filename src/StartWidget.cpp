@@ -30,6 +30,7 @@ StartWidget::StartWidget(QWidget* parent)
 	w = new MenuWidget(nullptr);
 	setWindowTitle(QString::fromLocal8Bit("ÒôÁé»ÃÕÂMeolide"));
 	setWindowIcon(QIcon("./res/icon/icon.ico"));
+	setFixedSize(1280, 720);
 	UICtrl::setIfFullscreen(this, SettingsWidget::instance()->getFullscreen());
 
 	initMedia();

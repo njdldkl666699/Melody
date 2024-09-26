@@ -173,11 +173,6 @@ QPushButton:pressed
         <string>60</string>
        </property>
       </item>
-      <item>
-       <property name="text">
-        <string>120</string>
-       </property>
-      </item>
      </widget>
     </item>
     <item row="6" column="4">
