@@ -32,7 +32,6 @@ int main(int argc, char* argv[])
 {
 	QApplication a(argc, argv);
 	a.setStyle(QStyleFactory::create("Fusion"));
-	a.setAttribute(Qt::AA_EnableHighDpiScaling);
 
 	QFontDatabase::addApplicationFont("./res/font/Saira-Regular.ttf");
 	QFontDatabase::addApplicationFont("./res/font/SourceHanSansSC-Regular-2.otf");
