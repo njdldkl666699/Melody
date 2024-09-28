@@ -42,8 +42,8 @@ SettingsWidget::SettingsWidget(QWidget* parent)
 
 	connect(ui.pushButton_backMenu, &QPushButton::clicked, this, [this]()
 		{
-			emit pushButtonBackMenuClicked();
 			this->saveSettings();
+			emit pushButtonBackMenuClicked();
 			this->hide();
 		});
 	connect(ui.pushButton_license, &QPushButton::clicked, this, []()

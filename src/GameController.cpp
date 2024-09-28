@@ -48,6 +48,7 @@ GameController::GameController(const QString& songFilePth,
 	musicCountdownTimer.setInterval(waitTime);
 
 	wait();
+	chartPlay();
 
 	//connect chart related
 	connect(noteAnimationGroup, &QParallelAnimationGroup::finished,
@@ -204,7 +205,7 @@ void GameController::wait()
 	which names devaition.
 	*/
 	musicCountdownTimer.start();
-	chartPlay();
+	//chartPlay();
 }
 
 void GameController::chartPlay()
@@ -243,6 +244,7 @@ void GameController::reset()
 	initVals();
 	resetNoteTracks();
 	wait();
+	chartPlay();
 }
 
 void GameController::resetNoteTracks()
@@ -269,6 +271,10 @@ void GameController::resetNoteTracks()
 	//only possible at head
 	for (int i = 0; i < 4; i++)
 	{
+		if (noteTracks[i].isEmpty())
+		{
+			continue;
+		}
 		Note* note = noteTracks[i].head();
 		if (note->getType() == "Hold")
 		{

@@ -48,9 +48,21 @@ MenuWidget::MenuWidget(QWidget* parent)
 	connect(ui.pushButton_settings, &QPushButton::clicked, this, [this]()
 		{
 			SettingsWidget::instance()->show();
+			menuMusicPlayer->pause();
 			this->hide();
 		});
-	connect(SettingsWidget::instance(), &SettingsWidget::pushButtonBackMenuClicked, this, &MenuWidget::show);
+	connect(SettingsWidget::instance(), &SettingsWidget::pushButtonBackMenuClicked, this, [this]()
+		{
+			menuAudio->setVolume(SettingsWidget::instance()->getMusicVal());
+			// reconnect buttonClickSound
+			const int soundVal = SettingsWidget::instance()->getSoundVal();
+			setObjectSound(ui.comboBox_chart, &QComboBox::highlighted, gear, soundVal);
+			setObjectSound(ui.comboBox_song, &QComboBox::highlighted, gear, soundVal);
+			setObjectSound(ui.pushButton_play, &QPushButton::clicked, ber, soundVal);
+			setObjectSound(ui.pushButton_settings, &QPushButton::clicked, ber, soundVal);
+			menuMusicPlayer->play();
+			this->show();
+		});
 
 	// connect PlayWidget related
 	connect(ui.pushButton_play, &QPushButton::clicked, this, &MenuWidget::onPushButtonPlayClicked);

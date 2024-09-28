@@ -48,8 +48,6 @@ PlayWidget::PlayWidget(const QString& songFilePth,
 
 	//create PauseWidget
 	pauseWidget = new PauseWidget(this);
-	pauseWidget->move((this->width() - pauseWidget->width()) / 2,
-		(this->height() - pauseWidget->height()) / 2);
 
 	//connect PauseWidget related
 	connect(pauseWidget, &PauseWidget::signalBackMenu, this, &PlayWidget::gameClose);
@@ -183,6 +181,7 @@ void PlayWidget::updateCountDown()
 	{
 		countDownTimer.stop();
 		ui.label_countDown->clear();
+		gameController->chartPlay();
 		countDownNum = 3;
 	}
 }
@@ -274,6 +273,7 @@ void PlayWidget::gameRestart()
 	this->setGraphicsEffect(nullptr);
 	gameController->reset();
 	this->updateUI();
+	ui.pushButton_end->hide();
 	this->show();
 }
 

@@ -41,6 +41,7 @@ public:
 	//## Only Use in PlayWidget.cpp ##
 	void reset();
 	void wait();
+	void chartPlay();
 
 public:
 	//get functions
@@ -92,7 +93,6 @@ private:
 	void initNoteTracks();
 	void initMusicPlayer();
 
-	void chartPlay();
 	void calculateAccAndScore();
 	
 	void resetNoteTracks();
