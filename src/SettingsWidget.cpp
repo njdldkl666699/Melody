@@ -67,7 +67,7 @@ void SettingsWidget::initBackground()
 
 void SettingsWidget::initWindow()
 {
-	setWindowTitle(QString::fromLocal8Bit("ÒôÁé»ÃÕÂMeolide"));
+	setWindowTitle(QString::fromUtf8("éŸ³çµå¹»ç« Meolide"));
 	setWindowIcon(QIcon("./res/icon/icon.ico"));
 	using namespace UICtrl;
 	setIfFullscreen(this, isFullscreen);
@@ -241,7 +241,7 @@ void SettingsWidget::onKeyEdited(const QKeySequence& keySequence)
 	{
 		ui.pushButton_backMenu->hide();
 		ui.label_resetKey->show();
-        auto keySequenceEdit = qobject_cast<QKeySequenceEdit*>(sender());
+		auto keySequenceEdit = qobject_cast<QKeySequenceEdit*>(sender());
 		if (keySequenceEdit != nullptr)
 			keySequenceEdit->clear();
 	}

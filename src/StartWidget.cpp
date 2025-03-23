@@ -28,7 +28,7 @@ StartWidget::StartWidget(QWidget* parent)
 	: QWidget(parent)
 {
 	w = new MenuWidget(nullptr);
-	setWindowTitle(QString::fromLocal8Bit("ÒôÁé»ÃÕÂMeolide"));
+	setWindowTitle(QString::fromUtf8("éŸ³çµå¹»ç« Meolide"));
 	setWindowIcon(QIcon("./res/icon/icon.ico"));
 	setFixedSize(1280, 720);
 	UICtrl::setIfFullscreen(this, SettingsWidget::instance()->getFullscreen());
@@ -80,10 +80,11 @@ void StartWidget::playMedia0()
 	player->setAudioOutput(audio);
 	player->play();
 
-	connect(player, &QMediaPlayer::mediaStatusChanged, this, 
-		[this](QMediaPlayer::MediaStatus status) {
-			if (status == QMediaPlayer::EndOfMedia)
-				playMedia1();
+	connect(player, &QMediaPlayer::mediaStatusChanged, this,
+		[this](QMediaPlayer::MediaStatus status)
+ {
+	 if (status == QMediaPlayer::EndOfMedia)
+		 playMedia1();
 		});
 
 	nextTimer.start();
@@ -105,15 +106,16 @@ void StartWidget::playMedia1()
 	loopAudioPlayer->play();
 
 	// The Meolide video, with looped music already playing
-	connect(player, &QMediaPlayer::mediaStatusChanged, this, 
-		[this](QMediaPlayer::MediaStatus status){
-			if (status == QMediaPlayer::EndOfMedia)
-			{
-				player->stop();
-				loopVideoPlayer->setSource(QUrl::fromLocalFile("./res/video/gameStart3.mp4"));
-				loopVideoPlayer->setVideoOutput(videoWidget);
-				loopVideoPlayer->play();
-			}
+	connect(player, &QMediaPlayer::mediaStatusChanged, this,
+		[this](QMediaPlayer::MediaStatus status)
+{
+	if (status == QMediaPlayer::EndOfMedia)
+	{
+		player->stop();
+		loopVideoPlayer->setSource(QUrl::fromLocalFile("./res/video/gameStart3.mp4"));
+		loopVideoPlayer->setVideoOutput(videoWidget);
+		loopVideoPlayer->play();
+	}
 		});
 
 	nextTimer.start(1000);

@@ -37,7 +37,7 @@ PlayWidget::PlayWidget(const QString& songFilePth,
 	gameController = new GameController(songFilePath, chartFilePath, this);
 
 	/* set labels' level
-	Explain: the z-order is determined by thier construction order 
+	Explain: the z-order is determined by thier construction order
 		and raise() function, so call raise() here can make those labels
 		above notes, and don't need to call it in updateUI() function.
 	*/
@@ -96,7 +96,7 @@ PlayWidget::~PlayWidget()
 void PlayWidget::initPlayWidget()
 {
 	//set window & sound
-	setWindowTitle(QString::fromLocal8Bit("“Ù¡Èª√’¬Meolide"));
+	setWindowTitle(QString::fromUtf8("Èü≥ÁÅµÂπªÁ´†Meolide"));
 	setWindowIcon(QIcon("./res/icon/icon.ico"));
 	using namespace UICtrl;
 	auto sw = SettingsWidget::instance();

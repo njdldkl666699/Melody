@@ -80,7 +80,7 @@ EndWidget::~EndWidget()
 void EndWidget::initWindow()
 {
 	using namespace UICtrl;
-	setWindowTitle(QString::fromLocal8Bit("ÒôÁé»ÃÕÂMeolide"));
+	setWindowTitle(QString::fromUtf8("éŸ³çµå¹»ç« Meolide"));
 	setWindowIcon(QIcon("./res/icon/icon.ico"));
 	auto sw = SettingsWidget::instance();
 	setIfFullscreen(this, sw->getFullscreen());
@@ -140,7 +140,7 @@ void EndWidget::initRank()
 {
 	QString rankPath = "./res/icon/rank";
 	const QString rankPathEnd[] = { "Phi", "BV", "V", "S", "A", "B", "C", "F" };
-	const QString rankRecord[] = { "¦Õ AP", "V FC", "V", "S", "A", "B", "C", "F" };
+	const QString rankRecord[] = { "Ï† AP", "V FC", "V", "S", "A", "B", "C", "F" };
 	const QString rankComment[] =
 	{
 		"Genius!Perfect!",
@@ -186,7 +186,7 @@ void EndWidget::initRank()
 void EndWidget::playAnimation()
 {
 	//label_rank animation
-	QPropertyAnimation* rankAnimation = 
+	QPropertyAnimation* rankAnimation =
 		new QPropertyAnimation(ui.label_rank, "pos", this);
 	rankAnimation->setDuration(1000);
 	rankAnimation->setStartValue(QPoint(-600, 70));
@@ -195,7 +195,7 @@ void EndWidget::playAnimation()
 	rankAnimation->start();
 
 	//label_scoreFrame animation
-	QPropertyAnimation* scoreFrameAnimation = 
+	QPropertyAnimation* scoreFrameAnimation =
 		new QPropertyAnimation(ui.label_scoreFrame, "pos", this);
 	scoreFrameAnimation->setDuration(1000);
 	scoreFrameAnimation->setStartValue(QPoint(-600, 510));
@@ -204,7 +204,7 @@ void EndWidget::playAnimation()
 	scoreFrameAnimation->start();
 
 	//label_scoreNum animation
-	QPropertyAnimation* scoreNumAnimation = 
+	QPropertyAnimation* scoreNumAnimation =
 		new QPropertyAnimation(ui.label_scoreNum, "pos", this);
 	scoreNumAnimation->setDuration(1000);
 	scoreNumAnimation->setStartValue(QPoint(-600, 590));

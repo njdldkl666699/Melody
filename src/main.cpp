@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
 	MenuWidget w;
 	w.show();
 #else
-    StartWidget s;
+	StartWidget s;
 	s.show();
 #endif // _DEBUG
 

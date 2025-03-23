@@ -26,7 +26,7 @@ MenuWidget::MenuWidget(QWidget* parent)
 	: QWidget(parent), playWidget(nullptr), confirmDialog(nullptr)
 {
 	ui.setupUi(this);
-	setWindowTitle(QString::fromLocal8Bit("ÒôÁé»ÃÕÂMeolide"));
+	setWindowTitle(QString::fromUtf8("éŸ³çµå¹»ç« Meolide"));
 	setWindowIcon(QIcon("./res/icon/icon.ico"));
 	using namespace UICtrl;
 	setIfFullscreen(this, SettingsWidget::instance()->getFullscreen());
